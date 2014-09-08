@@ -132,7 +132,7 @@ function fumblesLost($gsis, $team) {
 function farts($gsis, $team) {
     $query = "SELECT COUNT(*) 
               FROM play_player 
-              WHERE gsis_id='2013090900' AND defense_frec_tds > 0 AND play_id IN 
+              WHERE gsis_id='$gsis' AND defense_frec_tds > 0 AND play_id IN 
                   (SELECT play_id
                       FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
                       WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' 
@@ -210,7 +210,7 @@ function completionPct($gsis, $team) {
 function safeties($gsis, $team) {
     $query = "SELECT COUNT(*) 
               FROM play_player 
-              WHERE gsis_id='2013090900' AND defense_safe > 0 AND play_id IN 
+              WHERE gsis_id='$gsis' AND defense_safe > 0 AND play_id IN 
                   (SELECT play_id
                       FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
                       WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' 
