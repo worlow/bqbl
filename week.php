@@ -24,11 +24,11 @@ while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     echo "<div id=matchup style='display:table-row;'>\n";
     echo "<div class=score>\n";
     echo "$hometeam\n";
-    printGameScore($awayteam, $week, $year);
+    printGameScore($hometeam, $week, $year);
     echo "</div><div class=score>@</div>\n";
     echo "<div class=score >\n";
     echo "$awayteam\n";
-    printGameScore($hometeam, $week, $year);
+    printGameScore($awayteam, $week, $year);
     echo"</div></div>";
 }
 echo "</div>";

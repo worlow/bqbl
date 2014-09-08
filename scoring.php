@@ -40,7 +40,8 @@ function printGameScore($team, $week, $year=2014) {
         elseif($turnovers >= 6) $points['turnovers'] = 50;
     $points['longPasses'] = $longPasses == 0 ? 10 : 0;
     $points['TDs'] = 0;
-        if($TDs == 3) $points['TDs'] = -5;
+        if($TDs == 0) $points['TDs'] = 10;
+        elseif($TDs == 3) $points['TDs'] = -5;
         elseif($TDs == 4) $points['TDs'] = -10;
         elseif($TDs == 5) $points['TDs'] = -20;
         elseif($TDs >= 6) $points['TDs'] = -40;
