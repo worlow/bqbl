@@ -12,10 +12,10 @@ function printGameScore($team, $week, $year=2014) {
                   AND week='$week' AND season_type='Regular';";
     $gsis = pg_fetch_result(pg_query($query),0);
     $taints = taints($gsis, $team);
-    $ints = ints($gsis, $team);
-    $fumblesNotLost = fumblesNotLost($gsis, $team);
-    $fumblesLost = fumblesLost($gsis, $team);
+    $ints = ints($gsis, $team) - $taints;
     $farts = farts($gsis, $team);
+    $fumblesNotLost = fumblesNotLost($gsis, $team);
+    $fumblesLost = fumblesLost($gsis, $team) - $farts;
     $turnovers = $fumblesLost + $ints;
     $longPasses = longPasses($gsis, $team, 25);
     $passingTDs = passingTDs($gsis, $team);
