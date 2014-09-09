@@ -19,6 +19,8 @@ $tot70 = 0;
 $tot75 = 0;
 $tot80 = 0;
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
+	echo number_format(completionPct($gsis, $hometeam),1).":$passingTDs:$passingyards\\n";
+	echo number_format(completionPct($gsis, $awayteam),1).":$passingTDs:$passingyards\\n";
 	if (number_format(completionPct($gsis, $hometeam),1) <= 35) {
 		$tot35++;
 	} elseif (number_format(completionPct($gsis, $hometeam),1) <= 40) {
