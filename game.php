@@ -26,14 +26,9 @@ list($gsis,$hometeam,$awayteam) = pg_fetch_array($result,0);
 echo $hometeam == $team ? "$awayteam at <b>$hometeam</b>" : "<b>$awayteam</b> at $hometeam";
 echo ", Week $week of $year:<br>\n";
 
-printGameScore($team, $week, $year);
+//printGameScore($team, $week, $year);
 
 echo number_format(completionPct($gsis, $team),1);
-
-
-
-
-
 
 
 
