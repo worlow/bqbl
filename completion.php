@@ -20,11 +20,11 @@ $tot75 = 0;
 $tot80 = 0;
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
 	if (number_format(completionPct($gsis, $hometeam),1) <= 55) {	
-		echo number_format(completionPct($gsis, $hometeam),1).":".passingTDs($gsis, $hometeam).":".passingYards($gsis, $hometeam)."\n";
+		echo "Completion Percentage:".number_format(completionPct($gsis, $hometeam),1).", Passing TDs:".passingTDs($gsis, $hometeam).", Yards:".passingYards($gsis, $hometeam)."\nInterceptions:".ints($gsis,$hometeam);
 	}
 	if (number_format(completionPct($gsis, $awayteam),1) <= 55) {
-		echo number_format(completionPct($gsis, $awayteam),1).":".passingTDs($gsis, $awayteam).":".passingYards($gsis, $awayteam)."\n";
-}
+		echo "Completion Percentage:".number_format(completionPct($gsis, $awayteam),1).", Passing TDs:".passingTDs($gsis, $awayteam).", Yards:".passingYards($gsis, $awayteam)."\nInterceptions".ints($gsis,$awayteam);
+	}
 	if (number_format(completionPct($gsis, $hometeam),1) <= 35) {
 		$tot35++;
 	} elseif (number_format(completionPct($gsis, $hometeam),1) <= 40) {
