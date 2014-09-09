@@ -10,7 +10,7 @@ $result = pg_query($query);
 $tot = 0;
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
         $tot++;
-	echo "$hometeam: number_format(completionPct($gsis, $hometeam),1)\n";
-        echo "$awayteam: number_format(completionPct($gsis, $awayteam),1)\n";
+	echo "$hometeam:".number_format(completionPct($gsis, $hometeam),1)."\n";
+        echo "$awayteam:".number_format(completionPct($gsis, $awayteam),1)."\n";
 }
 echo "\n$tot";
