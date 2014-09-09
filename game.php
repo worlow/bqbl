@@ -28,6 +28,7 @@ echo ", Week $week of $year:<br>\n";
 
 printGameScore($team, $week, $year);
 
+echo number_format(completionPct($gsis, $team),1);
 
 
 
