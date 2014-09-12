@@ -4,7 +4,7 @@ require_once "scoring.php";
 
 $query = "SELECT gsis_id, home_team, away_team
 		  FROM game
-		  WHERE season_year IN ('2010','2011','2012','2013') AND season_type='Regular'
+		  WHERE season_year IN ('2010','2011') AND season_type='Regular'
           ORDER BY start_time ASC;";
 $result = pg_query($query);
 $tot = 0;
