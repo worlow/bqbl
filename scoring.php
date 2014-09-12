@@ -173,7 +173,7 @@ function rushingTDs($gsis, $team) {
 function passingYards($gsis, $team) {
     $query = "SELECT SUM(passing_yds) 
               FROM play_player 
-              WHERE gsis_id='$gsis' AND team='$team';";
+              WHERE gsis_id='$gsis' AND team='$team'  AND passing_sk = 0;";
     $result = pg_fetch_result(pg_query($query),0);
     return $result;
 }
@@ -181,7 +181,7 @@ function passingYards($gsis, $team) {
 function rushingYards($gsis, $team) {
     $query = "SELECT SUM(rushing_yds)
               FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
-              WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' AND passing_sk = 0;";
+              WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB';";
     $result = pg_fetch_result(pg_query($query),0);
     return $result;
 }
