@@ -171,11 +171,11 @@ function rushingTDs($gsis, $team) {
 }
 
 function passingYards($gsis, $team) {
-    $query = "SELECT SUM(passing_yds) 
+    $query = "SELECT SUM(passing_yds), SUM(passing_sk_yds) 
               FROM play_player 
-              WHERE gsis_id='$gsis' AND team='$team'  AND passing_sk = 0;";
-    $result = pg_fetch_result(pg_query($query),0);
-    return $result;
+              WHERE gsis_id='$gsis' AND team='$team';";
+    list($passingYards, $sackYards) = pg_fetch_array(pg_query($query));
+    return $passingYards + $sackYards;
 }
 
 function rushingYards($gsis, $team) {
