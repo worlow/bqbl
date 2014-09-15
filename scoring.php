@@ -17,7 +17,7 @@ function printGameScore($team, $week, $year=2014) {
     $fumblesNotLost = fumblesNotLost($gsis, $team);
     $fumblesLost = fumblesLost($gsis, $team) - $farts;
     $turnovers = $fumblesLost + $ints + $taints + $farts;
-    $longPasses = longPasses($gsis, $team, 25);
+    $longestPass = longestPass($gsis, $team);
     $passingTDs = passingTDs($gsis, $team);
     $rushingTDs = rushingTDs($gsis, $team);
     $TDs = $passingTDs + $rushingTDs;
@@ -42,7 +42,7 @@ function printGameScore($team, $week, $year=2014) {
         elseif($turnovers == 4) $points['turnovers'] = 16;
         elseif($turnovers == 5) $points['turnovers'] = 24;
         elseif($turnovers >= 6) $points['turnovers'] = 50;
-    $points['longPasses'] = $longPasses == 0 ? 10 : 0;
+    $points['longestPass'] = $longestPass < 25 ? 10 : 0;
     $points['TDs'] = 0;
         if($TDs == 0) $points['TDs'] = 10;
         elseif($TDs == 3) $points['TDs'] = -5;
@@ -65,18 +65,18 @@ function printGameScore($team, $week, $year=2014) {
     $points['overtimeTaints'] = 50*$overtimeTaints;
     $total_points = array_sum($points);
     printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
-                    $turnovers, $longPasses, $TDs, $passingYards, $rushingYards,
+                    $turnovers, $longestPass, $TDs, $passingYards, $rushingYards,
                     $completionPct, $safeties, $overtimeTaints, $total_points);
 }
 
 function printBlankScore() {
 $points = array();
-$points["taints"]=$points["ints"]=$points["fumblesNotLost"]=$points["fumblesLost"]=$points["farts"]=$points["turnovers"]=$points["longPasses"]=$points["TDs"]=$points["passingYards"]=$points["rushingYards"]=$points["completionPct"]=$points["safeties"]=$points["overtimeTaints"]=0;
+$points["taints"]=$points["ints"]=$points["fumblesNotLost"]=$points["fumblesLost"]=$points["farts"]=$points["turnovers"]=$points["longestPass"]=$points["TDs"]=$points["passingYards"]=$points["rushingYards"]=$points["completionPct"]=$points["safeties"]=$points["overtimeTaints"]=0;
 printScore(array(), "", "", "", "", "", "", "", "", "", "", "", "", "", "");
 }
 
 function printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
-                    $turnovers, $longPasses, $TDs, $passingYards, $rushingYards,
+                    $turnovers, $longestPass, $TDs, $passingYards, $rushingYards,
                     $completionPct, $safeties, $overtimeTaints, $total_points) {
 echo <<<END
 <table border=2 cellpadding=4 style="border-collapse: collapse;">
@@ -87,7 +87,7 @@ echo <<<END
 <tr><td>Fumbles Lost</td> <td>$fumblesLost</td> <td>$points[fumblesLost]</td></tr>
 <tr><td>FARTS</td> <td>$farts</td> <td>$points[farts]</td></tr>
 <tr><td>Turnovers</td> <td>$turnovers</td> <td>$points[turnovers]</td></tr>
-<tr><td>Passes 25+ yds</td> <td>$longPasses</td> <td>$points[longPasses]</td></tr>
+<tr><td>Longest Pass (25+?)</td> <td>$longestPass</td> <td>$points[longestPass]</td></tr>
 <tr><td>TDs</td> <td>$TDs</td> <td>$points[TDs]</td></tr>
 <tr><td>Passing Yards</td> <td>$passingYards</td> <td>$points[passingYards]</td></tr>
 <tr><td>Rushing Yards</td> <td>$rushingYards</td> <td>$points[rushingYards]</td></tr>
