@@ -4,6 +4,8 @@ ehthumbs.db
 
 git.php
 lib_db.php
+update.php
+temp.php
 histograms/
 
 # Folder config file
