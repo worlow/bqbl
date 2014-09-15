@@ -187,7 +187,7 @@ function passingYards($gsis, $team) {
               FROM play_player 
               WHERE gsis_id='$gsis' AND team='$team';";
     list($passingYards, $sackYards) = pg_fetch_array(pg_query($query));
-    return $passingYards - $sackYards;
+    return $passingYards + $sackYards;
 }
 
 function rushingYards($gsis, $team) {
