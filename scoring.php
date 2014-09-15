@@ -23,7 +23,11 @@ function printGameScore($team, $week, $year=2014) {
     $TDs = $passingTDs + $rushingTDs;
     $passingYards = passingYards($gsis, $team);
     $rushingYards = rushingYards($gsis, $team);
-    $completionPct = number_format(completionPct($gsis, $team),1);
+    try {
+        $completionPct = number_format(@completionPct($gsis, $team),1);
+    } catch (Exception $e) {
+        $completionPct = -1;
+    }
     $safeties = safeties($gsis, $team);
     $overtimeTaints = overtimeTaints($gsis, $team);
 
@@ -153,6 +157,14 @@ function longPasses($gsis, $team, $passLength) {
     return $result;
 }
 
+function longestPass($gsis, $team) {
+    $query = "SELECT MAX(passing_yds)
+              FROM play_player 
+              WHERE gsis_id='$gsis' AND team='$team';";
+    $result = pg_fetch_result(pg_query($query),0);
+    return $result;
+}
+
 function passingTDs($gsis, $team) {
     $query = "SELECT COUNT(*) 
               FROM play_player 
@@ -171,11 +183,11 @@ function rushingTDs($gsis, $team) {
 }
 
 function passingYards($gsis, $team) {
-    $query = "SELECT SUM(passing_yds) 
+    $query = "SELECT SUM(passing_yds), SUM(passing_sk_yds) 
               FROM play_player 
-              WHERE gsis_id='$gsis' AND team='$team'  AND passing_sk = 0;";
-    $result = pg_fetch_result(pg_query($query),0);
-    return $result;
+              WHERE gsis_id='$gsis' AND team='$team';";
+    list($passingYards, $sackYards) = pg_fetch_array(pg_query($query));
+    return $passingYards - $sackYards;
 }
 
 function rushingYards($gsis, $team) {
