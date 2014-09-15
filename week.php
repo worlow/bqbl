@@ -17,7 +17,7 @@ $query = "SELECT gsis_id, home_team, away_team
 		  FROM game
 		  WHERE season_year='$year' AND week='$week' AND season_type='Regular'
           ORDER BY start_time ASC;";
-$result = pg_query($query);
+$result = pg_query($GLOBALS['nfldbconn'],$query);
 echo "<div style='display:table;'>";
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     $gameType = gameTypeById($gsis);

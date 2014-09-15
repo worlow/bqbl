@@ -20,7 +20,7 @@ $query = "SELECT gsis_id, home_team, away_team
 		  FROM game
 		  WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
 			  AND week='$week' AND season_type='Regular';";
-$result = pg_query($query);
+$result = pg_query($nfldbconn,$query);
 list($gsis,$hometeam,$awayteam) = pg_fetch_array($result,0);
 
 echo $hometeam == $team ? "$awayteam at <b>$hometeam</b>" : "<b>$awayteam</b> at $hometeam";
