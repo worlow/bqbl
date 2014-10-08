@@ -23,8 +23,8 @@ echo "<div style='display:table;'>";
 echo "<tr><th>Team Name</th> <th>Total Points</th></tr>";
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     $gameType = gameTypeById($gsis);
-    echo "<div class=score><tr><th>$hometeam</th><th>" printTotalScore($hometeam, $week, $year) ",/th></tr><th>Stat Value</th></tr></div>";
-    echo "<div class=score><tr><th>$awayteam</th><th>" printTotalScore($awayteam, $week, $year) ",/th></tr><th>Stat Value</th></tr></div>";
+    echo "<div class=score><tr><th>$hometeam</th><th>", printTotalScore($hometeam, $week, $year), ",/th></tr><th>Stat Value</th></tr></div>";
+    echo "<div class=score><tr><th>$awayteam</th><th>", printTotalScore($awayteam, $week, $year), ",/th></tr><th>Stat Value</th></tr></div>";
 }
 echo "</div>";
 
