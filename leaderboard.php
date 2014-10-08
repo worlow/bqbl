@@ -18,17 +18,20 @@ $query = "SELECT gsis_id, home_team, away_team
 		  WHERE season_year='$year' AND week='$week' AND season_type='Regular'
           ORDER BY start_time ASC;";
 $result = pg_query($GLOBALS['nfldbconn'],$query);
+$totals = array();
 
 echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
 echo "<tr><th>Team Name</th><th>Total Points</th></tr>";
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
+    $totals[$hometeam] = totalScore($team, $week, $year);
+    $totals[$awayteam] = totalScore($team, $week, $year);
     $gameType = gameTypeById($gsis);
-    echo "<tr><th>$hometeam</th><th>", printTotalScore($hometeam, $week, $year), "</th></tr>";
-    echo "<tr><th>$awayteam</th><th>", printTotalScore($awayteam, $week, $year), "</th></tr>";
+    echo "<tr><th>$hometeam</th><th>$totals[$hometeam]</th></tr>";
+    echo "<tr><th>$awayteam</th><th>$totals[$awayteam]</th></tr>";
 }
 echo "</table>";
 
-function printTotalScore($team, $week, $year=2014) {
+function totalScore($team, $week, $year=2014) {
     if (gameType($year, $week, $team) == 2) {
         printBlankScore();
         return;
@@ -91,6 +94,6 @@ function printTotalScore($team, $week, $year=2014) {
     $points['safeties'] = 20*$safeties;
     $points['overtimeTaints'] = 50*$overtimeTaints;
     $total_points = array_sum($points);
-    echo $total_points;
+    return $total_points;
 }
 ?>
