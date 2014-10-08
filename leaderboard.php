@@ -23,8 +23,8 @@ $totals = array();
 echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
 echo "<tr><th>Team Name</th><th>Total Points</th></tr>";
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
-    $totals[$hometeam] = totalScore($team, $week, $year);
-    $totals[$awayteam] = totalScore($team, $week, $year);
+    $totals[$hometeam] = totalScore($hometeam, $week, $year);
+    $totals[$awayteam] = totalScore($awayteam, $week, $year);
     $gameType = gameTypeById($gsis);
     echo "<tr><th>$hometeam</th><th>$totals[$hometeam]</th></tr>";
     echo "<tr><th>$awayteam</th><th>$totals[$awayteam]</th></tr>";
