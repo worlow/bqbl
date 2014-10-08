@@ -18,16 +18,18 @@ $query = "SELECT gsis_id, home_team, away_team
 		  WHERE season_year='$year' AND week='$week' AND season_type='Regular'
           ORDER BY start_time ASC;";
 $result = pg_query($GLOBALS['nfldbconn'],$query);
+
 $totals = array();
+while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
+    $totals[$hometeam] = totalScore($hometeam, $week, $year);
+    $totals[$awayteam] = totalScore($awayteam, $week, $year);    
+}
+arsort($totals);
 
 echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
 echo "<tr><th>Team Name</th><th>Total Points</th></tr>";
-while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
-    $totals[$hometeam] = totalScore($hometeam, $week, $year);
-    $totals[$awayteam] = totalScore($awayteam, $week, $year);
-    $gameType = gameTypeById($gsis);
-    echo "<tr><th>$hometeam</th><th>$totals[$hometeam]</th></tr>";
-    echo "<tr><th>$awayteam</th><th>$totals[$awayteam]</th></tr>";
+foreach ($totals as $key => $val) {
+    echo "<tr><th>$key</th><th>$val</th></tr>";
 }
 echo "</table>";
 
