@@ -20,18 +20,30 @@ $query = "SELECT gsis_id, home_team, away_team
 $result = pg_query($GLOBALS['nfldbconn'],$query);
 
 $totals = array();
+$totals_defense = array();
 $grandtotals = array();
+$grandtotals_defense = array();
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     $grandtotals[$hometeam] = 0;
     $grandtotals[$awayteam] = 0;
     $totals[$hometeam] = totalScore($hometeam, $week, $year);
-    $totals[$awayteam] = totalScore($awayteam, $week, $year);    
+    $totals_defense[$hometeam] = totalScore($awayteam, $week, $year);
+    $totals[$awayteam] = totalScore($awayteam, $week, $year);
+    $totals_defense[$awayteam] = totalScore($hometeam, $week, $year);
 }
 arsort($totals);
+arsort($totals_defense);
 
 echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
 echo "<tr><th>Team Name</th><th>Total Points</th></tr>";
 foreach ($totals as $key => $val) {
+    echo "<tr><th>$key</th><th>$val</th></tr>";
+}
+echo "</table>";
+
+echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
+echo "<tr><th>Team Name</th><th>Total Defensive Points</th></tr>";
+foreach ($totals_defense as $key => $val) {
     echo "<tr><th>$key</th><th>$val</th></tr>";
 }
 echo "</table>";
@@ -45,14 +57,24 @@ for ($x=1; $x<=$week; $x++) {
     $result = pg_query($GLOBALS['nfldbconn'],$query);
     while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
         $grandtotals[$hometeam] += totalScore($hometeam, $x, $year);
-        $grandtotals[$awayteam] += totalScore($awayteam, $x, $year);    
+        $grandtotals[$hometeam] += totalScore($awayteam, $x, $year);
+        $grandtotals[$awayteam] += totalScore($awayteam, $x, $year);  
+        $grandtotals[$awayteam] += totalScore($hometeam, $x, $year);
     }
 }
 arsort($grandtotals);
+arsort($grandtotals_defense);
 
 echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
 echo "<tr><th>Team Name</th><th>Total Points</th></tr>";
 foreach ($grandtotals as $key => $val) {
+    echo "<tr><th>$key</th><th>$val</th></tr>";
+}
+echo "</table>";
+
+echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
+echo "<tr><th>Team Name</th><th>Total Defensive Points</th></tr>";
+foreach ($grandtotals_defense as $key => $val) {
     echo "<tr><th>$key</th><th>$val</th></tr>";
 }
 echo "</table>";
