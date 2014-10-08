@@ -21,6 +21,8 @@ $result = pg_query($GLOBALS['nfldbconn'],$query);
 
 $totals = array();
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
+    $grandtotals[$hometeam] = 0;
+    $grandtotals[$awayteam] = 0;
     $totals[$hometeam] = totalScore($hometeam, $week, $year);
     $totals[$awayteam] = totalScore($awayteam, $week, $year);    
 }
