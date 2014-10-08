@@ -33,6 +33,27 @@ foreach ($totals as $key => $val) {
 }
 echo "</table>";
 
+$grandtotals = array();
+for ($x=1; $x<=$week; $x++) {
+    $query = "SELECT gsis_id, home_team, away_team
+		  FROM game
+		  WHERE season_year='$year' AND week='$x' AND season_type='Regular'
+          ORDER BY start_time ASC;";
+    $result = pg_query($GLOBALS['nfldbconn'],$query);
+    while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
+        $totals[$hometeam] += totalScore($hometeam, $x, $year);
+        $totals[$awayteam] += totalScore($awayteam, $x, $year);    
+    }
+}
+arsort($grandtotals);
+
+echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
+echo "<tr><th>Team Name</th><th>Total Points</th></tr>";
+foreach ($grandtotals as $key => $val) {
+    echo "<tr><th>$key</th><th>$val</th></tr>";
+}
+echo "</table>";
+
 function totalScore($team, $week, $year=2014) {
     if (gameType($year, $week, $team) == 2) {
         return 0;
