@@ -19,8 +19,8 @@ $query = "SELECT gsis_id, home_team, away_team
           ORDER BY start_time ASC;";
 $result = pg_query($GLOBALS['nfldbconn'],$query);
 
-echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">'
-echo "<tr><th>Team Name</th> <th>Total Points</th></tr>";
+echo '<table border=2 cellpadding=4 style="border-collapse: collapse;">';
+echo "<tr><th>Team Name</th><th>Total Points</th></tr>";
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     $gameType = gameTypeById($gsis);
     echo "<tr><th>$hometeam</th><th>", printTotalScore($hometeam, $week, $year), ",/th></tr><th>Stat Value</th></tr>";
