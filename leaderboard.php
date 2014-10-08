@@ -35,8 +35,7 @@ echo "</table>";
 
 function totalScore($team, $week, $year=2014) {
     if (gameType($year, $week, $team) == 2) {
-        printBlankScore();
-        return;
+        return 0;
     }
     $query = "SELECT gsis_id
               FROM game
