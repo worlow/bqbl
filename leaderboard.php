@@ -20,6 +20,7 @@ $query = "SELECT gsis_id, home_team, away_team
 $result = pg_query($GLOBALS['nfldbconn'],$query);
 
 $totals = array();
+$grandtotals = array();
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     $grandtotals[$hometeam] = 0;
     $grandtotals[$awayteam] = 0;
@@ -35,7 +36,7 @@ foreach ($totals as $key => $val) {
 }
 echo "</table>";
 
-$grandtotals = array();
+
 for ($x=1; $x<=$week; $x++) {
     $query = "SELECT gsis_id, home_team, away_team
 		  FROM game
@@ -43,8 +44,8 @@ for ($x=1; $x<=$week; $x++) {
           ORDER BY start_time ASC;";
     $result = pg_query($GLOBALS['nfldbconn'],$query);
     while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
-        $totals[$hometeam] += totalScore($hometeam, $x, $year);
-        $totals[$awayteam] += totalScore($awayteam, $x, $year);    
+        $grandtotals[$hometeam] += totalScore($hometeam, $x, $year);
+        $grandtotals[$awayteam] += totalScore($awayteam, $x, $year);    
     }
 }
 arsort($grandtotals);
