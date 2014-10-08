@@ -59,9 +59,9 @@ for ($x=1; $x<=$week; $x++) {
     $result = pg_query($GLOBALS['nfldbconn'],$query);
     while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
         $grandtotals[$hometeam] += totalScore($hometeam, $x, $year);
-        $grandtotals[$hometeam] += totalScore($awayteam, $x, $year);
+        $grandtotals_defense[$hometeam] += totalScore($awayteam, $x, $year);
         $grandtotals[$awayteam] += totalScore($awayteam, $x, $year);  
-        $grandtotals[$awayteam] += totalScore($hometeam, $x, $year);
+        $grandtotals_defense[$awayteam] += totalScore($hometeam, $x, $year);
     }
 }
 arsort($grandtotals);
