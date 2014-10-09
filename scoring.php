@@ -30,6 +30,9 @@ function printGameScore($team, $week, $year=2014) {
     }
     $safeties = safeties($gsis, $team);
     $overtimeTaints = overtimeTaints($gsis, $team);
+	$benchings = benchings($week, $team);
+	$gameWinningDrive = gameWinningDrive($week, $team);
+	$miscPoints = miscPoints($week, $team);
 
     $points = array();
     $points['taints'] = 25*$taints;
@@ -63,10 +66,13 @@ function printGameScore($team, $week, $year=2014) {
         elseif($completionPct < 50) $points['completionPct'] = 5;
     $points['safeties'] = 20*$safeties;
     $points['overtimeTaints'] = 50*$overtimeTaints;
+	$points['benchings'] = 35*$benchings;
+	$points['gameWinningDrive'] = -12*$gameWinningDrive;
+	$points['miscPoints'] = $miscPoints;
     $total_points = array_sum($points);
     printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
                     $turnovers, $longestPass, $TDs, $passingYards, $rushingYards,
-                    $completionPct, $safeties, $overtimeTaints, $total_points);
+                    $completionPct, $safeties, $overtimeTaints, $benchings, $gameWinningDrive, $total_points);
 }
 
 function printBlankScore() {
@@ -77,7 +83,7 @@ printScore(array(), "", "", "", "", "", "", "", "", "", "", "", "", "", "");
 
 function printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
                     $turnovers, $longestPass, $TDs, $passingYards, $rushingYards,
-                    $completionPct, $safeties, $overtimeTaints, $total_points) {
+                    $completionPct, $safeties, $overtimeTaints, $benchings, $gameWinningDrive, $miscPoints, $total_points) {
 echo <<<END
 <table border=2 cellpadding=4 style="border-collapse: collapse;">
 <tr><th>Stat Type</th> <th>Stat Value</th> <th>BQBL Points</th></tr>
@@ -94,6 +100,9 @@ echo <<<END
 <tr><td>Completion %</td> <td>$completionPct</td> <td>$points[completionPct]</td></tr>
 <tr><td>Safeties</td> <td>$safeties</td> <td>$points[safeties]</td></tr>
 <tr><td>TAINTS in OT</td> <td>$overtimeTaints</td> <td>$points[overtimeTaints]</td></tr>
+<tr><td>In-game benchings</td> <td>$benchings</td> <td>$points[benchings]</td></tr>
+<tr><td>Game-Winning Drive</td> <td>$gameWinningDrive</td> <td>$points[gameWinningDrive]</td></tr>
+<tr><td>24/7 Points</td> <td> </td> <td>$points[miscPoints]</td></tr>
 <tr><th colspan=2>TOTAL</th> <td>$total_points</td>
 </table>
 END;
@@ -238,4 +247,39 @@ function overtimeTaints($gsis, $team) {
               AND defense_int_tds > 0 AND (\"time\").phase IN ('OT', 'OT2');";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
+}
+
+function teamToIndexArray( $headerLine ) {
+	$teamToIndexArray = array_slice( explode( " ", $headerLine ), 1 );
+	return $teamToIndexArray;
+}
+
+function readDataFromFile( $week, $team, $filename ) {
+	$fileHandle = fopen($filename, "r");
+	$headerLine = fgets( $fileHandle, 1024 );
+	$teamToIndexArray = teamToIndexArray( $headerLine );
+	for ($i = 1, $i < $week, $i++ ) {
+		fgets( $fileHandle, 1024 );
+	}
+	$dataForWeek = array_slice( explode( " ", fgets( $fileHandle, 1024 ) ), 1 );
+	$result = $dataForWeek[ array_search( $team, $teamToIndexArray ) ];
+	return $result;
+}
+
+function benchings($week, $team) {
+	$filename = "Benchings.txt";
+	$result = readDataFromFile( $gsis, $week, $team, $filename );
+	return $result;
+}
+
+function gameWinningDrive($week, $team) {
+	$filename = "GameWinningDrives.txt";
+	$result = readDataFromFile( $gsis, $week, $team, $filename );
+	return $result;
+}
+
+function miscPoints($week, $team) {
+	$filename = "MiscPoints.txt";
+	$result = readDataFromFile( $gsis, $week, $team, $filename );
+	return $result;
 }
