@@ -267,19 +267,19 @@ function readDataFromFile( $week, $team, $filename ) {
 }
 
 function benchings($week, $team) {
-	$filename = "Benchings.txt";
+	$filename = "Benchings_2014.txt";
 	$result = readDataFromFile( $gsis, $week, $team, $filename );
 	return $result;
 }
 
 function gameWinningDrive($week, $team) {
-	$filename = "GameWinningDrives.txt";
+	$filename = "GameWinningDrives_2014.txt";
 	$result = readDataFromFile( $gsis, $week, $team, $filename );
 	return $result;
 }
 
 function miscPoints($week, $team) {
-	$filename = "MiscPoints.txt";
+	$filename = "MiscPoints_2014.txt";
 	$result = readDataFromFile( $gsis, $week, $team, $filename );
 	return $result;
 }
