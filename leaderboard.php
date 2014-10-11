@@ -109,6 +109,9 @@ function totalScore($team, $week, $year=2014) {
     }
     $safeties = safeties($gsis, $team);
     $overtimeTaints = overtimeTaints($gsis, $team);
+    $benchings = benchings($week, $team);
+	$gameWinningDrive = gameWinningDrive($week, $team);
+	$miscPoints = miscPoints($week, $team);
 
     $points = array();
     $points['taints'] = 25*$taints;
@@ -142,6 +145,10 @@ function totalScore($team, $week, $year=2014) {
         elseif($completionPct < 50) $points['completionPct'] = 5;
     $points['safeties'] = 20*$safeties;
     $points['overtimeTaints'] = 50*$overtimeTaints;
+    $points['benchings'] = 35*$benchings;
+	$points['gameWinningDrive'] = -12*$gameWinningDrive;
+	$points['miscPoints'] = $miscPoints;
+    
     $total_points = array_sum($points);
     return $total_points;
 }
