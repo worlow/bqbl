@@ -28,10 +28,10 @@ while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     $grandtotals[$awayteam] = 0;
     $grandtotals_defense[$hometeam] = 0;
     $grandtotals_defense[$awayteam] = 0;
-    $totals[$hometeam] = totalScore($hometeam, $week, $year);
-    $totals_defense[$hometeam] = totalScore($awayteam, $week, $year);
-    $totals[$awayteam] = totalScore($awayteam, $week, $year);
-    $totals_defense[$awayteam] = totalScore($hometeam, $week, $year);
+    $totals[$hometeam] = totalScore($hometeam, $week, $year, true);
+    $totals_defense[$hometeam] = totalScore($awayteam, $week, $year, false);
+    $totals[$awayteam] = totalScore($awayteam, $week, $year, true);
+    $totals_defense[$awayteam] = totalScore($hometeam, $week, $year, false);
 }
 arsort($totals);
 arsort($totals_defense);
@@ -58,10 +58,10 @@ for ($x=1; $x<=$week; $x++) {
           ORDER BY start_time ASC;";
     $result = pg_query($GLOBALS['nfldbconn'],$query);
     while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
-        $grandtotals[$hometeam] += totalScore($hometeam, $x, $year);
-        $grandtotals_defense[$hometeam] += totalScore($awayteam, $x, $year);
-        $grandtotals[$awayteam] += totalScore($awayteam, $x, $year);  
-        $grandtotals_defense[$awayteam] += totalScore($hometeam, $x, $year);
+        $grandtotals[$hometeam] += totalScore($hometeam, $x, $year, true);
+        $grandtotals_defense[$hometeam] += totalScore($awayteam, $x, $year, false);
+        $grandtotals[$awayteam] += totalScore($awayteam, $x, $year, true);  
+        $grandtotals_defense[$awayteam] += totalScore($hometeam, $x, $year, false);
     }
 }
 arsort($grandtotals);
@@ -81,7 +81,7 @@ foreach ($grandtotals_defense as $key => $val) {
 }
 echo "</table>";
 
-function totalScore($team, $week, $year=2014) {
+function totalScore($team, $week, $year=2014, $isOffense) {
     if (gameType($year, $week, $team) == 2) {
         return 0;
     }
@@ -145,9 +145,11 @@ function totalScore($team, $week, $year=2014) {
         elseif($completionPct < 50) $points['completionPct'] = 5;
     $points['safeties'] = 20*$safeties;
     $points['overtimeTaints'] = 50*$overtimeTaints;
-    $points['benchings'] = 35*$benchings;
-	$points['gameWinningDrive'] = -12*$gameWinningDrive;
-	$points['miscPoints'] = $miscPoints;
+    if (isOffense) {
+        $points['benchings'] = 35*$benchings;
+        $points['gameWinningDrive'] = -12*$gameWinningDrive;
+        $points['miscPoints'] = $miscPoints;
+    }
     
     $total_points = array_sum($points);
     return $total_points;
