@@ -276,7 +276,7 @@ function overtimeTaints($gsis, $team) {
 }
 
 function teamToIndexArray($headerLine) {
-	$teamToIndexArray = array_slice(explode(" ", $headerLine), 1);
+	$teamToIndexArray = array_slice(explode("\t", $headerLine), 1);
 	return $teamToIndexArray;
 }
 
@@ -287,7 +287,7 @@ function readDataFromFile($gsis, $week, $team, $filename) {
 	for ($i = 1; $i < $week; $i++) {
 		fgets($fileHandle, 1024);
 	}
-	$dataForWeek = array_slice(explode(" ", fgets($fileHandle, 1024)), 1);
+	$dataForWeek = array_slice(explode("\t", fgets($fileHandle, 1024)), 1);
 	$result = $dataForWeek[ array_search($team, $teamToIndexArray) ];
 	return $result;
 }
