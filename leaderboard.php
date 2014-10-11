@@ -145,7 +145,7 @@ function totalScore($team, $week, $year=2014, $isOffense) {
         elseif($completionPct < 50) $points['completionPct'] = 5;
     $points['safeties'] = 20*$safeties;
     $points['overtimeTaints'] = 50*$overtimeTaints;
-    if (isOffense) {
+    if ($isOffense) {
         $points['benchings'] = 35*$benchings;
         $points['gameWinningDrive'] = -12*$gameWinningDrive;
         $points['miscPoints'] = $miscPoints;
