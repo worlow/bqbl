@@ -78,7 +78,7 @@ function printGameScore($team, $week, $year=2014) {
 function printBlankScore() {
 $points = array();
 $points["taints"]=$points["ints"]=$points["fumblesNotLost"]=$points["fumblesLost"]=$points["farts"]=$points["turnovers"]=$points["longestPass"]=$points["TDs"]=$points["passingYards"]=$points["rushingYards"]=$points["completionPct"]=$points["safeties"]=$points["overtimeTaints"]=0;
-printScore(array(), "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+printScore(array(), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
 }
 
 function printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
