@@ -34,7 +34,7 @@ function printGameScore($team, $week, $year=2014) {
 	$gameWinningDrive = gameWinningDrive($week, $team);
 	$miscPoints = miscPoints($week, $team);
 
-    array();
+    $points = array();
     $points['taints'] = 25*$taints;
     $points['ints'] = 5*$ints;
     $points['fumblesNotLost'] = 2*$fumblesNotLost;
@@ -72,7 +72,7 @@ function printGameScore($team, $week, $year=2014) {
     $total_points = array_sum($points);
     printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
                     $turnovers, $longestPass, $TDs, $passingYards, $rushingYards,
-                    $completionPct, $safeties, $overtimeTaints, $benchings, $gameWinningDrive, $total_points);
+                    $completionPct, $safeties, $overtimeTaints, $benchings, $gameWinningDrive, $miscPoints, $total_points);
 }
 
 function printBlankScore() {
@@ -275,37 +275,37 @@ function overtimeTaints($gsis, $team) {
     return $result;
 }
 
-function teamToIndexArray( $headerLine ) {
-	$teamToIndexArray = array_slice( explode( " ", $headerLine ), 1 );
+function teamToIndexArray($headerLine) {
+	$teamToIndexArray = array_slice(explode(" ", $headerLine), 1);
 	return $teamToIndexArray;
 }
 
-function readDataFromFile( $week, $team, $filename ) {
+function readDataFromFile($gsis, $week, $team, $filename) {
 	$fileHandle = fopen($filename, "r");
-	$headerLine = fgets( $fileHandle, 1024 );
-	$teamToIndexArray = teamToIndexArray( $headerLine );
-	for ($i = 1, $i < $week, $i++ ) {
-		fgets( $fileHandle, 1024 );
+	$headerLine = fgets($fileHandle, 1024);
+	$teamToIndexArray = teamToIndexArray($headerLine);
+	for ($i = 1; $i < $week; $i++) {
+		fgets($fileHandle, 1024);
 	}
-	$dataForWeek = array_slice( explode( " ", fgets( $fileHandle, 1024 ) ), 1 );
-	$result = $dataForWeek[ array_search( $team, $teamToIndexArray ) ];
+	$dataForWeek = array_slice(explode(" ", fgets($fileHandle, 1024)), 1);
+	$result = $dataForWeek[ array_search($team, $teamToIndexArray) ];
 	return $result;
 }
 
 function benchings($week, $team) {
 	$filename = "Benchings_2014.txt";
-	$result = readDataFromFile( $gsis, $week, $team, $filename );
+	$result = readDataFromFile($gsis, $week, $team, $filename);
 	return $result;
 }
 
 function gameWinningDrive($week, $team) {
 	$filename = "GameWinningDrives_2014.txt";
-	$result = readDataFromFile( $gsis, $week, $team, $filename );
+	$result = readDataFromFile($gsis, $week, $team, $filename);
 	return $result;
 }
 
 function miscPoints($week, $team) {
 	$filename = "MiscPoints_2014.txt";
-	$result = readDataFromFile( $gsis, $week, $team, $filename );
+	$result = readDataFromFile($gsis, $week, $team, $filename);
 	return $result;
 }
