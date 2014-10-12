@@ -10,6 +10,7 @@ $week = pg_escape_string($_GET['week']);
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : 2014;
 
 echo "<html><head>
+<div id='content' align='center'>
 <title>BQBL Week $week $year</title></head><body>\n
 <h1>Week $week $year Scoreboard</h1>";
 
@@ -31,8 +32,8 @@ while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     printGameScore($awayteam, $week, $year);
     echo"</div></div>";
 }
-echo "</div>";
-
+echo "</div>";  # table div
+echo "</div>";  # content div
 ?>
 <style>
 .score {

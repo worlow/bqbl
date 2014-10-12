@@ -1,6 +1,6 @@
 <?php
 require_once "lib.php";
-
+echo "<h1>SHIT IS GOING TO BE BROKEN. DEAL WITH IT.</h1>";
 function printGameScore($team, $week, $year=2014) {
     if (gameType($year, $week, $team) == 2) {
         printBlankScore();
@@ -30,9 +30,9 @@ function printGameScore($team, $week, $year=2014) {
     }
     $safeties = safeties($gsis, $team);
     $overtimeTaints = overtimeTaints($gsis, $team);
-	$benchings = benchings($week, $team);
-	$gameWinningDrive = gameWinningDrive($week, $team);
-	$miscPoints = miscPoints($week, $team);
+	$benchings = benchings($year, $week, $team);
+	$gameWinningDrive = 0;
+	$miscPoints = miscPoints($year, $week, $team);
 
     $points = array();
     $points['taints'] = 25*$taints;
@@ -292,20 +292,18 @@ function readDataFromFile($gsis, $week, $team, $filename) {
 	return $result;
 }
 
-function benchings($week, $team) {
-	$filename = "Benchings_2014.txt";
-	$result = readDataFromFile($gsis, $week, $team, $filename);
+function benchings($year, $week, $team) {
+    $query = "SELECT benching FROM extra_points 
+              WHERE nfl_team='$team' AND week='$week' AND year='$year';";
+    
+    $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
 	return $result;
 }
 
-function gameWinningDrive($week, $team) {
-	$filename = "GameWinningDrives_2014.txt";
-	$result = readDataFromFile($gsis, $week, $team, $filename);
-	return $result;
-}
-
-function miscPoints($week, $team) {
-	$filename = "MiscPoints_2014.txt";
-	$result = readDataFromFile($gsis, $week, $team, $filename);
+function miscPoints($year, $week, $team) {
+    $query = "SELECT points FROM extra_points 
+              WHERE nfl_team='$team' AND week='$week' AND year='$year';";
+    
+    $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
 	return $result;
 }
