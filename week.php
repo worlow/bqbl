@@ -1,6 +1,7 @@
 <?php
 require_once "lib.php";
 require_once "scoring.php";
+
 if(!isset($_GET['week'])) {
     echo "Error: week variable not set!";
     exit();

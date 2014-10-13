@@ -1,8 +1,10 @@
 <?php
 require_once "lib.php";
-echo "<h1>SHIT IS GOING TO BE BROKEN. DEAL WITH IT.</h1>";
 
 function getPoints($team, $week, $year=2014) {
+    if (gameType($year, $week, $team) == 2) {
+        return array();
+    }
     $query = "SELECT gsis_id
               FROM game
               WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
@@ -10,11 +12,11 @@ function getPoints($team, $week, $year=2014) {
     $gsis = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     $points = array();
     $points["TAINTs"] = array(taints($gsis, $team), 0);
-    $points["Interceptions"] = array(ints($gsis, $team) - $taints, 0);
+    $points["Interceptions"] = array(ints($gsis, $team) - $points["TAINTs"][0], 0);
     $points["FARTs"] = array(farts($gsis, $team), 0);
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
-    $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $farts, 0);
-    $points["Turnovers"] = array($fumblesLost + $ints + $taints + $farts, 0);
+    $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $points["FARTs"][0], 0);
+    $points["Turnovers"] = array($points["Fumbles Lost"][0] + $points["Interceptions"][0] + $points["TAINTs"][0] + $points["FARTs"][0], 0);
     $points["Longest Pass"] = array(longestPass($gsis, $team), 0);
     $points["TDs"] = array(passingTDs($gsis, $team) + rushingTDs($gsis, $team), 0);
     $points["Passing Yards"] = array(passingYards($gsis, $team), 0);
@@ -79,17 +81,20 @@ function totalPoints($points) {
 
 function printGameScore($team, $week, $year=2014) {
     if (gameType($year, $week, $team) == 2) {
-        printBlankScore();
+        printBlankScore($team);
         return;
     }
     $points = getPoints($team, $week, $year);
     printScore($points);
 }
 
-function printBlankScore() {
-$points = array();
-$points["taints"]=$points["ints"]=$points["fumblesNotLost"]=$points["fumblesLost"]=$points["farts"]=$points["turnovers"]=$points["longestPass"]=$points["TDs"]=$points["passingYards"]=$points["rushingYards"]=$points["completionPct"]=$points["safeties"]=$points["overtimeTaints"]=0;
-printScore(array(), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+function printBlankScore($team) {
+echo <<< END
+<table border=2 cellpadding=4 style="border-collapse: collapse;">
+<tr><th>Stat Type</th> <th>Stat Value</th> <th>BQBL Points</th></tr>
+<tr><th colspan=2>TOTAL</th> <td>0</td>
+</table>
+END;
 }
 
 function printScore($points) {
@@ -288,14 +293,6 @@ function miscPoints($year, $week, $team) {
 	return $result;
 }
 
-function miscPoints($year, $week, $team) {
-    $query = "SELECT points FROM extra_points 
-              WHERE nfl_team='$team' AND week='$week' AND year='$year';";
-    
-    $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
-	return $result;
-}
-
 function gameWinningDrive($year, $week, $team) {
 	$query = "SELECT not_winning = last_drive_qualifies = won_game = TRUE as game_winning_drive FROM
 (SELECT SUM(score) <= 0 as not_winning
@@ -374,4 +371,12 @@ WHERE (home_team = '$team'
 	  
     $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
   	return $result;
+}
+
+
+function defenseScore($points) {
+    $total = totalPoints($points);
+    $total -= $points["Misc. Points"][1];
+    $total -= $points["Benchings"][1];
+    return $total;
 }
