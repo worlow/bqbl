@@ -51,17 +51,17 @@ foreach ($totals_defense as $key => $val) {
 echo "</table>";
 
 
-for ($x=1; $x<=$week; $x++) {
+for ($i=1; $i<=$week; $i++) {
     $query = "SELECT gsis_id, home_team, away_team
 		  FROM game
-		  WHERE season_year='$year' AND week='$x' AND season_type='Regular'
+		  WHERE season_year='$year' AND week='$i' AND season_type='Regular'
           ORDER BY start_time ASC;";
     $result = pg_query($GLOBALS['nfldbconn'],$query);
     while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
-        $grandtotals[$hometeam] += totalScore($hometeam, $x, $year, true);
-        $grandtotals_defense[$hometeam] += totalScore($awayteam, $x, $year, false);
-        $grandtotals[$awayteam] += totalScore($awayteam, $x, $year, true);  
-        $grandtotals_defense[$awayteam] += totalScore($hometeam, $x, $year, false);
+        $grandtotals[$hometeam] += totalScore($hometeam, $i, $year, true);
+        $grandtotals_defense[$hometeam] += totalScore($awayteam, $i, $year, false);
+        $grandtotals[$awayteam] += totalScore($awayteam, $i, $year, true);  
+        $grandtotals_defense[$awayteam] += totalScore($hometeam, $i, $year, false);
     }
 }
 arsort($grandtotals);
@@ -109,9 +109,9 @@ function totalScore($team, $week, $year=2014, $isOffense) {
     }
     $safeties = safeties($gsis, $team);
     $overtimeTaints = overtimeTaints($gsis, $team);
-    $benchings = benchings($week, $team);
-	$gameWinningDrive = gameWinningDrive($week, $team);
-	$miscPoints = miscPoints($week, $team);
+    $benchings = benchings($year, $week, $team);
+	$gameWinningDrive = 0;
+	$miscPoints = miscPoints($year, $week, $team);
 
     $points = array();
     $points['taints'] = 25*$taints;
