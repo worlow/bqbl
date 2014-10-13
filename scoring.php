@@ -293,7 +293,7 @@ function miscPoints($year, $week, $team) {
 }
 
 function gameWinningDrive($year, $week, $team) {
-	$query = "SELECT not_winning = last_drive_qualifies = won_game = TRUE as game_winning_drive FROM
+	$query = "SELECT CASE WHEN not_winning = TRUE AND last_drive_qualifies = TRUE AND won_game = TRUE THEN 1 ELSE 0 END as game_winning_drive FROM
 (SELECT SUM(score) <= 0 as not_winning
 FROM (SELECT CASE WHEN pos_team = '$team' AND note = 'TD' AND def_td = 0 THEN 6 
                   WHEN pos_team != '$team' AND note = 'TD' AND def_td = 0 THEN -6 
