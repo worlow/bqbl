@@ -13,7 +13,7 @@
 }
 </style>
 </head>
-<marquee scrollamount=15><h1 class="blink">Welcome to the BQBL page!</h1></marquee>
+<marquee scrollamount=18><h1 class="blink">Welcome to the BQBL page!!!</h1></marquee>
 <a href='week.php'>Scoreboard</a><br>
 <a href='leaderboard.php'>Weekly Leaders</a><br>
 <a href='seasonleaderboard.php'>Season Rankings</a><br>
