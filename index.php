@@ -1,47 +1,20 @@
-<?php
-require "lib.php";
-echo "<html><head><title>BQBL Scoring</title></head>\n";
-$dbconn = connect_db();
-
-echo "<select id=\"year\" onchange=\"updateFrame();\">";
-$query = "SELECT DISTINCT(season_year) FROM game ORDER BY season_year DESC";
-$result = pg_query($query);
-while (list($year) = pg_fetch_array($result)) {
-    echo "<option value=\"$year\">$year</option>\n";
+<html><head><title>BQBL</title>
+<style type="text/css">
+.blink {
+  animation: blink 1s steps(3, start) infinite;
+  -webkit-animation: blink 1s steps(3, start) infinite;
+  color:red;
 }
-echo "</select>\n";
-
-echo "<select id=\"week\" onchange=\"updateFrame();\">
-<option selected disabled hidden value=''>Week</option>";
-$query = "SELECT DISTINCT(week) FROM game WHERE season_type='Regular' ORDER BY week ASC";
-$result = pg_query($query);
-while (list($week) = pg_fetch_array($result)) {
-    echo "<option value=\"$week\">$week</option>\n";
+@keyframes blink {
+  to { visibility: hidden; }
 }
-echo "</select>\n";
-
-echo "<select id=\"team\" onchange=\"updateFrame();\">
-<option selected disabled hidden value=''>Team</option>";
-$query = "SELECT team_id FROM team ORDER BY team ASC";
-$result = pg_query($query);
-while (list($team) = pg_fetch_array($result)) {
-    echo "<option value=\"$team\">$team</option>\n";
+@-webkit-keyframes blink {
+  to { visibility: hidden; }
 }
-echo "</select>";
-?>
-<br>
-<script type="text/javascript">
-function updateFrame() {
-    var s = document.getElementById("year");
-    var year = s.options[s.selectedIndex].value;
-    s = document.getElementById("week");
-    var week = s.options[s.selectedIndex].value;
-    s = document.getElementById("team");
-    var team = s.options[s.selectedIndex].value;   
-    if (year != '' && week != '' && team != '') {
-        document.getElementById('score_frame').src = 
-            "game.php?year=" + year + "&week=" + week + "&team=" + team;
-    }
-}
-</script>
-<iframe id='score_frame' width=100% height=90% style="overflow:hidden;" scrolling=no frameborder=0>
+</style>
+</head>
+<marquee scrollamount=15><h1 class="blink">Welcome to the BQBL page!</h1></marquee>
+<a href='week.php'>Scoreboard</a><br>
+<a href='leaderboard.php'>Weekly Leaders</a><br>
+<a href='seasonleaderboard.php'>Season Rankings</a><br>
+<a href='extrapoints.php'>Input Extra BQBL Points</a><br>
