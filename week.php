@@ -10,10 +10,12 @@ if(!isset($_GET['week'])) {
 $week = pg_escape_string($_GET['week']);
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : 2014;
 
+$updateTime = date("Y-m-d H:i:s", databaseModificationTime());
 echo "<html><head>
 <div id='content' align='center'>
 <title>BQBL Week $week $year</title></head><body>\n
-<h1>Week $week $year Scoreboard</h1>";
+<h1>Week $week $year Scoreboard</h1>
+Last Updated at $updateTime";
 
 $query = "SELECT gsis_id, home_team, away_team
 		  FROM game

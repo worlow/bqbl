@@ -374,7 +374,7 @@ WHERE (home_team = '$team'
 	  AND season_year = $year 
 	  AND season_type = 'Regular') AS wg;";
 	  
-    $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
+    $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
   	return $result;
 }
 

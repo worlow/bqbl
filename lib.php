@@ -11,6 +11,11 @@ function currentYear() {
     return 2014;
 }
 
+function databaseModificationTime() {
+    $file = "C:\PostgreSQL\9.3\data\global\pg_control"; // pg_stat_tmp\global.stat;
+    return filemtime($file);
+}
+
 function gameTypeById($gsis) {
 global $nfldbconn;
     $query = "SELECT start_time
