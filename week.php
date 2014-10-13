@@ -2,13 +2,9 @@
 require_once "lib.php";
 require_once "scoring.php";
 
-if(!isset($_GET['week'])) {
-    echo "Error: week variable not set!";
-    exit();
-}
+$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
+$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
-$week = pg_escape_string($_GET['week']);
-$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : 2014;
 
 $updateTime = date("Y-m-d H:i:s", databaseModificationTime());
 echo "<html><head>

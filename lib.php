@@ -11,6 +11,13 @@ function currentYear() {
     return 2014;
 }
 
+function currentWeek() {
+    $now = time();
+    $season_start = strtotime("2014-09-04");
+    $weeks = 1+floor(($now-$season_start)/(60*60*24*7));
+    return $weeks;
+}
+
 function databaseModificationTime() {
     $file = "C:\PostgreSQL\9.3\data\global\pg_control"; // pg_stat_tmp\global.stat;
     return filemtime($file);

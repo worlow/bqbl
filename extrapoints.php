@@ -2,12 +2,9 @@
 // Report simple running errors
 error_reporting(E_ERROR);
 require_once("lib.php");
-if(!isset($_GET['week'])) {
-    echo "ERROR: week variable not set in URL";
-    exit(0);
-}
-$year = isset($_GET['year']) ? $_GET['year'] : currentYear();
-$week = $_GET['week'];
+$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
+$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+
 if (isset($_POST['submit'])) {
     foreach (nflTeams() as $team) {
         $benching = $_POST["benching_$team"];
@@ -21,6 +18,7 @@ if (isset($_POST['submit'])) {
     echo "Updated.<br>\n";
 }
 
+echo "<h1>Extra Points for Week $week, $year</h1>";
 $formaction=$_SERVER['PHP_SELF'] . "?week=$week&year=$year";
 echo "<form method=post action='$formaction'>
 <table><tr><th>Team</th><th>Benchings</th><th>Other</th><th>Explanation</th></tr>\n";
