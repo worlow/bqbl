@@ -1,78 +1,89 @@
 <?php
 require_once "lib.php";
 echo "<h1>SHIT IS GOING TO BE BROKEN. DEAL WITH IT.</h1>";
-function printGameScore($team, $week, $year=2014) {
-    if (gameType($year, $week, $team) == 2) {
-        printBlankScore();
-        return;
-    }
+
+function getPoints($team, $week, $year=2014) {
     $query = "SELECT gsis_id
               FROM game
               WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
                   AND week='$week' AND season_type='Regular';";
     $gsis = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
-    $taints = taints($gsis, $team);
-    $ints = ints($gsis, $team) - $taints;
-    $farts = farts($gsis, $team);
-    $fumblesNotLost = fumblesNotLost($gsis, $team);
-    $fumblesLost = fumblesLost($gsis, $team) - $farts;
-    $turnovers = $fumblesLost + $ints + $taints + $farts;
-    $longestPass = longestPass($gsis, $team);
-    $passingTDs = passingTDs($gsis, $team);
-    $rushingTDs = rushingTDs($gsis, $team);
-    $TDs = $passingTDs + $rushingTDs;
-    $passingYards = passingYards($gsis, $team);
-    $rushingYards = rushingYards($gsis, $team);
+    $points = array();
+    $points["TAINTs"] = array(taints($gsis, $team), 0);
+    $points["Inteceptions"] = array(ints($gsis, $team) - $taints, 0);
+    $points["FARTs"] = array(farts($gsis, $team), 0);
+    $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
+    $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $farts, 0);
+    $points["Turnovers"] = array($fumblesLost + $ints + $taints + $farts, 0);
+    $points["Longest Pass"] = array(longestPass($gsis, $team), 0);
+    $points["TDs"] = array(passingTDs($gsis, $team) + rushingTDs($gsis, $team), 0);
+    $points["Passing Yards"] = array(passingYards($gsis, $team), 0);
+    $points["Rushing Yards"] = array(rushingYards($gsis, $team), 0);
     try {
         $completionPct = number_format(@completionPct($gsis, $team),1);
     } catch (Exception $e) {
         $completionPct = -1;
     }
-    $safeties = safeties($gsis, $team);
-    $overtimeTaints = overtimeTaints($gsis, $team);
-	$benchings = benchings($year, $week, $team);
-	$gameWinningDrive = 0;
-	$miscPoints = miscPoints($year, $week, $team);
+    $points["Completion Pct"] = array($completionPct, 0);
+    $points["Safeties"] = array(safeties($gsis, $team), 0);
+    $points["Overtime TAINTs"] = array(overtimeTaints($gsis, $team), 0);
+    $points["Benchings"] = array(benchings($year, $week, $team), 0);
+    $points["Game Winning Drive"] = array(0, 0);
+    $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
+    
+    
+    $points['TAINTs'][1] = 25*$points['TAINTs'][0];
+    $points['Interceptions'][1] = 5*$points['Interceptions'][0];
+    $points['Fumbles Kept'][1] = 2*$points['Fumbles Kept'][0];
+    $points['Fumbles Lost'][1] = 5*$points['Fumbles Lost'][0];
+    $points['FARTs'][1] = 10*$points['FARTs'][0];
+    $points['Turnovers'][1] = 0;
+        if($points['Turnovers'][0] == 3) $points['Turnovers'][1] = 12;
+        elseif($points['Turnovers'][0] == 4) $points['Turnovers'][1] = 16;
+        elseif($points['Turnovers'][0] == 5) $points['Turnovers'][1] = 24;
+        elseif($points['Turnovers'][0] >= 6) $points['Turnovers'][1] = 50;
+    $points['Longest Pass'][1] = $points['Longest Pass'][0] < 25 ? 10 : 0;
+    $points['TDs'][1] = 0;
+        if($points['TDs'][0] == 0) $points['TDs'][1] = 10;
+        elseif($points['TDs'][0] == 3) $points['TDs'][1] = -5;
+        elseif($points['TDs'][0] == 4) $points['TDs'][1] = -10;
+        elseif($points['TDs'][0] == 5) $points['TDs'][1] = -20;
+        elseif($points['TDs'][0] >= 6) $points['TDs'][1] = -40;
+    $points['Passing Yards'][1] = 0;
+        if($points['Passing Yards'][0] < 100) $points['Passing Yards'][1] = 25;
+        elseif($points['Passing Yards'][0] < 150) $points['Passing Yards'][1] = 12;
+        elseif($points['Passing Yards'][0] < 200) $points['Passing Yards'][1] = 6;
+        elseif($points['Passing Yards'][0] >= 400) $points['Passing Yards'][1] = -12;
+        elseif($points['Passing Yards'][0] >= 350) $points['Passing Yards'][1] = -9;
+        elseif($points['Passing Yards'][0] >= 300) $points['Passing Yards'][1] = -6;
+    $points['Rushing Yards'][1] = $points['Rushing Yards'][0] >= 75 ? -8 : 0;
+    $points['Completion Pct'][1] = 0;
+        if($points['Completion Pct'][0] < 30) $points['Completion Pct'][1] = 25;
+        elseif($points['Completion Pct'][0] < 40) $points['Completion Pct'][1] = 15;
+        elseif($points['Completion Pct'][0] < 50) $points['Completion Pct'][1] = 5;
+    $points['Safeties'][1] = 20*$points['Safeties'][0];
+    $points['Overtime TAINTs'][1] = 50*$points['Overtime TAINTs'][0];
+	$points['Benchings'][1] = 35*$points['Benchings'][0];
+	$points['Game Winning Drive'][1] = -12*$points['Game Winning Drive'][0];
+	$points['Misc. Points'][1] = $points['Misc. Points'][0];
+    return $points;
+}
 
-    $points = array();
-    $points['taints'] = 25*$taints;
-    $points['ints'] = 5*$ints;
-    $points['fumblesNotLost'] = 2*$fumblesNotLost;
-    $points['fumblesLost'] = 5*$fumblesLost;
-    $points['farts'] = 10*$farts;
-    $points['turnovers'] = 0;
-        if($turnovers == 3) $points['turnovers'] = 12;
-        elseif($turnovers == 4) $points['turnovers'] = 16;
-        elseif($turnovers == 5) $points['turnovers'] = 24;
-        elseif($turnovers >= 6) $points['turnovers'] = 50;
-    $points['longestPass'] = $longestPass < 25 ? 10 : 0;
-    $points['TDs'] = 0;
-        if($TDs == 0) $points['TDs'] = 10;
-        elseif($TDs == 3) $points['TDs'] = -5;
-        elseif($TDs == 4) $points['TDs'] = -10;
-        elseif($TDs == 5) $points['TDs'] = -20;
-        elseif($TDs >= 6) $points['TDs'] = -40;
-    $points['passingYards'] = 0;
-        if($passingYards < 100) $points['passingYards'] = 25;
-        elseif($passingYards < 150) $points['passingYards'] = 12;
-        elseif($passingYards < 200) $points['passingYards'] = 6;
-        elseif($passingYards >= 400) $points['passingYards'] = -12;
-        elseif($passingYards >= 350) $points['passingYards'] = -9;
-        elseif($passingYards >= 300) $points['passingYards'] = -6;
-    $points['rushingYards'] = $rushingYards >= 75 ? -8 : 0;
-    $points['completionPct'] = 0;
-        if($completionPct < 30) $points['completionPct'] = 25;
-        elseif($completionPct < 40) $points['completionPct'] = 15;
-        elseif($completionPct < 50) $points['completionPct'] = 5;
-    $points['safeties'] = 20*$safeties;
-    $points['overtimeTaints'] = 50*$overtimeTaints;
-	$points['benchings'] = 35*$benchings;
-	$points['gameWinningDrive'] = -12*$gameWinningDrive;
-	$points['miscPoints'] = $miscPoints;
-    $total_points = array_sum($points);
-    printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
-                    $turnovers, $longestPass, $TDs, $passingYards, $rushingYards,
-                    $completionPct, $safeties, $overtimeTaints, $benchings, $gameWinningDrive, $miscPoints, $total_points);
+function totalPoints($points) {
+    $total = 0;
+    foreach($points as $key => $val) {
+        $total = $total + $val[1];
+    }
+    return $total;
+}
+
+function printGameScore($team, $week, $year=2014) {
+    if (gameType($year, $week, $team) == 2) {
+        printBlankScore();
+        return;
+    }
+    $points = getPoints($team, $week, $year);
+    printScore($points);
 }
 
 function printBlankScore() {
@@ -81,31 +92,17 @@ $points["taints"]=$points["ints"]=$points["fumblesNotLost"]=$points["fumblesLost
 printScore(array(), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
 }
 
-function printScore($points, $taints, $ints, $fumblesNotLost, $fumblesLost, $farts,
-                    $turnovers, $longestPass, $TDs, $passingYards, $rushingYards,
-                    $completionPct, $safeties, $overtimeTaints, $benchings, $gameWinningDrive, $miscPoints, $total_points) {
-echo <<<END
+function printScore($points) {
+echo <<< END
 <table border=2 cellpadding=4 style="border-collapse: collapse;">
 <tr><th>Stat Type</th> <th>Stat Value</th> <th>BQBL Points</th></tr>
-<tr><td>TAINTS</td> <td>$taints</td> <td>$points[taints]</td></tr>
-<tr><td>Interceptions</td> <td>$ints</td> <td>$points[ints]</td></tr>
-<tr><td>Fumbles Kept</td> <td>$fumblesNotLost</td> <td>$points[fumblesNotLost]</td></tr>
-<tr><td>Fumbles Lost</td> <td>$fumblesLost</td> <td>$points[fumblesLost]</td></tr>
-<tr><td>FARTS</td> <td>$farts</td> <td>$points[farts]</td></tr>
-<tr><td>Turnovers</td> <td>$turnovers</td> <td>$points[turnovers]</td></tr>
-<tr><td>Longest Pass (25+?)</td> <td>$longestPass</td> <td>$points[longestPass]</td></tr>
-<tr><td>TDs</td> <td>$TDs</td> <td>$points[TDs]</td></tr>
-<tr><td>Passing Yards</td> <td>$passingYards</td> <td>$points[passingYards]</td></tr>
-<tr><td>Rushing Yards</td> <td>$rushingYards</td> <td>$points[rushingYards]</td></tr>
-<tr><td>Completion %</td> <td>$completionPct</td> <td>$points[completionPct]</td></tr>
-<tr><td>Safeties</td> <td>$safeties</td> <td>$points[safeties]</td></tr>
-<tr><td>TAINTS in OT</td> <td>$overtimeTaints</td> <td>$points[overtimeTaints]</td></tr>
-<tr><td>In-game benchings</td> <td>$benchings</td> <td>$points[benchings]</td></tr>
-<tr><td>Game-Winning Drive</td> <td>$gameWinningDrive</td> <td>$points[gameWinningDrive]</td></tr>
-<tr><td>24/7 Points</td> <td> </td> <td>$points[miscPoints]</td></tr>
-<tr><th colspan=2>TOTAL</th> <td>$total_points</td>
-</table>
 END;
+foreach ($points as $name => $val) {
+    echo "<tr><td>$name</td> <td>$val[0]</td> <td>$val[1]</td></tr>\n";
+}
+$total = totalPoints($points);
+echo "<tr><th colspan=2>TOTAL</th> <td>$total</td>
+</table>";
 }
 
 function taints($gsis, $team) {
