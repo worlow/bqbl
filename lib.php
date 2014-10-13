@@ -19,7 +19,7 @@ function currentWeek() {
 }
 
 function databaseModificationTime() {
-    $file = "C:\PostgreSQL\9.3\data\global\pg_control"; // pg_stat_tmp\global.stat;
+    $file = "C:\www\bqbl\update_time";
     return filemtime($file);
 }
 

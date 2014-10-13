@@ -2,6 +2,10 @@
 Thumbs.db
 ehthumbs.db
 
+update_time
+initseason.php
+oldindex.php
+resetpassword.php
 git.php
 lib_db.php
 update.php
