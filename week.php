@@ -6,7 +6,7 @@ $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
 
-$updateTime = date("Y-m-d H:i:s", databaseModificationTime());
+$updateTime = date("n/j g:i:s A, T", databaseModificationTime());
 echo "<html><head>
 <div id='content' align='center'>
 <title>BQBL Week $week $year</title></head><body>\n
