@@ -304,3 +304,91 @@ function miscPoints($year, $week, $team) {
     $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
 	return $result;
 }
+
+function miscPoints($year, $week, $team) {
+    $query = "SELECT points FROM extra_points 
+              WHERE nfl_team='$team' AND week='$week' AND year='$year';";
+    
+    $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
+	return $result;
+}
+
+function gameWinningDrive($year, $week, $team) {
+	$query = "SELECT not_winning = last_drive_qualifies = won_game = TRUE as game_winning_drive FROM
+(SELECT SUM(score) <= 0 as not_winning
+FROM (SELECT CASE WHEN pos_team = '$team' AND note = 'TD' AND def_td = 0 THEN 6 
+                  WHEN pos_team != '$team' AND note = 'TD' AND def_td = 0 THEN -6 
+                  WHEN pos_team = '$team' AND note = 'TD' AND def_td = 1 THEN -6 
+                  WHEN pos_team != '$team' AND note = 'TD' AND def_td = 1 THEN 6
+                  WHEN pos_team = '$team' AND note = 'XP' THEN 1
+                  WHEN pos_team != '$team' AND note = 'XP' THEN -1
+                  WHEN pos_team = '$team' AND note = 'FG' THEN 3
+                  WHEN pos_team != '$team' AND note = 'FG' THEN -3
+                  WHEN pos_team = '$team' AND note = 'SAF' THEN -2
+                  WHEN pos_team != '$team' AND note = 'SAF' THEN 2
+                  WHEN pos_team = '$team' AND note = '2PS' THEN 2
+                  WHEN pos_team != '$team' AND note = '2PS' THEN -2
+                  WHEN pos_team = '$team' AND note = '2PR' THEN 2
+                  WHEN pos_team != '$team' AND note = '2PR' THEN -2
+                  ELSE 0 
+             END AS score
+      FROM (SELECT note, pos_team, SUM(defense_int_tds + defense_frec_tds + defense_misc_tds) AS def_td
+            FROM (SELECT gsis_id 
+            	  FROM game 
+            	  WHERE (home_team = '$team' 
+            		     OR away_team = '$team') 
+            	        AND week = $week 
+            			AND season_year = $year 
+            			AND season_type = 'Regular')
+            	  AS g 
+            NATURAL JOIN (SELECT * 
+            	          FROM play 
+            			  WHERE (note = 'TD' 
+            				     OR note = 'XP' 
+            					 OR note = 'FG' 
+            					 OR note = 'SAF' 
+            					 OR note = '2PS' 
+            					 OR note = '2PR') 
+            					AND (((\"time\").phase != 'Q4') 
+            					     OR ((\"time\").phase = 'Q4' 
+            						     AND (\"time\").elapsed <= 780))) 
+            	          AS p
+            NATURAL JOIN play_player
+            GROUP BY time, note, description, pos_team
+            ORDER BY time) AS pl) as sc) AS nw,
+(SELECT CAST(CASE WHEN pos_team = '$team' AND (note = 'TD' OR note = 'FG') AND def_td = 0 THEN 1 
+            ELSE 0 
+	   END AS bool) AS last_drive_qualifies
+FROM (SELECT note, pos_team, SUM(defense_int_tds + defense_frec_tds + defense_misc_tds) AS def_td
+	  FROM (SELECT gsis_id 
+			FROM game 
+			WHERE (home_team = '$team' 
+				   OR away_team = '$team') 
+				  AND week = $week
+				  AND season_year = $year 
+				  AND season_type = 'Regular')
+			AS g 
+	  NATURAL JOIN (SELECT * 
+					FROM play 
+					WHERE (note = 'TD' 
+						   OR note = 'FG' 
+						   OR note = 'SAF'))
+					AS p
+	  NATURAL JOIN play_player
+	  GROUP BY time, note, description, pos_team
+	  ORDER BY time DESC) AS pl 
+LIMIT 1) AS ldq,
+(SELECT CAST(CASE WHEN home_team = '$team' AND home_score > away_score THEN 1 
+            WHEN away_team = '$team' AND away_score > home_score THEN 1 
+            ELSE 0 
+       END AS bool) AS won_game
+FROM game 
+WHERE (home_team = '$team' 
+	   OR away_team = '$team') 
+	  AND week = $week 
+	  AND season_year = $year 
+	  AND season_type = 'Regular') AS wg;";
+	  
+    $result = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'],$query),0);
+  	return $result;
+}
