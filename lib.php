@@ -7,6 +7,10 @@ date_default_timezone_set('America/Los_Angeles');
 $nfldbconn = connect_nfldb();
 $bqbldbconn = connect_bqbldb();
 
+function currentYear() {
+    return 2014;
+}
+
 function gameTypeById($gsis) {
 global $nfldbconn;
     $query = "SELECT start_time
@@ -38,5 +42,16 @@ function gameType($year, $week, $team) {
         return 2; // Future game
     }
     return 1; // Current or past game
+}
+
+function nflTeams() {
+    global $bqbldbconn;
+    $teams = array();
+    $query = "SELECT id from nfl_teams;";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($team) = pg_fetch_array($result)) {
+        $teams[] = $team;
+    }
+    return $teams;
 }
 ?>

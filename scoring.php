@@ -10,7 +10,7 @@ function getPoints($team, $week, $year=2014) {
     $gsis = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     $points = array();
     $points["TAINTs"] = array(taints($gsis, $team), 0);
-    $points["Inteceptions"] = array(ints($gsis, $team) - $taints, 0);
+    $points["Interceptions"] = array(ints($gsis, $team) - $taints, 0);
     $points["FARTs"] = array(farts($gsis, $team), 0);
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
     $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $farts, 0);
@@ -270,23 +270,6 @@ function overtimeTaints($gsis, $team) {
               AND defense_int_tds > 0 AND (\"time\").phase IN ('OT', 'OT2');";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
-}
-
-function teamToIndexArray($headerLine) {
-	$teamToIndexArray = array_slice(explode("\t", $headerLine), 1);
-	return $teamToIndexArray;
-}
-
-function readDataFromFile($gsis, $week, $team, $filename) {
-	$fileHandle = fopen($filename, "r");
-	$headerLine = fgets($fileHandle, 1024);
-	$teamToIndexArray = teamToIndexArray($headerLine);
-	for ($i = 1; $i < $week; $i++) {
-		fgets($fileHandle, 1024);
-	}
-	$dataForWeek = array_slice(explode("\t", fgets($fileHandle, 1024)), 1);
-	$result = $dataForWeek[ array_search($team, $teamToIndexArray) ];
-	return $result;
 }
 
 function benchings($year, $week, $team) {
