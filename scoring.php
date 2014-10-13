@@ -12,19 +12,16 @@ function getPoints($team, $week, $year=2014) {
     $gsis = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     $points = array();
     $points["TAINTs"] = array(taints($gsis, $team), 0);
-<<<<<<< HEAD
     $points["Interceptions"] = array(ints($gsis, $team) - $points["TAINTs"][0], 0);
     $points["FARTs"] = array(farts($gsis, $team), 0);
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
     $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $points["FARTs"][0], 0);
     $points["Turnovers"] = array($points["Fumbles Lost"][0] + $points["Interceptions"][0] + $points["TAINTs"][0] + $points["FARTs"][0], 0);
-=======
     $points["Inteceptions"] = array(ints($gsis, $team) - $points["TAINTs"], 0);
     $points["FARTs"] = array(farts($gsis, $team), 0);
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
     $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $points["FARTs"], 0);
     $points["Turnovers"] = array($points["Fumbles Lost"] + $points["Inteceptions"] + $points["TAINTs"] + $points["FARTs"], 0);
->>>>>>> 8e6d73a8dc792b627039901237beece5dd2f9db3
     $points["Longest Pass"] = array(longestPass($gsis, $team), 0);
     $points["TDs"] = array(passingTDs($gsis, $team) + rushingTDs($gsis, $team), 0);
     $points["Passing Yards"] = array(passingYards($gsis, $team), 0);
