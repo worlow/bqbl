@@ -16,7 +16,8 @@ function getPoints($team, $week, $year=2014) {
     $points["FARTs"] = array(farts($gsis, $team), 0);
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
     $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $points["FARTs"][0], 0);
-    $points["Turnovers"] = array($points["Fumbles Lost"][0] + $points["Interceptions"][0] + $points["TAINTs"][0] + $points["FARTs"][0], 0);
+    $points["Turnovers"] =
+        array($points["Fumbles Lost"][0] + $points["Interceptions"][0] + $points["TAINTs"][0] + $points["FARTs"][0], 0);
     $points["Inteceptions"] = array(ints($gsis, $team) - $points["TAINTs"][0], 0);
     $points["FARTs"] = array(farts($gsis, $team), 0);
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
@@ -34,7 +35,7 @@ function getPoints($team, $week, $year=2014) {
     $points["Safeties"] = array(safeties($gsis, $team), 0);
     $points["Overtime TAINTs"] = array(overtimeTaints($gsis, $team), 0);
     $points["Benchings"] = array(benchings($year, $week, $team), 0);
-    $points["Game Winning Drive"] = array(0, 0);
+    $points["Game Winning Drive"] = array(gameWinningDrive($year, $week, $team), 0);
     $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
     
     
