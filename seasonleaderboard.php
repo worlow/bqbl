@@ -77,7 +77,7 @@ foreach ($grandtotals_defense as $key => $val) {
 echo "</table>";
 
 arsort($nfl_draftscore);
-arsort($bqbl_draftscore);
+asort($bqbl_draftscore);
 
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
 echo "<tr><th>Rank</th><th>Team Name</th><th>Draft Score</th></tr>";
