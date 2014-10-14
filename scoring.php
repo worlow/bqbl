@@ -292,7 +292,11 @@ function miscPoints($year, $week, $team) {
 	return $result;
 }
 
+# Returns 1 if the last scoring play of the game was scored by $team,
+# it was an offensive score, that score put the team ahead, and it was
+# either in OT or the last 2 minutes of the game
 function gameWinningDrive($gsis, $team) {
+    # Gets final game score from database
     $query = "SELECT home_team, home_score, away_team, away_score
               FROM game WHERE gsis_id='$gsis';";
     list($home_team, $home_score, $away_team, $away_score) = pg_fetch_array(pg_query($GLOBALS['nfldbconn'],$query));
@@ -309,10 +313,12 @@ function gameWinningDrive($gsis, $team) {
      WHERE has_score
      ORDER BY play.play_id DESC
      LIMIT 1";
-     #echo $query;
     list($score_offense, $scoringteam, $phase, $elapsed) = pg_fetch_array(pg_query($GLOBALS['nfldbconn'],$query));
+    # team in question scored
     if ($scoringteam == $team) {
-        if ($phase == "OT" || ($phase == "Q4" && $elapsed >= (15*60-2*60))) {
+        # OT or last 2 minutes
+        if ($phase == "OT" || $phase == "OT2" || ($phase == "Q4" && $elapsed >= (15*60-2*60))) {
+            # team was not winning before this play
             if ($team_score-offensivePlayScoreToDriveScore($score_offense) <= $other_score) {
                 return 1;
             }
@@ -322,10 +328,10 @@ function gameWinningDrive($gsis, $team) {
 }
 
 # We get the last scoring play, so if it is an extra point or 2pt conversion we add 6
-function offensivePlayScoreToDriveScore($play_score) {
-    if ($play_score == 1) return 7;
-    if ($play_score == 2) return 8;
-    return $play_score;
+function offensivePlayScoreToDriveScore($last_play_score) {
+    if ($last_play_score == 1) return 7;
+    if ($last_play_score == 2) return 8;
+    return $last_play_score;
 }
 
 function oldGameWinningDrive($year, $week, $team) {
