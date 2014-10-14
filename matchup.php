@@ -48,15 +48,15 @@ foreach ($matchup as $key => $val) {
     $away2_total = totalPoints($away_team2);
     
     echo "<div>";
-    echo "$bqbl_teamname[$key]\n";
+    echo "$bqbl_teamname[$key]";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
     echo "<tr><td>".$lineup[$key][0]."</td> <td>".$home1_total."</td></tr>\n";
     echo "<tr><td>".$lineup[$key][1]."</td> <td>".$home2_total."</td></tr>\n";
-    echo "<tr><td>Total</td> <td>".$hotal1_total+$home2_total."</td></tr>\n";
+    echo "<tr><td>Total</td> <td>".$home1_total+$home2_total."</td></tr>\n";
     echo "</table>";
     
-    echo "$bqbl_teamname[$val]\n";
+    echo "$bqbl_teamname[$val]";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
     echo "<tr><td>".$lineup[$val][0]."</td> <td>".$away1_total."</td></tr>\n";
