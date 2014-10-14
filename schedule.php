@@ -37,7 +37,7 @@ for ($i = 1; $i <= 14; $i++) {
     for ($j = 1; $j <= 8; $j++) {
         if ($score[$j][$i] > $score[$matchup[$i][$j]][$i]) {
             echo "<td background-color='green'>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
-        } elseif {
+        } elseif ($score[$j][$i] < $score[$matchup[$i][$j]][$i]) {
             echo "<td background-color='red'>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
         } else {
             echo "<td>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
