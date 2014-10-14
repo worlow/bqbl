@@ -66,4 +66,15 @@ function nflTeams() {
     }
     return $teams;
 }
+
+function bqblTeams() {
+    global $bqbldbconn;
+    $teams = array();
+    $query = "SELECT id from users;";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($team) = pg_fetch_array($result)) {
+        $teams[] = $team;
+    }
+    return $teams;
+}
 ?>
