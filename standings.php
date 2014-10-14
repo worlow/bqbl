@@ -42,11 +42,6 @@ for ($i = 1; $i <= $week; $i++) {
         } elseif ($score[$team1][$i] < $score[$team2][$i]) {
             $record[$team1][1]++;
             $record[$team2][0]++;
-        } else {
-            $record[$team1][0] += .5;
-            $record[$team2][0] += .5;
-            $record[$team1][1] += .5;
-            $record[$team2][1] += .5;
         }
     }
 }
@@ -57,7 +52,7 @@ echo "<tr><th></th><th>Team</th><th>W</th><th>L</th><th>PF</th><th>PA</th><th>PD
 $rank = 0;
 foreach ($record as $key => $val) {
     $rank++;
-    $point_differential = $points_for[$key] - $points_against[$key];
+    $point_differential = $val[2] - $points_against[$key];
     echo "<tr><td>$rank.</td><td>$bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$val[2]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
 }
 echo "</table>";
