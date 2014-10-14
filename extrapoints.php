@@ -21,13 +21,13 @@ if (isset($_POST['submit'])) {
 echo "<h1>Extra Points for Week $week, $year</h1>";
 $formaction=$_SERVER['PHP_SELF'] . "?week=$week&year=$year";
 echo "<form method=post action='$formaction'>
-<table><tr><th>Team</th><th>Benchings</th><th>Other</th><th>Explanation</th></tr>\n";
+<table><tr><th>Team</th><th>Benchings</th><th>Other</th><th>Explanation For Other Points</th></tr>\n";
 foreach (nflTeams() as $team) {
     $query = "SELECT benching, points, explanation FROM extra_points 
               WHERE year='$year' AND week='$week' AND nfl_team='$team';";
     list($benching, $points, $explanation) = pg_fetch_array(pg_query($bqbldbconn, $query));
-    echo "<tr><td>$team</td><td><input type='text' name='benching_$team' size='3' value='$benching'></td><td><input type='text' name='points_$team' size='3' value='$points'></td><td><input type='text' name='explanation_$team' size='80' value='$explanation'></td></tr>\n";
+    echo "<tr><td>$team</td><td><input type='text' name='benching_$team' size='3' maxlength='1' value='$benching'></td><td><input type='text' name='points_$team' size='3' value='$points'></td><td><input type='text' name='explanation_$team' size='80' value='$explanation'></td></tr>\n";
 }
 echo "</table>
-<input type='submit' name='submit'></form>";
+<input type='submit' name='submit' value='Update'></form>";
 ?>
