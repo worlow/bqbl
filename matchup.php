@@ -9,29 +9,10 @@ echo "<html><head>
 <title>$year BQBL Week $week </title></head><body>\n";
 
 $bqbl_teamname = bqblTeams();
-$lineup = array();
-$matchup = array();
+$lineup = getLineups($week, $year);
+$matchup = getMatchups($week, $year);
 
-foreach ($bqbl_teamname as $key => $val) {
-    $lineup[$key] = array();
-}
 
-$query = "SELECT bqbl_team, starter1, starter2
-            FROM lineup
-              WHERE year = $year AND week = $week;";
-$result = pg_query($bqbldbconn, $query);
-while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
-    $lineup[$bqbl_team][0] = $starter1;
-    $lineup[$bqbl_team][1] = $starter2;
-}
-
-$query = "SELECT team1, team2
-            FROM schedule
-              WHERE year = $year AND week = $week;";
-$result = pg_query($bqbldbconn, $query);
-while(list($team1,$team2) = pg_fetch_array($result)) {
-    $matchup[$team1] = $team2;
-}
 
 foreach ($matchup as $key => $val) {
     $home_team1 = getPoints($lineup[$key][0], $week, $year);
@@ -64,5 +45,38 @@ foreach ($matchup as $key => $val) {
     echo "<tr><td>Total</td> <td>$away_total</td></tr>\n";
     echo "</table>";
     echo "</div>";
+}
+
+function getLineups($week, $year) {
+    $lineup = array();
+    $query = "SELECT bqbl_team, starter1, starter2
+                FROM lineup
+                  WHERE year = $year AND week = $week;";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
+        $lineup[$bqbl_team][0] = $starter1;
+        $lineup[$bqbl_team][1] = $starter2;
+    }
+}
+
+function getMatchups($week, $year) {
+    $matchup = array();
+    $query = "SELECT team1, team2
+            FROM schedule
+              WHERE year = $year AND week = $week;";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($team1,$team2) = pg_fetch_array($result)) {
+        $matchup[$team1] = $team2;
+    }
+}
+
+function gameResult($team1, $team2, $week, $year) {
+    $query = "SELECT team1, team2
+            FROM schedule
+              WHERE year = $year AND week = $week;";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($team1,$team2) = pg_fetch_array($result)) {
+        $matchup[$team1] = $team2;
+}
 }
 ?>
