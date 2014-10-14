@@ -27,7 +27,7 @@ echo "</tr>";
 for ($i = 1; $i <= 14; $i++) {
     echo "<tr><th>Week $i</th>";
     for ($j = 1; $j <= 8; $j++) {
-        echo "<th>".$matchup[$i][$j]."</th>";
+        echo "<th>".$bqbl_teamname[$matchup[$i][$j]]."</th>";
     }
     echo "</tr>";
 }
