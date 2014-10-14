@@ -48,6 +48,7 @@ foreach ($matchup as $key => $val) {
 }
 
 function getLineups($week, $year) {
+    global $bqbldbconn;
     $lineup = array();
     $query = "SELECT bqbl_team, starter1, starter2
                 FROM lineup
@@ -57,9 +58,11 @@ function getLineups($week, $year) {
         $lineup[$bqbl_team][0] = $starter1;
         $lineup[$bqbl_team][1] = $starter2;
     }
+    return $lineup;
 }
 
 function getMatchups($week, $year) {
+    global $bqbldbconn;
     $matchup = array();
     $query = "SELECT team1, team2
             FROM schedule
@@ -68,6 +71,7 @@ function getMatchups($week, $year) {
     while(list($team1,$team2) = pg_fetch_array($result)) {
         $matchup[$team1] = $team2;
     }
+    return $matchup;
 }
 
 function gameResult($team1, $team2, $week, $year) {
