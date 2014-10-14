@@ -6,7 +6,13 @@ $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
 echo "<html><head>
-<title>$year BQBL Standings </title></head><body>\n";
+<title>$year BQBL Standings </title>
+<style type='text/css'>
+tr.thickline td {
+border-bottom-width: 6px;
+}
+</style>
+</head><body>\n";
 
 $bqbl_teamname = bqblTeams();
 $matchup = array();
@@ -53,7 +59,8 @@ $rank = 0;
 foreach ($record as $key => $val) {
     $rank++;
     $point_differential = $val[2] - $points_against[$key];
-    echo "<tr><td>$rank.</td><td>$bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$val[2]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
+    $thickline = ($rank==4) ? "class='thickline'" : "";
+    echo "<tr $thickline><td>$rank.</td><td>$bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$val[2]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
 }
 echo "</table>";
 
