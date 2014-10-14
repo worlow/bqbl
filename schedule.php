@@ -30,16 +30,16 @@ echo "</tr>";
 for ($i = 1; $i <= 14; $i++) {
     $lineup = getLineups($year, $i);
     foreach ($lineup as $team => $starters) {
-            $score[$team][$i] =
+            $score[$team] =
                 totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
     }
     
     echo "<tr><td>Week $i</td>";
     for ($j = 1; $j <= 8; $j++) {
-        if ($score[$j][$i] > $score[$matchup[$i][$j]][$i]) {
-            echo "<td color='green'>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
-        } elseif ($score[$j][$i] < $score[$matchup[$i][$j]][$i]) {
-            echo "<td color='red'>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
+        if ($score[$j] > $score[$matchup[$i][$j]]) {
+            echo '<td bgcolor="green">'.$bqbl_teamname[$matchup[$i][$j]]."</td>";
+        } elseif ($score[$j] < $score[$matchup[$i][$j]]) {
+            echo '<td bgcolor="red">'.$bqbl_teamname[$matchup[$i][$j]]."</td>";
         } else {
             echo "<td>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
         }
