@@ -38,9 +38,9 @@ for ($i = 1; $i <= 14; $i++) {
     
     echo "<tr><td>Week $i</td>";
     for ($j = 1; $j <= 8; $j++) {
-        if ($score[$j] > $score[$matchup[$i][$j]]) {
+        if ($i <= $week && $score[$j] > $score[$matchup[$i][$j]]) {
             echo '<td bgcolor="green">'.$bqbl_teamname[$matchup[$i][$j]]."</td>";
-        } elseif ($score[$j] < $score[$matchup[$i][$j]]) {
+        } elseif ($i <= $week && $score[$j] < $score[$matchup[$i][$j]]) {
             echo '<td bgcolor="red">'.$bqbl_teamname[$matchup[$i][$j]]."</td>";
         } else {
             echo "<td>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
