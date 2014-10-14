@@ -69,12 +69,12 @@ function nflTeams() {
 
 function bqblTeams() {
     global $bqbldbconn;
-    $teams = array();
-    $query = "SELECT id from users;";
+    $bqbl_teamname = array();
+    $query = "SELECT id, team_name FROM users;";
     $result = pg_query($bqbldbconn, $query);
-    while(list($team) = pg_fetch_array($result)) {
-        $teams[] = $team;
+    while(list($id,$team_name) = pg_fetch_array($result)) {
+        $bqbl_teamname[$id] = $team_name;
     }
-    return $teams;
+    return $bqbl_teamname;
 }
 ?>

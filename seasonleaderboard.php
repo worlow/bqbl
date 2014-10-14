@@ -13,7 +13,7 @@ $grandtotals = array();
 $grandtotals_defense = array();
 $owner = array();
 $bqbl_draftscore = array();
-$bqbl_teamname = array();
+$bqbl_teamname = bqblTeams();
 $nfl_draftscore = array();
 $draft_pick = array();
 echo "<br><h1>$year Season Rankings</h1>";
@@ -23,11 +23,8 @@ foreach (nflTeams() as $team) {
     $grandtotals_defense[$team] = 0;
 }
 
-$query = "SELECT id, team_name FROM users;";
-$result = pg_query($bqbldbconn, $query);
-while(list($id,$team_name) = pg_fetch_array($result)) {
-    $bqbl_draftscore[$id] = 0;
-    $bqbl_teamname[$id] = $team_name;
+foreach ($bqbl_teamname as $key => $val) {
+    $bqbl_draftscore[$key] = 0;
 }
 
 $query = "SELECT bqbl_team, nfl_team, draft_position

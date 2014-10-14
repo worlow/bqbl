@@ -8,15 +8,12 @@ $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 echo "<html><head>
 <title>$year BQBL Week $week </title></head><body>\n";
 
-$bqbl_teamname = array();
+$bqbl_teamname = bqblTeams();
 $lineup = array();
 $matchup = array();
 
-$query = "SELECT id, team_name FROM users;";
-$result = pg_query($bqbldbconn, $query);
-while(list($id,$team_name) = pg_fetch_array($result)) {
-    $bqbl_teamname[$id] = $team_name;
-    $lineup[$id] = array();
+foreach ($bqbl_teamname as $key => $val) {
+    $lineup[$key] = array();
 }
 
 $query = "SELECT bqbl_team, starter1, starter2
