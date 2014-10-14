@@ -23,11 +23,11 @@ foreach (nflTeams() as $team) {
     $grandtotals_defense[$team] = 0;
 }
 
-$query = "SELECT id, name FROM users;";
+$query = "SELECT id, team_name FROM users;";
 $result = pg_query($bqbldbconn, $query);
-while(list($id,$name) = pg_fetch_array($result)) {
+while(list($id,$team_name) = pg_fetch_array($result)) {
     $bqbl_draftscore[$id] = 0;
-    $bqbl_teamname[$id] = $name;
+    $bqbl_teamname[$id] = $team_name;
 }
 
 $query = "SELECT bqbl_team, nfl_team, draft_position
