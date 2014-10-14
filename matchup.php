@@ -50,6 +50,7 @@ foreach ($matchup as $key => $val) {
         END;
     echo "<tr><td>".$lineup[$key][0]."</td> <td>".totalPoints($home_team1)."</td></tr>\n";
     echo "<tr><td>".$lineup[$key][1]."</td> <td>".totalPoints($home_team2)."</td></tr>\n";
+    echo "</table>";
     echo "</div><div class=score>@</div>\n";
     echo "<div class=score >\n";
     echo "$bqbl_teamname[$key]\n";
@@ -59,6 +60,7 @@ foreach ($matchup as $key => $val) {
         END;
     echo "<tr><td>".$lineup[$val][0]."</td> <td>".totalPoints($away_team1)."</td></tr>\n";
     echo "<tr><td>".$lineup[$val][1]."</td> <td>".totalPoints($away_team2)."</td></tr>\n";
+    echo "</table>";
     echo"</div></div>";
 }
 ?>
