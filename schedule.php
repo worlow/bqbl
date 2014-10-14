@@ -28,10 +28,12 @@ for ($i = 1; $i <= 8; $i++) {
 }
 echo "</tr>";
 for ($i = 1; $i <= 14; $i++) {
-    $lineup = getLineups($year, $i);
-    foreach ($lineup as $team => $starters) {
-            $score[$team] =
-                totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
+    if ($i <= $week) {
+        $lineup = getLineups($year, $i);
+        foreach ($lineup as $team => $starters) {
+                $score[$team] =
+                    totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
+        }
     }
     
     echo "<tr><td>Week $i</td>";
