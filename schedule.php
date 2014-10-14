@@ -19,7 +19,7 @@ while(list($week,$team1,$team2) = pg_fetch_array($result)) {
 }
 
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-echo "<tr><th>Week</th>";
+echo "<tr><th></th>";
 for ($i = 1; $i <= 8; $i++) {
     echo "<th>$bqbl_teamname[$i]</th>";
 }
