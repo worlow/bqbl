@@ -13,6 +13,7 @@
 }
 </style>
 </head>
+<audio autoplay="autoplay"><source src="GetLow.mp3" type="audio/mpeg" /></audio>
 <marquee scrollamount=18><h1 class="blink">Welcome to the BQBL page!!!</h1></marquee>
 <a href='week.php'>Scoreboard</a><br>
 <a href='leaderboard.php'>Weekly Leaders</a><br>
