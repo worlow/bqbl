@@ -17,6 +17,7 @@ $points_against = array();
 foreach ($bqbl_teamname as $key => $val) {
     $record[$key][0] = 0;
     $record[$key][1] = 0;
+    $record[$key][2] = 0;
     $points_for[$key] = 0;
     $points_against[$key] = 0;
 }
@@ -30,10 +31,10 @@ for ($i = 1; $i <= $week; $i++) {
     
     $matchup = getMatchups($year, $i);
     foreach ($matchup as $team1 => $team2) {
-        $points_for[$team1] += $score[$team1][$i];
+        $record[$team1][2] += $score[$team1][$i];
         $points_against[$team1] += $score[$team2][$i];
         
-        $points_for[$team2] += $score[$team2][$i];
+        $record[$team2][2] += $score[$team2][$i];
         $points_against[$team2] += $score[$team1][$i];
         if ($score[$team1][$i] > $score[$team2][$i]) {
             $record[$team1][0]++;
@@ -57,7 +58,7 @@ $rank = 0;
 foreach ($record as $key => $val) {
     $rank++;
     $point_differential = $points_for[$key] - $points_against[$key];
-    echo "<tr><td>$rank. $bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$points_for[$key]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
+    echo "<tr><td>$rank. $bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$val[2]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
 }
 echo "</table>";
 
