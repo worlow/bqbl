@@ -53,12 +53,12 @@ for ($i = 1; $i <= $week; $i++) {
 
 arsort($record);
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block;">';
-echo "<tr><th>Team</th><th>W</th><th>L</th><th>PF</th><th>PA</th><th>PD</th></tr>";
+echo "<tr><th></th><th>Team</th><th>W</th><th>L</th><th>PF</th><th>PA</th><th>PD</th></tr>";
 $rank = 0;
 foreach ($record as $key => $val) {
     $rank++;
     $point_differential = $points_for[$key] - $points_against[$key];
-    echo "<tr><td>$rank. $bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$val[2]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
+    echo "<tr><td>$rank.</td><td>$bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$val[2]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
 }
 echo "</table>";
 
