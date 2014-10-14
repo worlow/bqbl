@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
 echo "<h1>Extra Points for Week $week, $year</h1>";
 $formaction=$_SERVER['PHP_SELF'] . "?week=$week&year=$year";
 echo "<form method=post action='$formaction'>
-<table><tr><th>Team</th><th>Benchings</th><th>Other</th><th>Explanation</th></tr>\n";
+<table><tr><th>Team</th><th>Benchings</th><th>Other</th><th>Explanation For Other Points</th></tr>\n";
 foreach (nflTeams() as $team) {
     $query = "SELECT benching, points, explanation FROM extra_points 
               WHERE year='$year' AND week='$week' AND nfl_team='$team';";
