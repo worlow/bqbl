@@ -26,8 +26,8 @@ foreach (nflTeams() as $team) {
     $query = "SELECT benching, points, explanation FROM extra_points 
               WHERE year='$year' AND week='$week' AND nfl_team='$team';";
     list($benching, $points, $explanation) = pg_fetch_array(pg_query($bqbldbconn, $query));
-    echo "<tr><td>$team</td><td><input type='text' name='benching_$team' size='3' value='$benching'></td><td><input type='text' name='points_$team' size='3' value='$points'></td><td><input type='text' name='explanation_$team' size='80' value='$explanation'></td></tr>\n";
+    echo "<tr><td>$team</td><td><input type='text' name='benching_$team' size='3' maxlength='1' value='$benching'></td><td><input type='text' name='points_$team' size='3' value='$points'></td><td><input type='text' name='explanation_$team' size='80' value='$explanation'></td></tr>\n";
 }
 echo "</table>
-<input type='submit' name='submit'></form>";
+<input type='submit' name='submit' value='Update'></form>";
 ?>
