@@ -54,16 +54,16 @@ foreach ($matchup as $key => $val) {
     echo "$bqbl_teamname[$key]";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
-    echo "<tr><td>$lineup[$key][0]</td> <td>$home1_total</td></tr>\n";
-    echo "<tr><td>$lineup[$key][1]</td> <td>$home2_total</td></tr>\n";
+    echo "<tr><td>".$lineup[$key][0]."</td> <td>$home1_total</td></tr>\n";
+    echo "<tr><td>".$lineup[$key][1]."</td> <td>$home2_total</td></tr>\n";
     echo "<tr><td>Total</td> <td>$home_total</td></tr>\n";
     echo "</table>";
     
     echo "$bqbl_teamname[$val]";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
-    echo "<tr><td>$lineup[$val][0]</td> <td>$away1_total</td></tr>\n";
-    echo "<tr><td>$lineup[$val][1]</td> <td>$away2_total</td></tr>\n";
+    echo "<tr><td>".$lineup[$val][0]."</td> <td>$away1_total</td></tr>\n";
+    echo "<tr><td>".$lineup[$val][1]."</td> <td>$away2_total</td></tr>\n";
     echo "<tr><td>Total</td> <td>$away_total</td></tr>\n";
     echo "</table>";
     echo "</div>";
