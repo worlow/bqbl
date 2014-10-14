@@ -1,7 +1,6 @@
 <?php
 require_once "lib.php";
 require_once "scoring.php";
-require_once "matchup.php";
 
 $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
@@ -10,29 +9,32 @@ echo "<html><head>
 <title>$year BQBL Standings </title></head><body>\n";
 
 $bqbl_teamname = bqblTeams();
-$lineup = array();
 $matchup = array();
 $record = array();
 $score = array();
+$points_for = array();
+$points_against = array();
 foreach ($bqbl_teamname as $key => $val) {
-    $lineup[$key] = array();
-    $score[$key] = array();
     $record[$key][0] = 0;
     $record[$key][1] = 0;
+    $points_for[$key] = 0;
+    $points_against[$key] = 0;
 }
 
 for ($i = 1; $i <= $week; $i++) {
-    $lineup = getLineups($i, $year);
+    $lineup = getLineups($year, $i);
     foreach ($lineup as $team => $starters) {
             $score[$team][$i] =
                 totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
     }
     
-    $query = "SELECT team1, team2
-            FROM schedule
-              WHERE year = $year AND week = $i;";
-    $result = pg_query($bqbldbconn, $query);
-    while(list($team1,$team2) = pg_fetch_array($result)) {
+    $matchup = getMatchups($year, $i);
+    foreach ($matchup as $team1 => $team2) {
+        $points_for[$team1] += $score[$team1][$i];
+        $points_against[$team1] += $score[$team2][$i];
+        
+        $points_for[$team2] += $score[$team2][$i];
+        $points_against[$team2] += $score[$team1][$i];
         if ($score[$team1][$i] > $score[$team2][$i]) {
             $record[$team1][0]++;
             $record[$team2][1]++;
@@ -50,11 +52,12 @@ for ($i = 1; $i <= $week; $i++) {
 
 arsort($record);
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block;">';
-echo "<tr><th>Team</th><th>W</th><th>L</th></tr>";
+echo "<tr><th>Team</th><th>W</th><th>L</th><th>PF</th><th>PA</th><th>PD</th></tr>";
 $rank = 0;
 foreach ($record as $key => $val) {
     $rank++;
-    echo "<tr><td>$rank. $bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td></tr>";
+    $point_differential = $points_for[$key] - $points_against[$key]
+    echo "<tr><td>$rank. $bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$points_for[$key]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
 }
 echo "</table>";
 

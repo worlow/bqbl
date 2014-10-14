@@ -77,4 +77,31 @@ function bqblTeams() {
     }
     return $bqbl_teamname;
 }
+
+function getLineups($year, $week) {
+    global $bqbldbconn;
+    $lineup = array();
+    $query = "SELECT bqbl_team, starter1, starter2
+                FROM lineup
+                  WHERE year = $year AND week = $week;";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
+        $lineup[$bqbl_team][0] = $starter1;
+        $lineup[$bqbl_team][1] = $starter2;
+    }
+    return $lineup;
+}
+
+function getMatchups($year, $week) {
+    global $bqbldbconn;
+    $matchup = array();
+    $query = "SELECT team1, team2
+            FROM schedule
+              WHERE year = $year AND week = $week;";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($team1,$team2) = pg_fetch_array($result)) {
+        $matchup[$team1] = $team2;
+    }
+    return $matchup;
+}
 ?>
