@@ -46,5 +46,4 @@ foreach ($matchup as $key => $val) {
     echo "</table>";
     echo "</div>";
 }
-}
 ?>
