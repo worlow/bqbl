@@ -1,6 +1,7 @@
 <?php
 require_once "lib.php";
 
+$week = currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
 echo "<html><head>
@@ -8,6 +9,7 @@ echo "<html><head>
 
 $bqbl_teamname = bqblTeams();
 $matchup = array();
+$score = array();
 
 $query = "SELECT week, team1, team2
             FROM schedule
@@ -25,9 +27,21 @@ for ($i = 1; $i <= 8; $i++) {
 }
 echo "</tr>";
 for ($i = 1; $i <= 14; $i++) {
+    $lineup = getLineups($year, $i);
+    foreach ($lineup as $team => $starters) {
+            $score[$team][$i] =
+                totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
+    }
+    
     echo "<tr><td>Week $i</td>";
     for ($j = 1; $j <= 8; $j++) {
-        echo "<td>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
+        if ($score[$j][$i] > $score[$matchup[$i][$j]][$i]) {
+            echo "<td background-color='green'>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
+        } elseif {
+            echo "<td background-color='red'>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
+        } else {
+            echo "<td>".$bqbl_teamname[$matchup[$i][$j]]."</td>";
+        }
     }
     echo "</tr>";
 }
