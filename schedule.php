@@ -19,13 +19,13 @@ while(list($week,$team1,$team2) = pg_fetch_array($result)) {
 }
 
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-echo "<tr>";
+echo "<tr><th>Week</th>";
 for ($i = 1; $i <= 8; $i++) {
     echo "<th>$bqbl_teamname[$i]</th>";
 }
 echo "</tr>";
-for ($i = 1; $i <= 17; $i++) {
-    echo "<tr>";
+for ($i = 1; $i <= 14; $i++) {
+    echo "<tr><th>Week $i</th>";
     for ($j = 1; $j <= 8; $j++) {
         echo "<th>".$matchup[$i][$j]."</th>";
     }
