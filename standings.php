@@ -24,7 +24,7 @@ foreach ($bqbl_teamname as $key => $val) {
 for ($i = 1; $i <= $week; $i++) {
     $lineup = getLineups($i, $year);
     foreach ($lineup as $team => $starters) {
-            $score[team][$i] =
+            $score[$team][$i] =
                 totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
     }
     
