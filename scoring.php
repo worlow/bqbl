@@ -31,7 +31,7 @@ function getPoints($team, $week, $year=2014) {
     $points["Safeties"] = array(safeties($gsis, $team), 0);
     $points["Overtime TAINTs"] = array(overtimeTaints($gsis, $team), 0);
     $points["Benchings"] = array(benchings($year, $week, $team), 0);
-    $points["Game Winning Drive"] = array(gameWinningDrive($year, $week, $team), 0);
+    $points["Game Winning Drive"] = array(gameWinningDrive($gsis, $team), 0);
     $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
      $points['TAINTs'][1] = 25*$points['TAINTs'][0];
     $points['Interceptions'][1] = 5*$points['Interceptions'][0];
@@ -292,7 +292,43 @@ function miscPoints($year, $week, $team) {
 	return $result;
 }
 
-function gameWinningDrive($year, $week, $team) {
+function gameWinningDrive($gsis, $team) {
+    $query = "SELECT home_team, home_score, away_team, away_score
+              FROM game WHERE gsis_id='$gsis';";
+    list($home_team, $home_score, $away_team, $away_score) = pg_fetch_array(pg_query($GLOBALS['nfldbconn'],$query));
+    $team_score = ($team==$home_team) ? $home_score : $away_score;
+    $other_score = ($team==$home_team) ? $away_score : $home_score;
+    if ($team_score <= $other_score) return 0;
+    
+    $query = 
+    "SELECT play_score_offense(play.gsis_id, play.play_id, player_id) AS score_offense, team, (\"time\").phase, (\"time\").elapsed
+     FROM (SELECT play_has_score(gsis_id, play_id, player_id) AS has_score,
+                  gsis_id, play_id, player_id, team
+           FROM play_player
+           WHERE gsis_id='$gsis') AS scores JOIN play ON (play.gsis_id = scores.gsis_id AND play.play_id = scores.play_id)
+     WHERE has_score
+     ORDER BY play.play_id DESC
+     LIMIT 1";
+     #echo $query;
+    list($score_offense, $scoringteam, $phase, $elapsed) = pg_fetch_array(pg_query($GLOBALS['nfldbconn'],$query));
+    if ($scoringteam == $team) {
+        if ($phase == "OT" || ($phase == "Q4" && $elapsed >= (15*60-2*60))) {
+            if ($team_score-offensivePlayScoreToDriveScore($score_offense) <= $other_score) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+# We get the last scoring play, so if it is an extra point or 2pt conversion we add 6
+function offensivePlayScoreToDriveScore($play_score) {
+    if ($play_score == 1) return 7;
+    if ($play_score == 2) return 8;
+    return $play_score;
+}
+
+function oldGameWinningDrive($year, $week, $team) {
 	$query = "SELECT CASE WHEN not_winning = TRUE AND last_drive_qualifies = TRUE AND won_game = TRUE THEN 1 ELSE 0 END as game_winning_drive FROM
 (SELECT SUM(score) <= 0 as not_winning
 FROM (SELECT CASE WHEN pos_team = '$team' AND note = 'TD' AND def_td = 0 THEN 6 
