@@ -11,11 +11,22 @@ echo "<html><head>
 
 $grandtotals = array();
 $grandtotals_defense = array();
+$team_draftscore = array();
+$player_draftscore = array();
+$draft_position = array();
 echo "<br><h1>$year Season Rankings</h1>";
 
 foreach (nflTeams() as $team) {
     $grandtotals[$team] = 0;
     $grandtotals_defense[$team] = 0;
+    $player_draftscore[$team] = 0;
+}
+
+$query = "SELECT bqbl_team, nfl_team, draft_position
+    FROM roster;";
+$result = pg_query($GLOBALS['bqbldbconn'],$query),0);
+while(list($bqbl_team,$nfl_team,$draft_position) = pg_fetch_array($result)) {
+    $draft_position[$nfl_team] = $draft_position;
 }
 
 for ($i=1; $i<=$week; $i++) {
@@ -41,6 +52,7 @@ echo "<tr><th>Rank</th><th>Team Name</th><th>Total Points</th></tr>";
 $rank = 0;
 foreach ($grandtotals as $key => $val) {
     $rank++;
+    $player_draftscore[$key] += $rank;
     echo "<tr><td>$rank</td><td>$key</td><td>$val</td></tr>";
 }
 echo "</table>";
@@ -49,6 +61,16 @@ echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inli
 echo "<tr><th>Rank</th><th>Team Name</th><th>Total Defensive Points</th></tr>";
 $rank = 0;
 foreach ($grandtotals_defense as $key => $val) {
+    $rank++;
+    echo "<tr><td>$rank</td><td>$key</td><td>$val</td></tr>";
+}
+echo "</table>";
+
+arsort($player_draftscore);
+echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
+echo "<tr><th>Rank</th><th>Team Name</th><th>Draft Score</th></tr>";
+$rank = 0;
+foreach ($player_draftscore as $key => $val) {
     $rank++;
     echo "<tr><td>$rank</td><td>$key</td><td>$val</td></tr>";
 }
