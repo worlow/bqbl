@@ -17,7 +17,7 @@ foreach ($bqbl_teamname as $key => $val) {
     $lineup[$key] = array();
     $score[$key] = array();
     $record[$key][0] = 0;
-    $record[$key][1] = 1;
+    $record[$key][1] = 0;
 }
 
 for ($i = 1; $i <= $week; $i++) {
@@ -49,7 +49,7 @@ for ($i = 1; $i <= $week; $i++) {
     }
 }
 
-asort($record);
+arsort($record);
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block;">';
 echo "<tr><th>Team</th><th>W</th><th>L</th></tr>";
 $rank = 0;
