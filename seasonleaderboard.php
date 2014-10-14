@@ -57,7 +57,7 @@ arsort($grandtotals);
 arsort($grandtotals_defense);
 
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block;">';
-echo "<tr><th>Rank</th><th>Team Name</th><th>Total Points</th></tr>";
+echo "<tr><th>Rank</th><th>Team</th><th>Total Points</th></tr>";
 $rank = 0;
 foreach ($grandtotals as $key => $val) {
     $rank++;
@@ -68,7 +68,7 @@ foreach ($grandtotals as $key => $val) {
 echo "</table>";
 
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-echo "<tr><th>Rank</th><th>Team Name</th><th>Total Defensive Points</th></tr>";
+echo "<tr><th>Rank</th><th>Team</th><th>Total Defensive Points</th></tr>";
 $rank = 0;
 foreach ($grandtotals_defense as $key => $val) {
     $rank++;
@@ -80,7 +80,7 @@ arsort($nfl_draftscore);
 asort($bqbl_draftscore);
 
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-echo "<tr><th>Rank</th><th>Team Name</th><th>Draft Position</th><th>Draft Score</th></tr>";
+echo "<tr><th>Rank</th><th>Team</th><th>Draft Pick</th><th>Draft Score</th></tr>";
 $rank = 0;
 foreach ($nfl_draftscore as $key => $val) {
     $rank++;
