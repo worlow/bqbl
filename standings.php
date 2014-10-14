@@ -22,14 +22,12 @@ foreach ($bqbl_teamname as $key => $val) {
 }
 
 for ($i = 1; $i <= $week; $i++) {
-    $query = "SELECT bqbl_team, starter1, starter2
-                FROM lineup
-                  WHERE year = $year AND week = $i;";
-    $result = pg_query($bqbldbconn, $query);
-    while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
-        $score[$bqbl_team][$i] =
-            totalPoints(getPoints($starter1, $i, $year)) + totalPoints(getPoints($starter2, $i, $year));
+    $lineup = getLineups($i, $year);
+    foreach ($lineup as $team => $starters) {
+            $score[team][$i] =
+                totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year))
     }
+    
     $query = "SELECT team1, team2
             FROM schedule
               WHERE year = $year AND week = $i;";
