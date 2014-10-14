@@ -42,20 +42,27 @@ foreach ($matchup as $key => $val) {
     $away_team1 = getPoints($lineup[$val][0], $week, $year);
     $away_team2 = getPoints($lineup[$val][1], $week, $year);
     
+    $home1_total = totalPoints($home_team1);
+    $home2_total = totalPoints($home_team2);
+    $away1_total = totalPoints($away_team1);
+    $away2_total = totalPoints($away_team2);
+    
     echo "<div>";
     echo "$bqbl_teamname[$key]\n";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
-    echo "<tr><td>".$lineup[$key][0]."</td> <td>".totalPoints($home_team1)."</td></tr>\n";
-    echo "<tr><td>".$lineup[$key][1]."</td> <td>".totalPoints($home_team2)."</td></tr>\n";
+    echo "<tr><td>".$lineup[$key][0]."</td> <td>".$home1_total."</td></tr>\n";
+    echo "<tr><td>".$lineup[$key][1]."</td> <td>".$home2_total."</td></tr>\n";
+    echo "<tr><td>Total</td> <td>".$hotal1_total+$home2_total."</td></tr>\n";
     echo "</table>";
     
     echo "$bqbl_teamname[$val]\n";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
-    echo "<tr><td>".$lineup[$val][0]."</td> <td>".totalPoints($away_team1)."</td></tr>\n";
-    echo "<tr><td>".$lineup[$val][1]."</td> <td>".totalPoints($away_team2)."</td></tr>\n";
-    echo "</table>\n";
+    echo "<tr><td>".$lineup[$val][0]."</td> <td>".$away1_total."</td></tr>\n";
+    echo "<tr><td>".$lineup[$val][1]."</td> <td>".$away2_total."</td></tr>\n";
+    echo "<tr><td>Total</td> <td>".$away1_total+$away2_total."</td></tr>\n";
+    echo "</table>";
     echo "</div>";
 }
 ?>
