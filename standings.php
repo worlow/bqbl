@@ -56,7 +56,7 @@ echo "<tr><th>Team</th><th>W</th><th>L</th><th>PF</th><th>PA</th><th>PD</th></tr
 $rank = 0;
 foreach ($record as $key => $val) {
     $rank++;
-    $point_differential = $points_for[$key] - $points_against[$key]
+    $point_differential = $points_for[$key] - $points_against[$key];
     echo "<tr><td>$rank. $bqbl_teamname[$key]</td><td>$val[0]</td><td>$val[1]</td><td>$points_for[$key]</td><td>$points_against[$key]</td><td>$point_differential</td></tr>";
 }
 echo "</table>";
