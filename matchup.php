@@ -30,7 +30,7 @@ while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
 
 $query = "SELECT team1, team2
             FROM schedule
-              WHERE WHERE year = $year AND week = $week;";
+              WHERE year = $year AND week = $week;";
 $result = pg_query($bqbldbconn, $query);
 while(list($team1,$team2) = pg_fetch_array($result)) {
     $matchup[$team1] = $team2;
