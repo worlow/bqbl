@@ -42,12 +42,14 @@ foreach ($matchup as $key => $val) {
     $away_team1 = getPoints($lineup[$val][0], $week, $year);
     $away_team2 = getPoints($lineup[$val][1], $week, $year);
     
+    echo "$bqbl_teamname[$key]";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
     echo "<tr><td>".$lineup[$key][0]."</td> <td>".totalPoints($home_team1)."</td></tr>\n";
     echo "<tr><td>".$lineup[$key][1]."</td> <td>".totalPoints($home_team2)."</td></tr>\n";
     echo "</table>";
     
+    echo "$bqbl_teamname[$val]";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Points</th></tr>";
     echo "<tr><td>".$lineup[$val][0]."</td> <td>".totalPoints($away_team1)."</td></tr>\n";
