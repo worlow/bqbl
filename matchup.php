@@ -38,9 +38,9 @@ while(list($team1,$team2) = pg_fetch_array($result)) {
 
 foreach ($matchup as $key => $val) {
     $home_team1 = getPoints($lineup[$key][0], $week, $year);
-    $home_team2 = getPoints($lineup[$key][0], $week, $year);
+    $home_team2 = getPoints($lineup[$key][1], $week, $year);
     $away_team1 = getPoints($lineup[$val][0], $week, $year);
-    $away_team2 = getPoints($lineup[$val][0], $week, $year);
+    $away_team2 = getPoints($lineup[$val][1], $week, $year);
     echo "<div id=matchup style='display:table-row;'>\n";
     echo "<div class=score>\n";
     echo "$bqbl_teamname[$key]\n";
@@ -64,3 +64,12 @@ foreach ($matchup as $key => $val) {
     echo"</div></div>";
 }
 ?>
+<style>
+.score {
+font-size: x-large;
+font-weight:bold;
+text-align: center;
+display:table-cell;
+padding:0 20px 60px 0;
+}
+</style>
