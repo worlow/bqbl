@@ -24,8 +24,8 @@ $query = "SELECT bqbl_team, starter1, starter2
               WHERE year = $year AND week = $week;";
 $result = pg_query($bqbldbconn, $query);
 while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
-    $lineup[$id][] = $starter1;
-    $lineup[$id][] = $starter2;
+    $lineup[$id][0] = $starter1;
+    $lineup[$id][1] = $starter2;
 }
 
 $query = "SELECT team1, team2
