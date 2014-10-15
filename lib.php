@@ -18,6 +18,13 @@ function currentWeek() {
     return $weeks;
 }
 
+function currentCompletedWeek() {
+    $now = time();
+    $season_week1_end = strtotime("2014-09-09");
+    $weeks = 1+floor(($now-$season_week1_end)/(60*60*24*7));
+    return $weeks;
+}
+
 function databaseModificationTime() {
     $file = "C:\www\bqbl\update_time";
     return filemtime($file);

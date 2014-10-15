@@ -2,7 +2,7 @@
 require_once "lib.php";
 require_once "scoring.php";
 
-$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
+$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
 echo "<html><head>
