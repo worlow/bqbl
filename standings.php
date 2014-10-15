@@ -68,6 +68,14 @@ for ($i = 1; $i <= $week; $i++) {
             } else {
                 $record[$team2]['streak']++;
             }
+        } else {
+            $record[$team1]['wins'] += .5;
+            $record[$team1]['losses'] += .5;
+            $record[$team2]['wins'] += .5;
+            $record[$team2]['losses'] += .5;
+            $record[$team1]['streak'] = 0;
+            $record[$team2]['streak'] = 0;
+            
         }
     }
 }
