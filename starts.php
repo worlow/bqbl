@@ -36,7 +36,7 @@ foreach (bqblTeams() as $id => $name) {
     echo "$name";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Starts</th></tr>";
-    foreach ($roster[$bqbl_team] as $nfl_team) {
+    foreach ($roster[$id] as $nfl_team) {
         echo "<tr><td>".$nfl_team."</td> <td>$starts[$nfl_team]</td></tr>\n";
     }
     echo "</table>"; 
