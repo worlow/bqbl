@@ -82,8 +82,11 @@ foreach ($record as $key => $val) {
     $point_differential = $val['points_for'] - $val['points_against'];
     $thickline = ($rank==4) ? "class='thickline'" : "";
     echo "<tr $thickline><td>$rank.</td><td>$bqbl_teamname[$key]</td><td>".$val['wins']."</td>
-        <td>".$val['losses']."</td><td>".$val['points_for']."</td><td>".$val['points_against']."</td>
-        <td>$point_differential</td><td>";
+        <td>".$val['losses']."</td><td>".$val['points_for']."</td><td>".$val['points_against']."</td><td>";
+    if ($point_differential >= 0) {
+        echo "+";
+    }
+    echo "$point_differential</td><td>";
     if ($val['streak'] < 0) {
         echo "L".$val['streak'];
     } else {
