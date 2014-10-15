@@ -18,6 +18,7 @@
     
 <a href='standings.php'>Standings</a><br>
 <a href='schedule.php'>Schedule</a><br>
+<a href='starts.php'>Starts</a><br>
 <a href='matchup.php'>Weekly Matchups</a><br>
 <a href='week.php'>Scoreboard</a><br>
 <a href='leaderboard.php'>Weekly Leaders</a><br>
