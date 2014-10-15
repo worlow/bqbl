@@ -2,7 +2,7 @@
 require_once "lib.php";
 require_once "scoring.php";
 
-$week = currentCompletedWeek();
+$week_complete = currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
 echo "<html><head>
@@ -30,12 +30,12 @@ echo "</tr>";
 for ($i = 1; $i <= 14; $i++) {
     $lineup = getLineups($year, $i);
     foreach ($lineup as $team => $starters) {
-        if ($i <= $week) {
+        if ($i <= $week_complete) {
             $score[$team][$i] =
                 totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
         } else {
             $score[$team][$i] = 0;
-        }    
+        }   
     }
     
     echo "<tr><td>Week $i</td>";
