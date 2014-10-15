@@ -17,7 +17,7 @@ $bqbl_draftscore = array();
 $bqbl_teamname = bqblTeams();
 $nfl_draftscore = array();
 $draft_pick = array();
-$average = arra
+$average = array();
 echo "<br><h1>$year Season Rankings</h1>";
 
 foreach (nflTeams() as $team) {
