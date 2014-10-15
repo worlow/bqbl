@@ -33,7 +33,7 @@ for ($i = 1; $i <= $week; $i++) {
 }
 
 foreach (bqblTeams() as $id => $name) {
-    echo "$name";
+    echo "<h4 align='center'>$name</h4>";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Starts</th></tr>";
     foreach ($roster[$id] as $nfl_team) {
