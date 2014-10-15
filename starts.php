@@ -34,7 +34,7 @@ for ($i = 1; $i <= $week; $i++) {
 
 foreach (bqblTeams() as $id => $name) {
     echo "<h4 align='center'>$name</h4>";
-    echo '<table border=2 cellpadding=4 style="border-collapse:collapse; margin-left:20px;">';
+    echo '<table border=2 cellpadding=4 align="center" style="border-collapse:collapse; margin-left:20px;">';
     echo "<tr><th>Team</th><th>Starts</th></tr>";
     foreach ($roster[$id] as $nfl_team) {
         echo "<tr><td>".$nfl_team."</td> <td>$starts[$nfl_team]</td></tr>\n";
