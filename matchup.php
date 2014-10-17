@@ -12,19 +12,17 @@ $bqbl_teamname = bqblTeams();
 $lineup = getLineups($year, $week);
 $matchup = getMatchups($year, $week);
 
-
-
 foreach ($matchup as $key => $val) {
     $home_team1 = getPoints($lineup[$key][0], $week, $year);
     $home_team2 = getPoints($lineup[$key][1], $week, $year);
     $away_team1 = getPoints($lineup[$val][0], $week, $year);
     $away_team2 = getPoints($lineup[$val][1], $week, $year);
     
-    $home1_total = totalPoints($home_team1);
-    $home2_total = totalPoints($home_team2);
+    $home1_total = home_team1 != array() ? totalPoints($home_team1) : 0;
+    $home2_total = home_team2 != array() ? totalPoints($home_team2) : 0;
     $home_total = $home1_total + $home2_total;
-    $away1_total = totalPoints($away_team1);
-    $away2_total = totalPoints($away_team2);
+    $away1_total = away_team1 != array() ? totalPoints($away_team1) : 0;
+    $away2_total = away_team2 != array() ? totalPoints($away_team2) : 0;
     $away_total = $away1_total + $away2_total;
     
     
