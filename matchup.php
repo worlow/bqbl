@@ -19,11 +19,11 @@ foreach ($matchup as $key => $val) {
     $away_team2 = getPoints($lineup[$val][1], $week, $year);
     
     echo gameType($year, $week, $lineup[$key][0]);
-    $home1_total = $home_team1 != array() || gameType($year, $week, $lineup[$key][0]) == -1 ? totalPoints($home_team1) : 0;
-    $home2_total = $home_team2 != array() || gameType($year, $week, $lineup[$key][1]) == -1 ? totalPoints($home_team2) : 0;
+    $home1_total = gameType($year, $week, $lineup[$key][0]) != -1 ? totalPoints($home_team1) : 0;
+    $home2_total = gameType($year, $week, $lineup[$key][1]) != -1 ? totalPoints($home_team2) : 0;
     $home_total = $home1_total + $home2_total;
-    $away1_total = $away_team1 != array() || gameType($year, $week, $lineup[$val][0]) == -1 ? totalPoints($away_team1) : 0;
-    $away2_total = $away_team2 != array() || gameType($year, $week, $lineup[$val][1]) == -1 ? totalPoints($away_team2) : 0;
+    $away1_total = gameType($year, $week, $lineup[$val][0]) != -1 ? totalPoints($away_team1) : 0;
+    $away2_total = gameType($year, $week, $lineup[$val][1]) != -1 ? totalPoints($away_team2) : 0;
     $away_total = $away1_total + $away2_total;
     
     
