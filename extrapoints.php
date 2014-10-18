@@ -1,7 +1,7 @@
 <?php
 // Report simple running errors
 error_reporting(E_ERROR);
-require_once("lib.php");
+require_once "lib/lib.php";
 $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 

@@ -1,5 +1,5 @@
 <?php
-require_once "lib.php";
+require_once "lib/lib.php";
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 $week = isset($_GET['week']) ? $_GET['week'] : currentWeek();

@@ -1,5 +1,5 @@
 <?php 
-require_once '../lib.php';
+require_once '../lib/lib.php';
 
 $redirectUrl="";
 if(isset($_POST['redirect_url']) && $_POST['redirect_url'] != "") {

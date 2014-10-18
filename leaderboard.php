@@ -1,6 +1,6 @@
 <?php
-require_once "lib.php";
-require_once "scoring.php";
+require_once "lib/lib.php";
+require_once "lib/scoring.php";
 $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 

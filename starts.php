@@ -1,5 +1,5 @@
 <?php
-require_once "lib.php";
+require_once "lib/lib.php";
 
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 $week = currentWeek();

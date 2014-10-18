@@ -1,5 +1,5 @@
 <?php
-require_once "lib.php";
+require_once "lib/lib.php";
 ?>
 <html><head><title>BQBL</title>
 <style type="text/css">
