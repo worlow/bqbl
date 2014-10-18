@@ -49,7 +49,7 @@ for ($i=1; $i<=$week; $i++) {
 }
 
 $query = "SELECT bqbl_team, nfl_team, draft_position
-    FROM roster;";
+    FROM roster WHERE year='$year';";
 $result = pg_query($GLOBALS['bqbldbconn'],$query);
 while(list($bqbl_team,$nfl_team,$draft_position) = pg_fetch_array($result)) {
     $draft_pick[$nfl_team] = $draft_position;
