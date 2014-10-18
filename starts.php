@@ -33,7 +33,7 @@ for ($i = 1; $i <= $week; $i++) {
 }
 
 foreach (bqblTeams() as $id => $name) {
-    if (($id == 9 && $year > 2013) && ($id == 4 && $year <= 2013)) {
+    if (($id == 9 && $year > 2013) || ($id == 4 && $year <= 2013)) {
         continue;
     }
     echo "<h4>$name</h4>";
