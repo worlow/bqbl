@@ -96,6 +96,9 @@ echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inli
 echo "<tr><th>Rank</th><th>Team Name</th><th>Draft Score</th></tr>";
 $rank = 0;
 foreach ($bqbl_draftscore as $key => $val) {
+    if (($key == 4 && $year <= 2013) || ($key == 9 && $year > 2013)) {
+            continue;
+    }
     $rank++;
     echo "<tr><td>$rank</td><td>$bqbl_teamname[$key]</td><td>$val</td></tr>";
 }
