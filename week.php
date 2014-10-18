@@ -5,6 +5,9 @@ require_once "lib/scoring.php";
 $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
+$games = array();
+foreach(nflTeams() as $nflTeam) $games[] = array($year, $week, $nflTeam);
+$gamePoints = getPointsBatch($games);
 
 $updateTime = date("n/j g:i:s A, T", databaseModificationTime());
 echo "<html><head>
@@ -24,11 +27,11 @@ while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     echo "<div id=matchup style='display:table-row;'>\n";
     echo "<div class=score>\n";
     echo "$hometeam\n";
-    printGameScore($hometeam, $week, $year);
+    printGameScore($gamePoints[$year][$week][$hometeam], $hometeam, $week, $year);
     echo "</div><div class=score>@</div>\n";
     echo "<div class=score >\n";
     echo "$awayteam\n";
-    printGameScore($awayteam, $week, $year);
+    printGameScore($gamePoints[$year][$week][$awayteam], $awayteam, $week, $year);
     echo"</div></div>";
 }
 echo "</div>";  # table div

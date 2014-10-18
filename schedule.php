@@ -1,10 +1,17 @@
 <?php
 require_once "lib/lib.php";
 require_once "lib/scoring.php";
-
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 $week_complete = $year < currentYear() ? 15 : currentCompletedWeek();
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
+
+$games = array();
+foreach (nflTeams() as $team) {
+    for ($i=1; $i<=$week_complete; $i++) {
+        $games[] = array($year, $i, $team);
+    }
+}
+$gamePoints = getPointsBatch($games);
 
 echo "<html><head>
 <title>$year BQBL Schedule </title></head><body>\n";
@@ -39,7 +46,7 @@ for ($i = 1; $i <= 15; $i++) {
     foreach ($lineup as $team => $starters) {
         if ($i <= $week_complete) {
             $score[$team][$i] =
-                totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
+                totalPoints($gamePoints[$year][$i][$starters[0]]) + totalPoints($gamePoints[$year][$i][$starters[0]]);
         } else {
             $score[$team][$i] = 0;
         }   

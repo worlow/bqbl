@@ -83,7 +83,7 @@ function gameType($year, $week, $team) {
               FROM game
               WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
               AND week='$week' AND season_type='Regular';";
-    $result = pg_query($nfldbconn,$query);
+    $result = pg_query($GLOBALS['nfldbconn'], $query);
     if(pg_num_rows($result) == 0) { // Bye week
         return -1;
     }

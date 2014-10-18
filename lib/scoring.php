@@ -78,12 +78,11 @@ function totalPoints($points) {
     return $total;
 }
 
-function printGameScore($team, $week, $year=2014) {
+function printGameScore($points, $team, $week, $year=2014) {
     if (gameType($year, $week, $team) == 2) {
         printBlankScore($team);
         return;
     }
-    $points = getPoints($team, $week, $year);
     printScore($points);
 }
 
@@ -339,4 +338,59 @@ function defenseScore($points) {
     $total -= $points["Misc. Points"][1];
     $total -= $points["Benchings"][1];
     return $total;
+}
+
+
+function getPointsBatch($games) {
+    global $bqbldbconn, $nfldbconn;
+    $points = array();
+    foreach($games as $key=>list($year, $week, $team)) { 
+        if(!isset($points[$year])) $points[$year] = array();
+        if(!isset($points[$year][$week])) $points[$year][$week] = array();
+    }
+
+    $pool = new Pool(8, \PointsWorker::class);
+    $work = array();
+    array_unshift($games, $games[0]);  // fixes weird bug where first element would be replaced by last element
+    foreach($games as $game) {
+        $newWork = new PointsWork($game);
+        $work[] = $newWork;
+        $pool->submit($newWork);
+    }
+    $pool->shutdown();
+    for($i=0;$i<count($work);$i++) {
+        $gameWork = $work[$i];
+        $total = totalPoints($gameWork->points);
+        $points[$gameWork->year][$gameWork->week][$gameWork->team] = $gameWork->points;
+    }
+    return $points;
+}
+
+class PointsWork extends Threaded {
+    public $year;
+    public $week;
+    public $team;
+    public $points;
+
+    public function __construct($game) {
+        list($year, $week, $team) = $game;
+        $this->year=$year;
+        $this->week=$week;
+        $this->team=$team;
+        $this->points=null;
+    }
+
+    public function run() {
+        if(!isset($GLOBALS['bqbldbconn'])) $GLOBALS['bqbldbconn'] = connect_bqbldb();
+        if(!isset($GLOBALS['nfldbconn'])) $GLOBALS['nfldbconn'] = connect_nfldb();
+        date_default_timezone_set('America/Los_Angeles');
+        if($this->week > 0) {
+            $this->points = getPoints($this->team, $this->week, $this->year);
+            $total = totalPoints($this->points);
+        }
+    }
+}
+
+class PointsWorker extends Worker {
+    public function run() {}
 }

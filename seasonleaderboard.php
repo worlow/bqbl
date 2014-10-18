@@ -2,11 +2,14 @@
 <?php
 require_once "lib/lib.php";
 require_once "lib/scoring.php";
-
-$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+if(isset($_GET['week'])) {
+    $week = pg_escape_string($_GET['week']);
+} else {
+    $week = $year < currentYear() ? 17 : currentWeek();
+}
+$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentCompletedWeek();
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
-
 echo "<html><head>
 <title>BQBL Season Leaders $year</title></head><body>\n";
 
@@ -15,17 +18,22 @@ $grandtotals_defense = array();
 $starts = array();
 $owner = array();
 $bqbl_draftscore = array();
-$bqbl_teamname = bqblTeams($league);
+$bqbl_teamname = bqblTeams($league, $year);
 $nfl_draftscore = array();
 $draft_pick = array();
 $average = array();
 echo "<br><h1>$year Season Rankings</h1>";
 
+$games = array();
 foreach (nflTeams() as $team) {
     $starts[$team] = 0;
     $grandtotals[$team] = 0;
     $grandtotals_defense[$team] = 0;
+    for ($i=1; $i<=$week; $i++) {
+        $games[] = array($year, $i, $team);
+    }
 }
+$gamePoints = getPointsBatch($games);
 
 foreach ($bqbl_teamname as $key => $val) {
     $bqbl_draftscore[$key] = 0;
@@ -40,8 +48,8 @@ for ($i=1; $i<=$week; $i++) {
     while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
         $starts[$hometeam]++;
         $starts[$awayteam]++;
-        $homepoints = getPoints($hometeam, $i, $year);
-        $awaypoints = getPoints($awayteam, $i, $year);
+        $homepoints = $gamePoints[$year][$i][$hometeam];
+        $awaypoints = $gamePoints[$year][$i][$awayteam];
         $grandtotals[$hometeam] += totalPoints($homepoints);
         $grandtotals_defense[$hometeam] += defenseScore($awaypoints);
         $grandtotals[$awayteam] += totalPoints($awaypoints);

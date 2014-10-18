@@ -8,6 +8,13 @@ $week = isset($_GET['week']) && (pg_escape_string($_GET['week']) <= $completed_w
         ? pg_escape_string($_GET['week']) : currentCompletedWeek();
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 
+$games = array();
+foreach (nflTeams() as $team) {
+    for ($i=1; $i<=$week; $i++) {
+        $games[] = array($year, $i, $team);
+    }
+}
+$gamePoints = getPointsBatch($games);
 
 echo "<html><head>
 <title>$year BQBL Standings </title>
@@ -31,13 +38,13 @@ foreach ($bqbl_teamname as $key => $val) {
 }
 
 for ($i = 1; $i <= $week; $i++) {
-    $lineup = getLineups($year, $i);
+    $lineup = getLineups($year, $i, $league);
     foreach ($lineup as $team => $starters) {
             $score[$team][$i] =
-                totalPoints(getPoints($starters[0], $i, $year)) + totalPoints(getPoints($starters[1], $i, $year));
+                totalPoints($gamePoints[$year][$i][$starters[0]]) + totalPoints($gamePoints[$year][$i][$starters[0]]);
     }
     
-    $matchup = getMatchups($year, $i);
+    $matchup = getMatchups($year, $i, $league);
     foreach ($matchup as $team1 => $team2) {
         $record[$team1]['points_for'] += $score[$team1][$i];
         $record[$team1]['points_against'] += $score[$team2][$i];

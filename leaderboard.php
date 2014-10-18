@@ -4,6 +4,9 @@ require_once "lib/scoring.php";
 $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 
+$games = array();
+foreach(nflTeams() as $nflTeam) $games[] = array($year, $week, $nflTeam);
+$gamePoints = getPointsBatch($games);
 
 echo "<html><head>
 <title>BQBL Week $week $year</title></head><body>\n
@@ -18,8 +21,8 @@ $result = pg_query($GLOBALS['nfldbconn'],$query);
 $totals = array();
 $totals_defense = array();
 while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
-    $homepoints = getPoints($hometeam, $week, $year);
-    $awaypoints = getPoints($awayteam, $week, $year);
+    $homepoints = $gamePoints[$year][$week][$hometeam];
+    $awaypoints = $gamePoints[$year][$week][$awayteam];
     $totals[$hometeam] = totalPoints($homepoints);
     $totals_defense[$hometeam] = defenseScore($awaypoints);
     $totals[$awayteam] = totalPoints($awaypoints);
