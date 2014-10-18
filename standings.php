@@ -6,6 +6,8 @@ $completed_week = currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 $week = isset($_GET['week']) && (pg_escape_string($_GET['week']) <= $completed_week || $year < currentYear())
         ? pg_escape_string($_GET['week']) : currentCompletedWeek();
+$league = isset($_GET['league']) ? $_GET['league'] : getLeague();
+
 
 echo "<html><head>
 <title>$year BQBL Standings </title>
@@ -16,7 +18,7 @@ border-bottom-width: 6px;
 </style>
 </head><body>\n";
 
-$bqbl_teamname = bqblTeams();
+$bqbl_teamname = bqblTeams($league, $year);
 $matchup = array();
 $record = array();
 $score = array();

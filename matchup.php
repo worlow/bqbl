@@ -9,9 +9,9 @@ $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 echo "<html><head>
 <title>$year BQBL Week $week </title></head><body>\n";
 
-$bqbl_teamname = bqblTeams($league);
-$lineup = getLineups($year, $week);
-$matchup = getMatchups($year, $week);
+$bqbl_teamname = bqblTeams($league, $year);
+$lineup = getLineups($year, $week, $league);
+$matchup = getMatchups($year, $week, $league);
 
 foreach ($matchup as $key => $val) {
     $home_team1 = getPoints($lineup[$key][0], $week, $year);

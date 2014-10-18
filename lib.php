@@ -37,10 +37,11 @@ function weekCutoffTime($week) {
 }
 
 function getLeague() {
+    $year=currentYear();
     if(isset($_SESSION['league'])) {
         return $_SESSION['league'];
     } elseif(isset($_SESSION['user'])) {
-        $query = "SELECT league FROM users WHERE username='$_SESSION[user]';";
+        $query = "SELECT league FROM membership JOIN users ON membership.bqbl_team=users.id WHERE username='$_SESSION[user]' AND year='$year';";
         $league = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'], $query),0);
         return ($league != "") ? $league : "nathans";
     } else return "nathans";
@@ -104,10 +105,12 @@ function nflTeams() {
     return $teams;
 }
 
-function bqblTeams($league) {
+function bqblTeams($league, $year) {
     global $bqbldbconn;
     $bqbl_teamname = array();
-    $query = "SELECT id, team_name FROM users WHERE league='$league';";
+    $query = "SELECT bqbl_team, team_name 
+              FROM membership JOIN users ON membership.bqbl_team=users.id 
+              WHERE league='$league';";
     $result = pg_query($bqbldbconn, $query);
     while(list($id,$team_name) = pg_fetch_array($result)) {
         $bqbl_teamname[$id] = $team_name;
@@ -115,12 +118,12 @@ function bqblTeams($league) {
     return $bqbl_teamname;
 }
 
-function getLineups($year, $week) {
+function getLineups($year, $week, $league) {
     global $bqbldbconn;
     $lineup = array();
     $query = "SELECT bqbl_team, starter1, starter2
                 FROM lineup
-                  WHERE year = $year AND week = $week;";
+                  WHERE year = $year AND week = $week AND league='$league';";
     $result = pg_query($bqbldbconn, $query);
     while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
         $lineup[$bqbl_team][0] = $starter1;
@@ -129,16 +132,28 @@ function getLineups($year, $week) {
     return $lineup;
 }
 
-function getMatchups($year, $week) {
+function getMatchups($year, $week, $league) {
     global $bqbldbconn;
     $matchup = array();
     $query = "SELECT team1, team2
             FROM schedule
-              WHERE year = $year AND week = $week;";
+              WHERE year = $year AND week = $week AND league='$league';";
     $result = pg_query($bqbldbconn, $query);
     while(list($team1,$team2) = pg_fetch_array($result)) {
         $matchup[$team1] = $team2;
     }
     return $matchup;
+}
+
+function gameTime($year, $week, $team) {
+    global $nfldbconn;
+    $query = "SELECT start_time FROM game
+              WHERE year='$year' AND week='$week' AND (home_team='$team' OR away_team='$team');";
+    $result = pg_query($nfldbconn, $query);
+    if(pg_num_rows($result) == 0) {
+        return 0;
+    } else {
+        return pg_fetch_result($result, 0);
+    }
 }
 ?>

@@ -9,7 +9,7 @@ $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 echo "<html><head>
 <title>$year BQBL Schedule </title></head><body>\n";
 
-$bqbl_teamname = bqblTeams($league);
+$bqbl_teamname = bqblTeams($league, $year);
 $matchup = array();
 $score = array();
 
@@ -35,7 +35,7 @@ for ($i = 1; $i <= 15; $i++) {
     if ($i == 15 && $year > 2013) {
         continue;
     }
-    $lineup = getLineups($year, $i);
+    $lineup = getLineups($year, $i, $league);
     foreach ($lineup as $team => $starters) {
         if ($i <= $week_complete) {
             $score[$team][$i] =
