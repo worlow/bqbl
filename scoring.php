@@ -2,7 +2,7 @@
 require_once "lib.php";
 
 function getPoints($team, $week, $year=2014) {
-    if (gameType($year, $week, $team) == 2) {
+    if (gameType($year, $week, $team) == 2 || gameType($year, $week, $team) == -1) {
         return array();
     }
     $query = "SELECT gsis_id
