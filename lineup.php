@@ -12,6 +12,21 @@ if(isset($_GET['team'])) {
     exit(0);
 }
 
+$bqblTeam = getBqblTeam($user);
+if(isset($_POST['submit'])) {
+    $insertstarter1 = pg_escape_string($bqbldbconn, $_POST['starter1']);
+    $insertstarter2 = pg_escape_string($bqbldbconn, $_POST['starter2']);
+    if(time() > currentWeekCutoffTime()) {
+        echo "Error: lineups cannot be set after 5:30PST on Thursday";
+    } elseif($insertstarter1 == $insertstarter2) {
+        echo "Error: Cannot start the same team twice!";
+    } else {
+        $query = "UPDATE lineup SET starter1='$insertstarter1', starter2='$insertstarter2'
+                  WHERE league='$league' AND bqbl_team='$bqblTeam' AND year='$year' AND week='$week';";
+        pg_query($bqbldbconn, $query);
+    }
+}
+
 echo "<html><head>
 <title>$year NFL Team Starts </title>
 <style type='text/css'>
@@ -23,7 +38,6 @@ border-bottom-width: 6px;
 <body>\n";
 
 $allowediting = ($_SESSION['user'] == $user) && ($week == currentWeek());
-$bqblTeam = getBqblTeam($user);
 $starts = getStarts($year, $bqblTeam, $league);
 
 $starter1 = $starter2 = "";

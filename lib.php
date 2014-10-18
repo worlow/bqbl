@@ -29,7 +29,7 @@ function currentCompletedWeek() {
     return currentWeek() - 1;
 }
 
-function currentWeekLineupCutoff() {
+function currentWeekCutoffTime() {
     global $WEEK_1_THURS_DATE;
     $now = time();
     $season_start = strtotime($WEEK_1_THURS_DATE . " 17:30:00");  # Tuesday
