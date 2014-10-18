@@ -3,9 +3,9 @@ require_once "lib.php";
 require_once "scoring.php";
 
 $completed_week = currentCompletedWeek();
-$week = isset($_GET['week']) && pg_escape_string($_GET['week']) <= $completed_week 
-        ? pg_escape_string($_GET['week']) : currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+$week = isset($_GET['week']) && (pg_escape_string($_GET['week']) <= $completed_week || $year < currentYear())
+        ? pg_escape_string($_GET['week']) : currentCompletedWeek();
 
 echo "<html><head>
 <title>$year BQBL Standings </title>
@@ -105,7 +105,4 @@ foreach ($record as $key => $val) {
     echo "</td></tr>";  
 }
 echo "</table>";
-
-
-
-
+?>

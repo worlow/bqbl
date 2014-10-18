@@ -2,8 +2,9 @@
 require_once "lib.php";
 require_once "scoring.php";
 
-$week_complete = currentCompletedWeek();
+
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+$week_complete = $year < currentYear() ? 15 : currentCompletedWeek();
 
 echo "<html><head>
 <title>$year BQBL Schedule </title></head><body>\n";
