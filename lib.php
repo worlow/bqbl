@@ -29,11 +29,11 @@ function currentCompletedWeek() {
     return currentWeek() - 1;
 }
 
-function currentWeekCutoffTime() {
+function weekCutoffTime($week) {
     global $WEEK_1_THURS_DATE;
     $now = time();
     $season_start = strtotime($WEEK_1_THURS_DATE . " 17:30:00");  # Tuesday
-    return $season_start + 7*24*60*60*(currentWeek() - 1);
+    return $season_start + 7*24*60*60*($week - 1);
 }
 
 function getLeague() {

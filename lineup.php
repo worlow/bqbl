@@ -19,13 +19,19 @@ if(isset($_GET['team'])) {
 if(isset($_POST['submit'])) {
     $insertstarter1 = pg_escape_string($bqbldbconn, $_POST['starter1']);
     $insertstarter2 = pg_escape_string($bqbldbconn, $_POST['starter2']);
-    if(time() > currentWeekCutoffTime()) {
+    if(($week < currentWeek()) || (time() > weekCutoffTime($week))) {
         echo "Error: lineups cannot be set after 5:30PST on Thursday";
     } elseif($insertstarter1 == $insertstarter2) {
         echo "Error: Cannot start the same team twice!";
     } else {
-        $query = "UPDATE lineup SET starter1='$insertstarter1', starter2='$insertstarter2'
+        $query = "SELECT * FROM lineup WHERE league='$league' AND bqbl_team='$bqblTeam' AND year='$year' AND week='$week';";
+        if(pg_num_rows(pg_query($bqbldbconn, $query)) > 0) {
+            $query = "UPDATE lineup SET starter1='$insertstarter1', starter2='$insertstarter2'
                   WHERE league='$league' AND bqbl_team='$bqblTeam' AND year='$year' AND week='$week';";
+        } else {
+            $query = "INSERT INTO lineup (year, week, league, bqbl_team, starter1, starter2)
+                  VALUES ('$year', '$week', '$league', '$bqblTeam', '$insertstarter1', '$insertstarter2');";
+        }
         pg_query($bqbldbconn, $query);
     }
 }
@@ -40,7 +46,7 @@ border-bottom-width: 6px;
 </head>
 <body>\n";
 
-$allowediting = ($_SESSION['bqbl_team'] == $bqblTeam) && ($week == currentWeek());
+$allowediting = ($_SESSION['bqbl_team'] == $bqblTeam) && ($week >= currentWeek());
 $starts = getStarts($year, $bqblTeam, $league);
 
 $starter1 = $starter2 = "";
@@ -50,7 +56,7 @@ $result = pg_query($bqbldbconn, $query);
 if(pg_num_rows($result) > 0) {
     list($starter1, $starter2) = pg_fetch_array($result);
 }
-if($allowediting) echo "<form method='post' action='$_SERVER[PHP_SELF]'>";
+if($allowediting) echo "<form method='post' action='$_SERVER[PHP_SELF]?week=$week'>";
 echo "<table border=1 style='border-collapse: collapse;'>";
 echo "<tr><th>Team</th><th>Starts</th><th>Wk$week Opponent<th>Wk$week Starter 1</th><th>Wk$week Starter 2</th></tr>";
 
