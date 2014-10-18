@@ -30,7 +30,10 @@ for ($i = 1; $i <= 9; $i++) {
     echo "<th>$bqbl_teamname[$i]</th>";
 }
 echo "</tr>";
-for ($i = 1; $i <= 14; $i++) {
+for ($i = 1; $i <= 15; $i++) {
+    if ($year > 2013) {
+        continue;
+    }
     $lineup = getLineups($year, $i);
     foreach ($lineup as $team => $starters) {
         if ($i <= $week_complete) {
