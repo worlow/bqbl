@@ -4,8 +4,10 @@ $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 $week = isset($_GET['week']) ? $_GET['week'] : currentWeek();
 if(isset($_GET['team'])) {
-    $bqblTeam = $_GET['team'];
-} elseif(isset($_SESSION['user'])) {
+    $bqblTeam = bqblTeamStrToInt(pg_escape_string($_GET['team']));
+} elseif(isset($_GET['teamnum'])) {
+    $bqblTeam = pg_escape_string($_GET['teamnum']);
+    } elseif(isset($_SESSION['user'])) {
     $bqblTeam = getBqblTeam($_SESSION['user']);
     if(!isset($_SESSION['bqbl_team'])) {
         $_SESSION['bqbl_team'] = $bqblTeam;
@@ -14,7 +16,6 @@ if(isset($_GET['team'])) {
     echo "Please set the 'team' parameter!";
     exit(0);
 }
-
 
 if(isset($_POST['submit'])) {
     $insertstarter1 = pg_escape_string($bqbldbconn, $_POST['starter1']);
@@ -46,7 +47,7 @@ border-bottom-width: 6px;
 </head>
 <body>\n";
 
-$allowediting = ($_SESSION['bqbl_team'] == $bqblTeam) && ($week >= currentWeek());
+$allowediting = (($_SESSION['bqbl_team'] == $bqblTeam) || isTed($bqblTeam)) && ($week >= currentWeek());
 $starts = getStarts($year, $bqblTeam, $league);
 
 $starter1 = $starter2 = "";

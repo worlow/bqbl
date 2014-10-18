@@ -156,4 +156,16 @@ function gameTime($year, $week, $team) {
         return pg_fetch_result($result, 0);
     }
 }
+
+function bqblTeamStrToInt($bqblTeam) {
+    global $bqbldbconn;
+    $query = "SELECT id FROM users WHERE username='$bqblTeam';";
+    return pg_fetch_result(pg_query($bqbldbconn, $query), 0);
+}
+
+function isTed($bqblTeam) {
+    global $bqbldbconn;
+    $query = "SELECT * FROM users WHERE id='$bqblTeam' AND username LIKE 'eltedador%';";
+    return pg_num_rows(pg_query($bqbldbconn, $query)) > 0;
+}
 ?>
