@@ -32,7 +32,7 @@ for ($i = 1; $i <= 9; $i++) {
 }
 echo "</tr>";
 for ($i = 1; $i <= 15; $i++) {
-    if ($year > 2013) {
+    if ($i == 15 && $year > 2013) {
         continue;
     }
     $lineup = getLineups($year, $i);
