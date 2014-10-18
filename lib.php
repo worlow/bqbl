@@ -1,28 +1,58 @@
 <?php
 // Report simple running errors
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
+session_start();
 require_once("lib_db.php");
+require_once("auth/lib_auth.php");
 date_default_timezone_set('America/Los_Angeles');
 
 $nfldbconn = connect_nfldb();
 $bqbldbconn = connect_bqbldb();
 
+$CURRENT_YEAR = 2014;
+$WEEK_1_THURS_DATE = "2014-09-04";
+
 function currentYear() {
-    return 2014;
+    global $CURRENT_YEAR;
+    return $CURRENT_YEAR;
 }
 
 function currentWeek() {
+    global $WEEK_1_THURS_DATE;
     $now = time();
-    $season_start = strtotime("2014-09-04");
+    $season_start = strtotime($WEEK_1_THURS_DATE) - 2*60*60*24;  # Tuesday
     $weeks = 1+floor(($now-$season_start)/(60*60*24*7));
     return $weeks;
 }
 
 function currentCompletedWeek() {
+    return currentWeek() - 1;
+}
+
+function currentWeekLineupCutoff() {
+    global $WEEK_1_THURS_DATE;
     $now = time();
-    $season_week1_end = strtotime("2014-09-09");
-    $weeks = 1+floor(($now-$season_week1_end)/(60*60*24*7));
-    return $weeks;
+    $season_start = strtotime($WEEK_1_THURS_DATE . " 17:30:00");  # Tuesday
+    return $season_start + 7*24*60*60*(currentWeek() - 1);
+}
+
+function getLeague() {
+    if(isset($_SESSION['league'])) {
+        return $_SESSION['league'];
+    } elseif(isset($_SESSION['user'])) {
+        $query = "SELECT league FROM users WHERE username='$_SESSION[user]';";
+        $league = pg_fetch_result(pg_query($GLOBALS['bqbldbconn'], $query),0);
+        return ($league != "") ? $league : "nathans";
+    } else return "nathans";
+}
+
+function getDomain() {
+    return "bqbl.duckdns.org";
+}
+
+function getBqblTeam($user) {
+    global $bqbldbconn;
+    return pg_fetch_result(pg_query($bqbldbconn, "SELECT id FROM users WHERE username='$user';"), 0);
 }
 
 function databaseModificationTime() {
