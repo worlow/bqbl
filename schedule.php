@@ -23,8 +23,14 @@ while(list($week,$team1,$team2) = pg_fetch_array($result)) {
 
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
 echo "<tr><th></th>";
-for ($i = 1; $i <= 8; $i++) {
-    echo "<th>$bqbl_teamname[$i]</th>";
+for ($i = 1; $i <= 9; $i++) {
+    if ($i == 4 && $year > 2013) {
+        echo "<th>$bqbl_teamname[$i]</th>";
+    } elseif ($i == 9 && $year <= 2013) {
+        echo "<th>$bqbl_teamname[$i]</th>";
+    } else {
+        echo "<th>$bqbl_teamname[$i]</th>";
+    }
 }
 echo "</tr>";
 for ($i = 1; $i <= 14; $i++) {
