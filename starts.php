@@ -17,7 +17,7 @@ $bqbl_teamname = bqblTeams();
 $roster = array();
 $starts = array();
 $query = "SELECT bqbl_team, nfl_team
-    FROM roster;";
+    FROM roster WHERE year='$year';";
 $result = pg_query($GLOBALS['bqbldbconn'],$query);
 while(list($bqbl_team,$nfl_team) = pg_fetch_array($result)) {
     $roster[$bqbl_team][] = $nfl_team;
