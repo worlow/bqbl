@@ -24,13 +24,10 @@ while(list($week,$team1,$team2) = pg_fetch_array($result)) {
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
 echo "<tr><th></th>";
 for ($i = 1; $i <= 9; $i++) {
-    if ($i == 4 && $year > 2013) {
-        echo "<th>$bqbl_teamname[$i]</th>";
-    } elseif ($i == 9 && $year <= 2013) {
-        echo "<th>$bqbl_teamname[$i]</th>";
-    } else {
-        echo "<th>$bqbl_teamname[$i]</th>";
-    }
+    if (($j == 4 && $year <= 2013) || ($j == 9 && $year > 2013)) {
+            continue;
+        }
+    echo "<th>$bqbl_teamname[$i]</th>";
 }
 echo "</tr>";
 for ($i = 1; $i <= 14; $i++) {
@@ -45,7 +42,10 @@ for ($i = 1; $i <= 14; $i++) {
     }
     
     echo "<tr><td>Week $i</td>";
-    for ($j = 1; $j <= 8; $j++) {
+    for ($j = 1; $j <= 9; $j++) {
+        if (($j == 4 && $year <= 2013) || ($j == 9 && $year > 2013)) {
+            continue;
+        }
         if ($score[$j][$i] > $score[$matchup[$i][$j]][$i]) {
             echo '<td bgcolor="#00FF00">'.$bqbl_teamname[$matchup[$i][$j]]."</td>";
         } elseif ($score[$j][$i] < $score[$matchup[$i][$j]][$i]) {
