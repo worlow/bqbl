@@ -15,7 +15,8 @@
 </head>
 <audio autoplay loop><source src="GetLow.mp3" type="audio/mpeg" /></audio>
 <marquee scrollamount=18><h1 class="blink">Welcome to the BQBL page!!!</h1></marquee>
-    
+
+<a href='lineup.php'>View and set lineups</a><br>
 <a href='standings.php'>Standings</a><br>
 <a href='schedule.php'>Schedule</a><br>
 <a href='starts.php'>Starts</a><br>
@@ -26,3 +27,4 @@
 <a href='extrapoints.php'>Input Extra BQBL Points</a><br>
 <a href='champions.html'>Past Champions</a><br>
 <a href='cares/'>BQBL Cares</a><br>
+<a href='auth/login.php'>Log in</a><br>
