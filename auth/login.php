@@ -1,15 +1,19 @@
 <?php 
 require_once '../lib.php';
 
+$redirectUrl="";
+if(isset($_POST['redirect_url']) && $_POST['redirect_url'] != "") {
+    $redirectUrl = $_POST['redirect_url'];
+} elseif((strpos($_SERVER['HTTP_REFERER'], getDomain()) > 0)
+    && !strpos($_SERVER['HTTP_REFERER'], 'login.php')) {
+    $redirectUrl = $_SERVER['HTTP_REFERER'];
+}
+
 if(!isset($_POST['user'])) {
     $loginMessage = isset($_GET['failed']) 
         ? "Login failed."
         : "Login.";
     $PHP_SELF = $_SERVER['PHP_SELF'];
-    if(strpos($_SERVER['HTTP_REFERER'], getDomain()) > 0
-       && strpos($_SERVER['HTTP_REFERER'], 'lineup.php')) {
-       $redirectUrl = $_SERVER['HTTP_REFERER'];
-    }
     echo <<< END
 <html><head>
 <title>BQBL Login</title></head>
@@ -17,6 +21,7 @@ if(!isset($_POST['user'])) {
         <tr>
             <td>
                 <form name="login_form" action="$PHP_SELF" method="post">
+                    <input type='hidden' name="redirect_url" value="$redirectUrl" />
                     <div align=center>$loginMessage</div>
                     <table id="login_box">
                         <tr>
@@ -31,7 +36,6 @@ if(!isset($_POST['user'])) {
                             <td align="right" colspan="2"><input type="submit" value="Login" /></td>
                         </tr>
                     </table>
-                    <input type='hidden' name="redirect_url" value="$redirectUrl" />
                 </form>
                 <script language="javascript" type="text/javascript">
                     document.login_form.user.focus();
@@ -44,8 +48,6 @@ END;
     $hashedPassword=hashedPassword($_POST['password']);
     $user=$_POST['user'];
     $dbuser = pg_escape_string($bqbldbconn, $user);
-    echo $dbuser;
-    echo $hashedPassword;
     $query = "SELECT * FROM users WHERE username='$dbuser' AND password='$hashedPassword';";
     $result = pg_query($bqbldbconn, $query);
     if (pg_num_rows($result) == 1) { 
@@ -55,11 +57,12 @@ END;
         setcookie('user', $_SESSION['user'], time()+60*60*24*3650, '/bqbl', getDomain());
 		setcookie('token', $_SESSION['token'], time()+60*60*24*3650, '/bqbl', getDomain());
 		setcookie('auth', $_SESSION['auth'], time()+60*60*24*3650, '/bqbl', getDomain());
-        if(isset($_POST['redirect_url'])) {
-            header("Location: $_POST[redirect_url]");
+        if($redirectUrl != "") {
+            header("Location: $redirectUrl");
             exit(0);
         }
 		header("Location: /");
+        
     }
     else {
         header("Location: $PHP_SELF?failed");
