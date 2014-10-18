@@ -88,7 +88,7 @@ echo "<tr><th></th><th>Team</th><th>Wins</th><th>Losses</th><th>Points For</th>
     <th>Points Against</th><th>Point Differential</th><th>Streak</th></tr>";
 $rank = 0;
 foreach ($record as $key => $val) {
-    if (($key == 4 && $year <= 2013) || ($key == 9 && $year > 2013) {
+    if (($key == 4 && $year <= 2013) || ($key == 9 && $year > 2013)) {
         continue;
     }
         
