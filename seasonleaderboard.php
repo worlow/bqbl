@@ -5,6 +5,7 @@ require_once "scoring.php";
 
 $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+$league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 
 echo "<html><head>
 <title>BQBL Season Leaders $year</title></head><body>\n";
@@ -14,7 +15,7 @@ $grandtotals_defense = array();
 $starts = array();
 $owner = array();
 $bqbl_draftscore = array();
-$bqbl_teamname = bqblTeams();
+$bqbl_teamname = bqblTeams($league);
 $nfl_draftscore = array();
 $draft_pick = array();
 $average = array();
