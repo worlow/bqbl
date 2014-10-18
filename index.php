@@ -16,7 +16,7 @@ require_once "lib.php";
 }
 </style>
 </head>
-<audio autoplay loop><source src="GetLow.mp3" type="audio/mpeg" /></audio>
+<audio autoplay loop><source src="media/GetLow.mp3" type="audio/mpeg" /></audio>
 <marquee scrollamount=18><h1 class="blink">Welcome to the BQBL page!!!</h1></marquee>
 
 <?php
