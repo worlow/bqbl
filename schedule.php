@@ -28,7 +28,7 @@ for ($i = 1; $i <= 9; $i++) {
     if (($i == 4 && $year <= 2013) || ($i == 9 && $year > 2013)) {
         continue;
     }
-    echo "<th><a href='/lineup.php?team=$i'>$bqbl_teamname[$i]</a></th>";
+    echo "<th>$bqbl_teamname[$i]</th>";
 }
 echo "</tr>";
 for ($i = 1; $i <= 15; $i++) {
