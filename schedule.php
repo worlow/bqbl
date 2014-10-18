@@ -2,20 +2,20 @@
 require_once "lib.php";
 require_once "scoring.php";
 
-
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 $week_complete = $year < currentYear() ? 15 : currentCompletedWeek();
+$league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 
 echo "<html><head>
 <title>$year BQBL Schedule </title></head><body>\n";
 
-$bqbl_teamname = bqblTeams();
+$bqbl_teamname = bqblTeams($league);
 $matchup = array();
 $score = array();
 
 $query = "SELECT week, team1, team2
             FROM schedule
-              WHERE year = $year;";
+              WHERE year='$year' AND league='$league';";
 $result = pg_query($bqbldbconn, $query);
 while(list($week,$team1,$team2) = pg_fetch_array($result)) {
     $matchup[$week][$team1] = $team2;
@@ -28,7 +28,7 @@ for ($i = 1; $i <= 9; $i++) {
     if (($i == 4 && $year <= 2013) || ($i == 9 && $year > 2013)) {
         continue;
     }
-    echo "<th>$bqbl_teamname[$i]</th>";
+    echo "<th><a href='/lineup.php?team=$i'>$bqbl_teamname[$i]</a></th>";
 }
 echo "</tr>";
 for ($i = 1; $i <= 15; $i++) {
@@ -45,7 +45,7 @@ for ($i = 1; $i <= 15; $i++) {
         }   
     }
     
-    echo "<tr><td>Week $i</td>";
+    echo "<tr><td><a href='/bqbl/matchup.php?week=$i'>Week $i</a></td>";
     for ($j = 1; $j <= 9; $j++) {
         if (($j == 4 && $year <= 2013) || ($j == 9 && $year > 2013)) {
             continue;

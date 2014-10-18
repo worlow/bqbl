@@ -4,11 +4,12 @@ require_once "scoring.php";
 
 $week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+$league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 
 echo "<html><head>
 <title>$year BQBL Week $week </title></head><body>\n";
 
-$bqbl_teamname = bqblTeams();
+$bqbl_teamname = bqblTeams($league);
 $lineup = getLineups($year, $week);
 $matchup = getMatchups($year, $week);
 
