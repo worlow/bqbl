@@ -47,7 +47,7 @@ border-bottom-width: 6px;
 </head>
 <body>\n";
 
-$allowediting = (($_SESSION['bqbl_team'] == $bqblTeam) || isTed($bqblTeam)) && ($week >= currentWeek());
+$allowediting = (($_SESSION['bqbl_team'] == $bqblTeam) || (isTed($bqblTeam) && isTed($_SESSION['bqbl_team'])) && ($week >= currentWeek());
 $starts = getStarts($year, $bqblTeam, $league);
 
 $starter1 = $starter2 = "";
