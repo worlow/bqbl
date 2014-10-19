@@ -30,13 +30,17 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     $home_team2 = $gamePoints[$year][$week][$lineup[$bqblteam1][1]];
     $away_team1 = $gamePoints[$year][$week][$lineup[$bqblteam2][0]];
     $away_team2 = $gamePoints[$year][$week][$lineup[$bqblteam2][1]];
-    $columns = 2 + count($home_team1);
+    $populatedTeam = $home_team1;
+    if(count($home_team2)>0) $populatedTeam = $home_team2;
+    elseif(count($away_team1)>0) $populatedTeam = $away_team1;
+    elseif(count($away_team2)>0) $populatedTeam = $away_team2;
+    $columns = 2 + count($populatedTeam);
 
     echo "<tr>\n";
     echo "<td><table border=2 class='matchup'>
     <tr><td colspan=$columns class='teamname'>$bqbl_teamname[$bqblteam1]</td></tr>
     <tr><th></th>";
-    foreach($home_team1 as $name => $val) {
+    foreach($populatedTeam as $name => $val) {
         echo "<th>$name</th>";
     }
     echo "<th>Total</th></tr>";
@@ -57,7 +61,7 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>VS.</td></tr>";
     echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>$bqbl_teamname[$bqblteam2]</td></tr>";
     echo "<th></th>";
-    foreach($home_team1 as $name => $val) {
+    foreach($populatedTeam as $name => $val) {
         echo "<th>$name</th>";
     }
     echo "<th>Total</th></tr>";
@@ -90,7 +94,7 @@ padding:0 20px 10px 0;
 .line {
 background: #FFFFFF;
 overflow: hidden;
-padding: 0px 0 30px 0;
+padding: 0px 0 50px 0;
 /* border-top: 5px solid #000000; */
 }
 
@@ -105,7 +109,7 @@ font-weight: bold;
 }
 
 .statvalue {
-color: #888888;
+color: #999999;
 margin-left: 5px;
 }
 
@@ -115,6 +119,6 @@ font-weight: bold;
 
 .matchup {
 border-collapse: collapse;
-background-color: #FAFAFA;
+background-color: #F8F8F8;
 }
 </style>
