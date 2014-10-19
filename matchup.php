@@ -21,36 +21,56 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
 }
 $gamePoints = getPointsBatch($games);
 
+echo "<table>";
 foreach ($matchup as $bqblteam1 => $bqblteam2) {
     $home_team1 = $gamePoints[$year][$week][$lineup[$bqblteam1][0]];
     $home_team2 = $gamePoints[$year][$week][$lineup[$bqblteam1][1]];
     $away_team1 = $gamePoints[$year][$week][$lineup[$bqblteam2][0]];
     $away_team2 = $gamePoints[$year][$week][$lineup[$bqblteam2][1]];
     
-    $home1_total = gameType($year, $week, $lineup[$bqblteam1][0]) != -1 ? totalPoints($home_team1) : 0;
-    $home2_total = gameType($year, $week, $lineup[$bqblteam1][1]) != -1 ? totalPoints($home_team2) : 0;
-    $home_total = $home1_total + $home2_total;
-    $away1_total = gameType($year, $week, $lineup[$bqblteam2][0]) != -1 ? totalPoints($away_team1) : 0;
-    $away2_total = gameType($year, $week, $lineup[$bqblteam2][1]) != -1 ? totalPoints($away_team2) : 0;
-    $away_total = $away1_total + $away2_total;
+    echo "<tr><td colspan=2 class='teamname'>$bqbl_teamname[$bqblteam1]</td></tr>";
+    echo "<tr>\n";
+    echo "<td class=score>\n";
+    echo $lineup[$bqblteam1][0];
+    printScore($home_team1);
+    echo "</td>\n";
+    echo "<td class=score>\n";
+    echo $lineup[$bqblteam1][1];
+    printScore($home_team2);
+    echo"</td></tr>\n";
     
-    
-    echo "<div>";
-    echo "$bqbl_teamname[$bqblteam1]";
-    echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-    echo "<tr><th>Team</th><th>Points</th></tr>";
-    echo "<tr><td>".$lineup[$bqblteam1][0]."</td> <td>$home1_total</td></tr>\n";
-    echo "<tr><td>".$lineup[$bqblteam1][1]."</td> <td>$home2_total</td></tr>\n";
-    echo "<tr><td>Total</td> <td>$home_total</td></tr>\n";
-    echo "</table>";
-    
-    echo "$bqbl_teamname[$bqblteam2]";
-    echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-    echo "<tr><th>Team</th><th>Points</th></tr>";
-    echo "<tr><td>".$lineup[$bqblteam2][0]."</td> <td>$away1_total</td></tr>\n";
-    echo "<tr><td>".$lineup[$bqblteam2][1]."</td> <td>$away2_total</td></tr>\n";
-    echo "<tr><td>Total</td> <td>$away_total</td></tr>\n";
-    echo "</table>";
-    echo "</div>";
+    echo "<tr><td colspan=2 class='teamname'>VS. <br>$bqbl_teamname[$bqblteam2]</td></tr>";    
+    echo "<tr>\n";
+    echo "<td class=score>\n";
+    echo $lineup[$bqblteam2][0];
+    printScore($away_team1);
+    echo "</td>\n";
+    echo "<td class=score >\n";
+    echo $lineup[$bqblteam2][1];
+    printScore($away_team2);
+    echo "</td></tr>\n";
+    echo "<tr><td class='line' colspan=2></td></tr>";
 }
+echo "</table>";
 ?>
+<style>
+.score {
+font-size: x-large;
+font-weight:bold;
+text-align: center;
+padding:0 20px 10px 0;
+}
+
+.line {
+background: #FFFFFF;
+overflow: hidden;
+padding: 0px 0 30px 0;
+border-top: 5px solid #000000;
+}
+
+.teamname {
+text-align: center;
+font-weight: bold;
+font-size: 25;
+}
+</style>

@@ -41,7 +41,7 @@ for ($i = 1; $i <= $week; $i++) {
     $lineup = getLineups($year, $i, $league);
     foreach ($lineup as $team => $starters) {
             $score[$team][$i] =
-                totalPoints($gamePoints[$year][$i][$starters[0]]) + totalPoints($gamePoints[$year][$i][$starters[0]]);
+                totalPoints($gamePoints[$year][$i][$starters[0]]) + totalPoints($gamePoints[$year][$i][$starters[1]]);
     }
     
     $matchup = getMatchups($year, $i, $league);

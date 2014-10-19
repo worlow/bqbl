@@ -169,4 +169,10 @@ function isTed($bqblTeam) {
     $query = "SELECT * FROM users WHERE id='$bqblTeam' AND username LIKE 'eltedador%';";
     return pg_num_rows(pg_query($bqbldbconn, $query)) > 0;
 }
+
+function footer() {
+    global $bqbldbconn, $nfldbconn;
+    pg_close($bqbldbconn);
+    pg_close($nfldbconn);
+}
 ?>

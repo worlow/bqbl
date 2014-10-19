@@ -358,11 +358,12 @@ function getPointsBatch($games) {
         $pool->submit($newWork);
     }
     $pool->shutdown();
-    for($i=0;$i<count($work);$i++) {
-        $gameWork = $work[$i];
+    foreach($work as $gameWork) {
         $total = totalPoints($gameWork->points);
         $points[$gameWork->year][$gameWork->week][$gameWork->team] = $gameWork->points;
+        unset($gameWork);
     }
+    unset($pool);
     return $points;
 }
 
@@ -388,6 +389,9 @@ class PointsWork extends Threaded {
             $this->points = getPoints($this->team, $this->week, $this->year);
             $total = totalPoints($this->points);
         }
+        #pg_close($GLOBALS['bqbldbconn']);
+        #pg_close($GLOBALS['nfldbconn']);
+        exit();
     }
 }
 
