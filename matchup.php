@@ -20,11 +20,11 @@ if (isset($_GET['autorefresh'])) {
         setTimeout(function() {location.reload();}, $timeout);
         </script>";
     } else {
-        echo "There was a problem with the auto-refresh function.";
+        echo "<br /><span style='color: #FF0000'>There was a problem with the auto-refresh function.</span>";
     }
 } elseif ($timeout>=0 && $week==currentWeek() && $year==currentYear()) {
 
-    echo "<a href='$_SERVER[PHP_SELF]?league=$league&autorefresh'>Auto Refresh</a>";
+    echo "<br/><a href='$_SERVER[PHP_SELF]?league=$league&autorefresh'>Auto Refresh</a>";
 }
 $bqbl_teamname = bqblTeams($league, $year);
 $lineup = getLineups($year, $week, $league);
