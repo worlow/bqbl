@@ -14,7 +14,18 @@ Last Updated at $updateTime";
 
 $bqbl_teamname = bqblTeams($league, $year);
 $lineup = getLineups($year, $week, $league);
-$matchup = getMatchups($year, $week, $league);
+$unsortedmatchup = getMatchups($year, $week, $league);
+$matchup=array();
+foreach ($unsortedmatchup as $bqblteam1 => $bqblteam2) {
+    if ($_SESSION['bqbl_team']==$bqblteam1 || $_SESSION['bqbl_team']==$bqblteam2) {
+        $matchup[$bqblteam1] = $bqblteam2;
+    }
+}
+foreach ($unsortedmatchup as $bqblteam1 => $bqblteam2) {
+    if ($_SESSION['bqbl_team']!=$bqblteam1 && $_SESSION['bqbl_team']!=$bqblteam2) {
+        $matchup[$bqblteam1] = $bqblteam2;
+    }
+}
 
 foreach ($matchup as $bqblteam1 => $bqblteam2) {
     $games[] = array($year, $week, $lineup[$bqblteam1][0]);
@@ -49,13 +60,13 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     foreach($home_team1 as $name => $val) {
         echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
     }
-    echo "<td>" . totalPoints($home_team1) . "</td>";
+    echo "<td class='totalpoints'>" . totalPoints($home_team1) . "</td>";
     echo "</tr>\n";
     echo "<tr><td class='nflteamname'>" . $lineup[$bqblteam1][1] . "</td>";
     foreach($home_team2 as $name => $val) {
         echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
     }
-    echo "<td>" . totalPoints($home_team2) . "</td>";
+    echo "<td class='totalpoints'>" . totalPoints($home_team2) . "</td>";
     echo "</tr>\n";
     
     echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>VS.</td></tr>";
@@ -69,19 +80,30 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     foreach($home_team1 as $name => $val) {
         echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
     }
-    echo "<td>" . totalPoints($away_team1) . "</td>";
+    echo "<td class='totalpoints'>" . totalPoints($away_team1) . "</td>";
     echo "</tr>\n";
     echo "<tr><td class='nflteamname'>" . $lineup[$bqblteam2][1] . "</td>";
     foreach($away_team2 as $name => $val) {
         echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
     }
-    echo "<td>" . totalPoints($away_team2) . "</td>";
+    echo "<td class='totalpoints'>" . totalPoints($away_team2) . "</td>";
     echo "</tr>\n";
     echo "</table>";
     echo "<tr><td class='line' colspan=$columns></td></tr>";
 }
 echo "</table>";
 echo "</div>";  # content div
+
+function cmp_isTeamUser($a, $b) {
+    if (isset($_SESSION['bqbl_team'])) {
+        if ($a == $_SESSION['bqbl_team']) {
+            return -1;
+        } elseif ($b == $_SESSION['bqbl_team']) {
+            return 1;
+        }
+    }
+    return 0;
+}
 ?>
 <style>
 .score {
@@ -124,5 +146,9 @@ background-color: #F8F8F8;
 
 .matchup th {
 padding: 0 5px 0 5px;
+}
+
+.totalpoints {
+font-weight:bold;
 }
 </style>
