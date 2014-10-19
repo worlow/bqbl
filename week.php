@@ -28,7 +28,7 @@ if (isset($_GET['autorefresh'])) {
     }
 } elseif ($timeout>=0 && $week==currentWeek() && $year==currentYear()) {
 
-    echo "<br/><a href='$_SERVER[PHP_SELF]?league=$league&autorefresh'>Auto Refresh</a>";
+    echo "<br/><a href='$_SERVER[PHP_SELF]?autorefresh'>Auto Refresh</a>";
 }
 $query = "SELECT gsis_id, home_team, away_team
 		  FROM game
