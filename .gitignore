@@ -14,7 +14,7 @@ completion.php
 completion2.php
 GetLow.mp3
 histograms/
-auth/lib_auth.php
+lib/lib_auth.php
 deprecated/
 
 # Folder config file

@@ -3,7 +3,7 @@
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 session_start();
 require_once("lib_db.php");
-require_once("auth/lib_auth.php");
+require_once("lib_auth.php");
 date_default_timezone_set('America/Los_Angeles');
 
 $nfldbconn = connect_nfldb();
