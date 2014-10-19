@@ -11,7 +11,7 @@ $bqbldbconn = connect_bqbldb();
 
 $CURRENT_YEAR = 2014;
 $WEEK_1_THURS_DATE = "2014-09-04";
-$DB_UPDATE_INTERVAL = 90;  # seconds
+$DB_UPDATE_INTERVAL = 60;  # seconds
 
 function currentYear() {
     global $CURRENT_YEAR;

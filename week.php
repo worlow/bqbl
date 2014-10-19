@@ -19,7 +19,7 @@ $timeout = $DB_UPDATE_INTERVAL - (time()-databaseModificationTime());
 if (isset($_GET['autorefresh'])) {
     if ($timeout >= 0) {
         $timeout *= 1000;  # millis
-        $timeout += rand(7000,15000);  # allow for update + prevent DDOS
+        $timeout += rand(15000,20000);  # allow for update + prevent DDOS
         echo "<script type='text/javascript'>
         setTimeout(function() {location.reload();}, $timeout);
         </script>";

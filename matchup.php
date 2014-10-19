@@ -15,7 +15,7 @@ $timeout = $DB_UPDATE_INTERVAL - (time()-databaseModificationTime());
 if (isset($_GET['autorefresh'])) {
     if ($timeout >= 0) {
         $timeout *= 1000;  # millis
-        $timeout += rand(7000,15000);  # allow for update + prevent DDOS
+        $timeout += rand(15000,20000);  # allow for update + prevent DDOS
         echo "<script type='text/javascript'>
         setTimeout(function() {location.reload();}, $timeout);
         </script>";
@@ -71,16 +71,26 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     echo "<th>Total</th></tr>";
     
     echo "<tr><td class='nflteamname'>" . $lineup[$bqblteam1][0] . "</td>";
-    foreach($home_team1 as $name => $val) {
-        echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+    if (gameType($year, $week, $lineup[$bqblteam1][0]) != 2) {
+        foreach($home_team1 as $name => $val) {
+            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+        }
+        echo "<td class='totalpoints'>" . totalPoints($home_team1) . "</td>";
+    } else {
+        $statcolumns = $columns - 1;
+        echo "<td colspan=$statcolumns></td>";
     }
-    echo "<td class='totalpoints'>" . totalPoints($home_team1) . "</td>";
     echo "</tr>\n";
     echo "<tr><td class='nflteamname'>" . $lineup[$bqblteam1][1] . "</td>";
-    foreach($home_team2 as $name => $val) {
-        echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+    if (gameType($year, $week, $lineup[$bqblteam1][1]) != 2) {
+        foreach($home_team2 as $name => $val) {
+            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+        }
+        echo "<td class='totalpoints'>" . totalPoints($home_team2) . "</td>";
+    } else {
+        $statcolumns = $columns - 1;
+        echo "<td colspan=$statcolumns></td>";
     }
-    echo "<td class='totalpoints'>" . totalPoints($home_team2) . "</td>";
     echo "</tr>\n";
     
     echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>VS.</td></tr>";
@@ -91,16 +101,26 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     }
     echo "<th>Total</th></tr>";
     echo "<tr><td class='nflteamname'>" . $lineup[$bqblteam2][0] . "</td>";
-    foreach($home_team1 as $name => $val) {
-        echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+    if (gameType($year, $week, $lineup[$bqblteam2][0]) != 2) {
+        foreach($away_team1 as $name => $val) {
+            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+        }
+        echo "<td class='totalpoints'>" . totalPoints($away_team1) . "</td>";
+    } else {
+        $statcolumns = $columns - 1;
+        echo "<td colspan=$statcolumns></td>";
     }
-    echo "<td class='totalpoints'>" . totalPoints($away_team1) . "</td>";
     echo "</tr>\n";
     echo "<tr><td class='nflteamname'>" . $lineup[$bqblteam2][1] . "</td>";
-    foreach($away_team2 as $name => $val) {
-        echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+    if (gameType($year, $week, $lineup[$bqblteam2][1]) != 2) {
+        foreach($away_team2 as $name => $val) {
+            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+        }
+        echo "<td class='totalpoints'>" . totalPoints($away_team2) . "</td>";
+    } else {
+        $statcolumns = $columns - 1;
+        echo "<td colspan=$statcolumns></td>";
     }
-    echo "<td class='totalpoints'>" . totalPoints($away_team2) . "</td>";
     echo "</tr>\n";
     echo "</table>";
     echo "<tr><td class='line' colspan=$columns></td></tr>";
