@@ -19,12 +19,12 @@ $timeout = $DB_UPDATE_INTERVAL - (time()-databaseModificationTime());
 if (isset($_GET['autorefresh'])) {
     if ($timeout >= 0) {
         $timeout *= 1000;  # millis
-        $timeout += rand(5000,12000);  # allow for update + prevent DDOS
+        $timeout += rand(7000,15000);  # allow for update + prevent DDOS
         echo "<script type='text/javascript'>
         setTimeout(function() {location.reload();}, $timeout);
         </script>";
     } else {
-        echo "<br /><span style='color: #FF0000'>There was a problem with the auto-refresh function.</span>";
+        echo "<br /><span style='color: #FF0000'>The auto-refresh function is not available at this time.</span>";
     }
 } elseif ($timeout>=0 && $week==currentWeek() && $year==currentYear()) {
 
