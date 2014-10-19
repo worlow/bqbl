@@ -57,7 +57,7 @@ function getBqblTeam($user) {
 }
 
 function databaseModificationTime() {
-    $file = "C:\www\bqbl\update_time";
+    $file = "C:\\Python27\\Lib\\site-packages\\nflgame\\gamecenter-json\\.";
     return filemtime($file);
 }
 

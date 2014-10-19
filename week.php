@@ -13,7 +13,7 @@ $updateTime = date("n/j g:i:s A, T", databaseModificationTime());
 echo "<html><head>
 <div id='content' align='center'>
 <title>BQBL Week $week $year</title></head><body>\n
-<h1>Week $week $year Scoreboard</h1>
+<h1>$year Week $week Scoreboard</h1>
 Last Updated at $updateTime";
 
 $query = "SELECT gsis_id, home_team, away_team
