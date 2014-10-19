@@ -105,12 +105,13 @@ function nflTeams() {
     return $teams;
 }
 
-function bqblTeams($league, $year) {
+function bqblTeams($league, $year, $sortByDraftOrder=false) {
     global $bqbldbconn;
     $bqbl_teamname = array();
+    $orderClause = $sortByDraftOrder ? "ORDER BY draft_order ASC" : "ORDER BY team_name ASC";
     $query = "SELECT bqbl_team, team_name 
               FROM membership JOIN users ON membership.bqbl_team=users.id 
-              WHERE league='$league';";
+              WHERE league='$league' AND year='$year' $orderClause;";
     $result = pg_query($bqbldbconn, $query);
     while(list($id,$team_name) = pg_fetch_array($result)) {
         $bqbl_teamname[$id] = $team_name;
