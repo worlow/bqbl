@@ -10,8 +10,21 @@ $updateTime = date("n/j g:i:s A, T", databaseModificationTime());
 echo "<html><head><title>BQBL Week $week $year</title>
 <div id='content' align='center'>
 <h1>$year Week $week BQBL Scoreboard</h1>
-Last Updated at $updateTime";
+Last Updated at $updateTime ";
+$timeout = $DB_UPDATE_INTERVAL - (time()-databaseModificationTime());
+if (isset($_GET['autorefresh'])) {
+    if ($timeout >= 0) {
+        $timeout *= 1000;  # millis
+        echo "<script type='text/javascript'>
+        setTimeout(function() {location.reload();}, $timeout);
+        </script>";
+    } else {
+        echo "There was a problem with the auto-refresh function.";
+    }
+} elseif ($timeout>=0 && $week==currentWeek() && $year==currentYear()) {
 
+    echo "<a href='$_SERVER[PHP_SELF]?league=$league&autorefresh'>Auto Refresh</a>";
+}
 $bqbl_teamname = bqblTeams($league, $year);
 $lineup = getLineups($year, $week, $league);
 $unsortedmatchup = getMatchups($year, $week, $league);
