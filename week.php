@@ -17,6 +17,7 @@ echo "<html><head>
 Last Updated at $updateTime ";
 $timeout = $DB_UPDATE_INTERVAL - (time()-databaseModificationTime());
 if (isset($_GET['autorefresh'])) {
+    if ($timeout < 0 && $timeout > -$DB_UPDATE_INTERVAL) $timeout=0;
     if ($timeout >= 0) {
         $timeout *= 1000;  # millis
         $timeout += rand(15000,20000);  # allow for update + prevent DDOS
