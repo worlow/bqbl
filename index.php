@@ -21,15 +21,15 @@ require_once "lib/lib.php";
 
 <?php
 if(isset($_SESSION['user'])) {
-    echo "<a href='lineup.php'>View and set lineups</a><br>";
+    echo "<a href='lineup.php'>View and set lineup</a><br>";
 } else {
     echo "<a href='auth/login.php'>Log in</a><br>";
 }
 ?>
+<a href='matchup.php'>BQBL Matchup Scoreboard</a><br>
+<a href='week.php'>BQBL NFL Scoreboard</a><br>
 <a href='standings.php'>Standings</a><br>
 <a href='schedule.php'>Schedule</a><br>
-<a href='matchup.php'>Weekly Matchups</a><br>
-<a href='week.php'>Scoreboard</a><br>
 <a href='leaderboard.php'>Weekly Leaders</a><br>
 <a href='seasonleaderboard.php'>Season Rankings</a><br>
 <a href='extrapoints.php'>Input Extra BQBL Points</a><br>
