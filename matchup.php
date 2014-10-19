@@ -121,4 +121,8 @@ font-weight: bold;
 border-collapse: collapse;
 background-color: #F8F8F8;
 }
+
+.matchup th {
+padding: 0 5px 0 5px;
+}
 </style>
