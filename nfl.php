@@ -10,7 +10,8 @@ if ($nfl_team == null) {
    }
 } else {
     $total = 0;
-    echo "<h2>".nflIdToCityTeamName($nfl_team)."</h2>";
+    list($city, $name) = nflIdToCityTeamName($nfl_team);
+    echo "<h2>$city $name</h2>";
     echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
     echo "<tr><th></th><th>Opponent</th><th>Score</th></tr>";
     for ($i = 1; $i <= 17; $i++) {
