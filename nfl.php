@@ -29,5 +29,6 @@ if ($nfl_team == null) {
     }
     echo "<tr><td>Total</td><td> -- </td><td>$total</td></tr>";
     echo "</table>";
+    echo "<div><a href='/bqbl/nfl.php?year=$year'>Back</a></div>";
 }
 ?>
