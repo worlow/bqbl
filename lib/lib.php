@@ -80,6 +80,7 @@ global $nfldbconn;
 
 function nflMatchup($year, $week, $team) {
     global $nfldbconn;
+    echo "$year $week $team";
     $query = "SELECT home_team, away_team
               FROM game
               WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
