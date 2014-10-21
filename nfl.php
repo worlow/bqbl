@@ -14,7 +14,7 @@ if ($nfl_team == null) {
     for ($i = 1; $i <= 17; $i++) {
         echo "<tr><td>Week $i</td>";
         
-        list($home, $away) = nflMatchup($year, $i, $team);
+        echo nflMatchup($year, $i, $team);
         if ($home == $team) {
             echo "<td>$away</td>";
         } else {
