@@ -21,7 +21,7 @@ if ($nfl_team == null) {
             echo "<td>$home</td>";
         }
         
-        echo "<td>".totalPoints(getPoints($year, $i, $team))."</td></tr>";
+        echo "<td>".totalPoints(getPoints($team, $i, $year))."</td></tr>";
     }
     echo "</table>";
 }
