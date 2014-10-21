@@ -14,11 +14,11 @@ if ($nfl_team == null) {
     for ($i = 1; $i <= 17; $i++) {
         echo "<tr><td>Week $i</td>";
         
-        echo nflMatchup($year, $i, $team);
-        if ($home == $team) {
-            echo "<td>$away</td>";
+        $matchup = nflMatchup($year, $i, $team);
+        if ($matchup['home_team'] == $team) {
+            echo "<td>".$matchup['away_team']."</td>";
         } else {
-            echo "<td>$home</td>";
+            echo "<td>".$matchup['home_team']."</td>";
         }
         
         echo "<td>".totalPoints(getPoints($team, $i, $year))."</td></tr>";
