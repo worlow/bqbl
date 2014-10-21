@@ -78,6 +78,19 @@ global $nfldbconn;
     return 1; // Current or past game
 }
 
+function nflMatchup($year, $week, $team) {
+    global $nfldbconn;
+    $query = "SELECT home_team, away_team
+              FROM game
+              WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
+              AND week='$week' AND season_type='Regular';";
+    $result = pg_query($GLOBALS['nfldbconn'], $query);
+    if(pg_num_rows($result) == 0) { // Bye week
+        return array();
+    }
+    return pg_fetch_array($result);
+}
+
 function gameType($year, $week, $team) {
     global $nfldbconn;
     $query = "SELECT start_time

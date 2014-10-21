@@ -9,6 +9,20 @@ if ($nfl_team == null) {
        echo "<div><a href='/bqbl/nfl.php?team=$team&year=$year'>$team</a></div>";
    }
 } else {
-    echo "Hello";
+    echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
+    echo "<tr><th></th><th>Opponent</th><th>Score</th></tr>";
+    for ($i = 1; $i <= 17; $i++) {
+        echo "<tr><td>Week $i</td>";
+        
+        list($home, $away) = nflMatchup($year, $i, $team);
+        if ($home == $team) {
+            echo "<td>$away</td>";
+        } else {
+            echo "<td>$home</td>";
+        }
+        
+        echo "<td>".totalPoints(getPoints($year, $i, $team))."</td></tr>";
+    }
+    echo "</table>";
 }
 ?>
