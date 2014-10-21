@@ -19,7 +19,7 @@ if ($nfl_team == null) {
         if ($home_team == $nfl_team) {
             echo "<td><a href='/bqbl/nfl.php?team=$away_team&year=$year'>$away_team</a></td>";
         } elseif ($away_team == $nfl_team) {
-            echo "<td><a href='/bqbl/nfl.php?team=$home_team&year=$year'>$home_team</a></td>";
+            echo "<td><a href='/bqbl/nfl.php?team=$home_team&year=$year'>@$home_team</a></td>";
         } else {
             echo "<td>BYE</td>";
         }
@@ -27,7 +27,7 @@ if ($nfl_team == null) {
         $total += $points;
         echo "<td>$points</td></tr>";
     }
-    echo "<tr><td>Total</td><td> -- </td><td>$points</td></tr>";
+    echo "<tr><td>Total</td><td> -- </td><td>$total</td></tr>";
     echo "</table>";
 }
 ?>
