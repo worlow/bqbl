@@ -89,7 +89,7 @@ function nflMatchup($year, $week, $team) {
     if(pg_num_rows($result) == 0) { // Bye week
         return array();
     }
-    list($home_team,$away_team) = pg_fetch_array($result,0)
+    list($home_team,$away_team) = pg_fetch_array($result,0);
     $matchup['home_team'] = $home_team;
     $matchup['away_team'] = $away_team;
     return $matchup;
