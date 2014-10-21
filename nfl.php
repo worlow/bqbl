@@ -6,7 +6,7 @@ $nfl_team = isset($_GET['team']) ? pg_escape_string($_GET['team']) : null;
 
 if ($nfl_team == null) {
    foreach (nflTeams() as $team) {
-       echo "<a href='/bqbl/nfl.php?team=$team&year=$year'>$team</a>";
+       echo "<div><a href='/bqbl/nfl.php?team=$team&year=$year'>$team</a></div>";
    }
 } else {
     echo "Hello";
