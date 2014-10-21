@@ -86,8 +86,7 @@ function nflMatchup($year, $week, $team) {
               AND week='$week' AND season_type='Regular';";
     $result = pg_query($GLOBALS['nfldbconn'], $query);
     $matchup = array();
-    echo $result;
-    echo pg_fetch_array($result,0);;
+    echo pg_fetch_array($result,0);
     
     if(pg_num_rows($result) == 0) { // Bye week
         return array();
