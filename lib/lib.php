@@ -85,10 +85,15 @@ function nflMatchup($year, $week, $team) {
               WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
               AND week='$week' AND season_type='Regular';";
     $result = pg_query($GLOBALS['nfldbconn'], $query);
+    $matchup = array();
     if(pg_num_rows($result) == 0) { // Bye week
         return array();
     }
-    return pg_fetch_array($result);
+    while(list($home_team,$away_team) = pg_fetch_array($result)) {
+        $matchup['home_team'] = $home_team;
+        $matchup['away_team'] = $away_team;
+    }
+    return $matchup;
 }
 
 function gameType($year, $week, $team) {
