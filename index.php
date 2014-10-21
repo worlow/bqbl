@@ -33,5 +33,6 @@ if(isset($_SESSION['user'])) {
 <a href='leaderboard.php'>Weekly Leaders</a><br>
 <a href='seasonleaderboard.php'>Season Rankings</a><br>
 <a href='extrapoints.php'>Input Extra BQBL Points</a><br>
+<a href='bios.html'>League Management</a><br>
 <a href='champions.html'>Past Champions</a><br>
 <a href='cares/'>BQBL Cares</a><br>
