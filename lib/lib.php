@@ -120,6 +120,13 @@ function nflTeams() {
     return $teams;
 }
 
+function nflIdToCityTeamName($id) {
+    global $bqbldbconn;
+    $query = "SELECT city, name FROM nfl_teams WHERE id='$id';";
+    $result = pg_query($bqbldbconn, $query);
+    return pg_fetch_array($result);
+}
+
 function bqblTeams($league, $year, $sortByDraftOrder=false) {
     global $bqbldbconn;
     $bqbl_teamname = array();
