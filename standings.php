@@ -110,7 +110,7 @@ foreach ($record as $key => $val) {
             $color =  "class='rainbow'";
             break;
         default:
-            $color = "":
+            $color = "";
     }
     
     echo "<tr $thickline><td>$rank.</td><td><span $color>$bqbl_teamname[$key]</span></td><td>".$val['wins']."</td>
