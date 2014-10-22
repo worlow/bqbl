@@ -66,7 +66,7 @@ $query = "SELECT nfl_team FROM roster
 $result = pg_query($bqbldbconn, $query);
 while (list($nflTeam) = pg_fetch_array($result)) {
     $opponent = getOpponent($year, $week, $nflTeam);
-    $disabled = !$allowediting || ($opponent == "BYE") ? "disabled" : "";
+    $disabled = !$allowediting ? "disabled" : "";
     $selected1 = $nflTeam == $starter1 ? "checked" : "";
     $selected2 = $nflTeam == $starter2 ? "checked" : "";
     echo "<tr><td><a href='/bqbl/nfl.php?team=$nflTeam&year=$year'>$nflTeam</a></td>
