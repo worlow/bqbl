@@ -104,7 +104,15 @@ foreach ($record as $key => $val) {
     $rank++;
     $point_differential = $val['points_for'] - $val['points_against'];
     $thickline = ($rank==4) ? "class='thickline'" : "";
-    $color = ($key == 6) ? "class='rainbow'" : "";
+    
+    switch ($key) {
+        case 6:
+            $color =  "class='rainbow'";
+            break;
+        default:
+            $color = "":
+    }
+    
     echo "<tr $thickline><td>$rank.</td><td><span $color>$bqbl_teamname[$key]</span></td><td>".$val['wins']."</td>
         <td>".$val['losses']."</td><td>".$val['points_for']."</td><td>".$val['points_against']."</td><td>";
     if ($point_differential >= 0) {
