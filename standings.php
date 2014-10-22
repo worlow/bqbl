@@ -109,11 +109,27 @@ foreach ($record as $key => $val) {
         case 1:
             $color = "class='samdwich'";
             break;
+        case 2:
+            $color ="class='sworls'";
+            break;
         case 3:
             $color = "class='jhka3'";
             break;
+        case 4:
+        case 9:
+            $color = "class='murphmanjr'";
+            break;
+        case 5:
+            $color = "class='lukabear'";
+            break;
         case 6:
             $color =  "class='anirbaijan'";
+            break;
+        case 7:
+            $color = "class='kvk'";
+            break;
+        case 8:
+            $color = "class='palc'";
             break;
         default:
             $color = "";
@@ -138,10 +154,25 @@ echo "</table>";
 .samdwich {
     background-color: #00FF00;
 }
+ 
+.sworls {
+    color: #FFFFFF;
+    background-color: #0000FF;
+}
     
 .jhka3 {
     color: #FFFFFF;
     background-color: #FF0000;
+}
+    
+.murphmanjr {
+    color: #FFFFFF;
+    background-color: #6495ED;
+}
+    
+.lukabear {
+    color: #FFFFFF;
+    background-color: #9B30FF;
 }
     
 .anirbaijan {
@@ -150,5 +181,14 @@ echo "</table>";
   color:transparent;
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+.kvk {
+    background-color: #FF7700;
+}
+
+.palc {
+    color: #FFFFFF;
+    background-color: #900000;
 }
 </style>
