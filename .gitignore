@@ -6,6 +6,7 @@ update_time
 initseason.php
 oldindex.php
 resetpassword.php
+forgotpassword.php
 git.php
 lib_db.php
 update.php
