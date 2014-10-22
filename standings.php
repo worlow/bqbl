@@ -184,7 +184,7 @@ echo "</table>";
 }
 
 .kvk {
-    background-color: #FF7700;
+    background-color: #FFAA00;
 }
 
 .palc {
