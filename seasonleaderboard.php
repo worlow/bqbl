@@ -76,7 +76,8 @@ foreach ($average as $key => $val) {
     $rank++;
     $nfl_draftscore[$key] = $draft_pick[$key] - $rank;
     $bqbl_draftscore[$owner[$key]] += $rank;
-    echo "<tr><td>$rank</td><td>$key</td><td>$grandtotals[$key]</td><td>".round($val,2)."</td></tr>";
+    echo "<tr><td>$rank</td><td><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></td>
+        <td>$grandtotals[$key]</td><td>".round($val,2)."</td></tr>";
 }
 echo "</table>";
 
@@ -85,7 +86,8 @@ echo "<tr><th>Rank</th><th>Team</th><th>Defensive Points</th><th>Average</th></t
 $rank = 0;
 foreach ($average_defense as $key => $val) {
     $rank++;
-    echo "<tr><td>$rank</td><td>$key</td><td>$grandtotals_defense[$key]</td><td>".round($val,2)."</td></tr>";
+    echo "<tr><td>$rank</td><td><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></td>
+        <td>$grandtotals_defense[$key]</td><td>".round($val,2)."</td></tr>";
 }
 echo "</table>";
 
@@ -97,7 +99,8 @@ echo "<tr><th>Rank</th><th>Team</th><th>Pick</th><th>Draft Score</th></tr>";
 $rank = 0;
 foreach ($nfl_draftscore as $key => $val) {
     $rank++;
-    echo "<tr><td>$rank</td><td>$key</td><td>$draft_pick[$key]</td><td>$val</td></tr>";
+    echo "<tr><td>$rank</td><td><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></td>
+        <td>$draft_pick[$key]</td><td>$val</td></tr>";
 }
 echo "</table>";
 

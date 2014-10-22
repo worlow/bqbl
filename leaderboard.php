@@ -36,7 +36,7 @@ echo "<tr><th>Rank</th><th>Team Name</th><th>Total Points</th></tr>";
 $rank = 0;
 foreach ($totals as $key => $val) {
     $rank++;
-    echo "<tr><td>$rank</td><td>$key</td><td>$val</td></tr>";
+    echo "<tr><td>$rank</td><td><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></td><td>$val</td></tr>";
 }
 echo "</table>";
 
@@ -45,7 +45,7 @@ echo "<tr><th>Rank</th><th>Team Name</th><th>Total Defensive Points</th></tr>";
 $rank = 0;
 foreach ($totals_defense as $key => $val) {
     $rank++;
-    echo "<tr><td>$rank</td><td>$key</td><td>$val</td></tr>";
+    echo "<tr><td>$rank</td><td><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></td><td>$val</td></tr>";
 }
 echo "</table>";
 ?>

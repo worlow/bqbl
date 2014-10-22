@@ -19,9 +19,9 @@ if ($nfl_team == null) {
         
         list($home_team,$away_team) = nflMatchup($year, $i, $nfl_team);
         if ($home_team == $nfl_team) {
-            echo "<td><a href='/bqbl/nfl.php?team=$away_team&year=$year'>vs $away_team</a></td>";
+            echo "<td>vs <a href='/bqbl/nfl.php?team=$away_team&year=$year'>$away_team</a></td>";
         } elseif ($away_team == $nfl_team) {
-            echo "<td><a href='/bqbl/nfl.php?team=$home_team&year=$year'>@ $home_team</a></td>";
+            echo "<td>@ <a href='/bqbl/nfl.php?team=$home_team&year=$year'>$home_team</a></td>";
         } else {
             echo "<td>BYE</td>";
         }
