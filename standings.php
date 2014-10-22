@@ -20,7 +20,7 @@ echo "<html><head>
 <title>$year BQBL Standings </title>
 <style type='text/css'>
 tr.thickline td {
-border-bottom-width: 12px;
+border-bottom-width: 24px;
 }
 </style>
 </head><body>\n";
