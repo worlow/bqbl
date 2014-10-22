@@ -67,7 +67,7 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     <tr><td colspan=$columns class='teamname'>$bqbl_teamname[$bqblteam1]</td></tr>
     <tr><th></th>";
     foreach($populatedTeam as $name => $val) {
-        echo "<th>$name</th>";
+        echo "<th><a href='/bqbl/nfl.php?team=$name&year=$year'>$name</a></th>";
     }
     echo "<th>Total</th></tr>";
     
@@ -98,7 +98,7 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>$bqbl_teamname[$bqblteam2]</td></tr>";
     echo "<th></th>";
     foreach($populatedTeam as $name => $val) {
-        echo "<th>$name</th>";
+        echo "<th><a href='/bqbl/nfl.php?team=$name&year=$year'>$name</a></th>";
     }
     echo "<th>Total</th></tr>";
     echo "<tr><td class='nflteamname'>" . $lineup[$bqblteam2][0] . "</td>";

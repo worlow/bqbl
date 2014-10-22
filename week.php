@@ -41,11 +41,11 @@ while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
     $gameType = gameTypeById($gsis);
     echo "<div id=matchup style='display:table-row;'>\n";
     echo "<div class=score>\n";
-    echo "$hometeam\n";
+    echo "<a href='/bqbl/nfl.php?team=$hometeam&year=$year'>$hometeam</a>\n";
     printGameScore($gamePoints[$year][$week][$hometeam], $hometeam, $week, $year);
     echo "</div><div class=score>@</div>\n";
     echo "<div class=score >\n";
-    echo "$awayteam\n";
+    echo "<a href='/bqbl/nfl.php?team=$awayteam&year=$year'>$awayteam</a>\n";
     printGameScore($gamePoints[$year][$week][$awayteam], $awayteam, $week, $year);
     echo"</div></div>";
 }
