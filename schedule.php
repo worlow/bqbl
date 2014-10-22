@@ -33,7 +33,11 @@ while(list($week,$team1,$team2) = pg_fetch_array($result)) {
 echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
 echo "<tr><th></th>";
 foreach($bqbl_teamname as $teamName) {
-    $team == "Anirbaijan" ? echo "<th><span class='rainbow'>$teamName</span></th>" : echo "<th>$teamName</th>";
+    if ($teamName == "Anirbaijan") {
+        echo "<th><span class='rainbow'>$teamName</span></th>";
+    } else {
+        echo "<th>$teamName</th>";
+    }
 }
 echo "</tr>";
 
