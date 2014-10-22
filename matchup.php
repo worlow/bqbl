@@ -84,7 +84,7 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     }
     echo "</tr>\n";
     echo "<tr><td class='nflteamname'>
-        <a href='/bqbl/nfl.php?team=".$lineup[$bqblteam1][0]."&year=$year'>".$lineup[$bqblteam1][0]."</a></td>";
+        <a href='/bqbl/nfl.php?team=".$lineup[$bqblteam1][1]."&year=$year'>".$lineup[$bqblteam1][1]."</a></td>";
     if (gameType($year, $week, $lineup[$bqblteam1][1]) != 2) {
         foreach($home_team2 as $name => $val) {
             echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
