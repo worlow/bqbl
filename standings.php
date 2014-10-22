@@ -20,7 +20,7 @@ echo "<html><head>
 <title>$year BQBL Standings </title>
 <style type='text/css'>
 tr.thickline td {
-border-bottom-width: 6px;
+border-bottom-width: 12px;
 }
 </style>
 </head><body>\n";
@@ -106,8 +106,14 @@ foreach ($record as $key => $val) {
     $thickline = ($rank==4) ? "class='thickline'" : "";
     
     switch ($key) {
+        case 1:
+            $color = "class='samdwich'";
+            break;
+        case 3:
+            $color = "class='jhka3'";
+            break;
         case 6:
-            $color =  "class='rainbow'";
+            $color =  "class='anirbaijan'";
             break;
         default:
             $color = "";
@@ -129,7 +135,16 @@ foreach ($record as $key => $val) {
 echo "</table>";
 ?>
 <style>
-.rainbow {
+.samdwich {
+    background-color: #00FF00;
+}
+    
+.jhka3 {
+    color: #FFFFFF;
+    background-color: #FF0000;
+}
+    
+.anirbaijan {
   background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
   background-image: gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
   color:transparent;
