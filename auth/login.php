@@ -31,12 +31,14 @@ if(!isset($_POST['user'])) {
                         <tr>
                             <td>Password:</td>
                             <td><input name="password" type="password" /></td>
+                            <td><a href="forgotpassword.php">Forgot password?</a></td>
                         </tr>
                         <tr>
                             <td align="right" colspan="2"><input type="submit" value="Login" /></td>
                         </tr>
                     </table>
                 </form>
+                
                 <script language="javascript" type="text/javascript">
                     document.login_form.user.focus();
                 </script>
