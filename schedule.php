@@ -34,7 +34,7 @@ echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inli
 echo "<tr><th></th>";
 foreach($bqbl_teamname as $teamName) {
     if ($teamName == "Anirbaijan") {
-        echo "<th><span class='rainbow'>$teamName</span></th>";
+        echo '<th><span class="rainbow">'.$teamName.'</span></th>';
     } else {
         echo "<th>$teamName</th>";
     }
