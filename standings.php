@@ -104,7 +104,8 @@ foreach ($record as $key => $val) {
     $rank++;
     $point_differential = $val['points_for'] - $val['points_against'];
     $thickline = ($rank==4) ? "class='thickline'" : "";
-    echo "<tr $thickline><td>$rank.</td><td>$bqbl_teamname[$key]</td><td>".$val['wins']."</td>
+    $color = ($key == 6) ? "class='rainbow'" : "";
+    echo "<tr $thickline><td>$rank.</td><td><span $color>$bqbl_teamname[$key]</span></td><td>".$val['wins']."</td>
         <td>".$val['losses']."</td><td>".$val['points_for']."</td><td>".$val['points_against']."</td><td>";
     if ($point_differential >= 0) {
         echo "+";
@@ -119,3 +120,12 @@ foreach ($record as $key => $val) {
 }
 echo "</table>";
 ?>
+<style>
+.rainbow {
+  background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
+  background-image: gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
+  color:transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+</style>
