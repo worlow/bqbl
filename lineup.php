@@ -69,9 +69,9 @@ while (list($nflTeam) = pg_fetch_array($result)) {
     $disabled = !$allowediting || ($opponent == "BYE") ? "disabled" : "";
     $selected1 = $nflTeam == $starter1 ? "checked" : "";
     $selected2 = $nflTeam == $starter2 ? "checked" : "";
-    echo "<tr><td>$nflTeam</td>
+    echo "<tr><td><a href='/bqbl/nfl.php?team=$nflTeam&year=$year'>$nflTeam</a></td>
           <td>$starts[$nflTeam]</td>
-          <td>$opponent</td>
+          <td><a href='/bqbl/nfl.php?team=$opponent&year=$year'>$opponent</a></td>
           <td align='center'><input type='radio' name='starter1' value='$nflTeam' $disabled $selected1></td>
           <td align='center'><input type='radio' name='starter2' value='$nflTeam' $disabled $selected2></td>
           </tr>\n";
