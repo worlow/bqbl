@@ -119,7 +119,7 @@ foreach ($record as $key => $val) {
             $color = "";
     }
     
-    echo "<tr $thickline><td>$rank.</td><td><span $color>$bqbl_teamname[$key]</span></td><td>".$val['wins']."</td>
+    echo "<tr $thickline><td>$rank.</td><td $color>$bqbl_teamname[$key]</td><td>".$val['wins']."</td>
         <td>".$val['losses']."</td><td>".$val['points_for']."</td><td>".$val['points_against']."</td><td>";
     if ($point_differential >= 0) {
         echo "+";
