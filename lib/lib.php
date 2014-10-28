@@ -141,6 +141,18 @@ function bqblTeams($league, $year, $sortByDraftOrder=false) {
     return $bqbl_teamname;
 }
 
+function getRosters($year, $league) {
+    global $bqbldbconn;
+    $roster = array();
+    $query = "SELECT bqbl_team, nfl_team
+                FROM roster
+                  WHERE year='$year' AND league='$league';";
+    $result = pg_query($GLOBALS['bqbldbconn'],$query);
+    while(list($bqbl_team,$nfl_team) = pg_fetch_array($result)) {
+        $roster[$bqbl_team][] = $nfl_team;
+    }
+}
+
 function getLineups($year, $week, $league) {
     global $bqbldbconn;
     $lineup = array();
