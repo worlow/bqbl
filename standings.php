@@ -46,12 +46,12 @@ foreach ($bqbl_teamname as $key => $val) {
 }
 
 for ($i = 1; $i <= $week; $i++) {
-    $lineup = getLineups($year, $i, $leagu-e);
+    $lineup = getLineups($year, $i, $league);
     foreach ($roster as $bqbl_team => $nfl_teams) {
         $score[$bqbl_team][$i] = 0;
         foreach ($nfl_teams as $nfl_team) {
             if ($nfl_team == $lineup[$bqbl_team][0] || $nfl_team == $lineup[$bqbl_team][1]) {
-                $score[$bqbl_team][$i] += totalPoints($gamePoints[$year][$i][$nfl_team])
+                $score[$bqbl_team][$i] += totalPoints($gamePoints[$year][$i][$nfl_team]);
             } else {
                 $score[$bqbl_team][$i] += $gamePoints[$year][$i][$nfl_team]['Misc. Points'];
             }
