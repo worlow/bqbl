@@ -53,7 +53,7 @@ for ($i = 1; $i <= $week; $i++) {
             if ($nfl_team == $lineup[$bqbl_team][0] || $nfl_team == $lineup[$bqbl_team][1]) {
                 $score[$bqbl_team][$i] += totalPoints($gamePoints[$year][$i][$nfl_team]);
             } else {
-                $score[$bqbl_team][$i] += $gamePoints[$year][$i][$nfl_team]['Misc. Points'];
+                $score[$bqbl_team][$i] += $gamePoints[$year][$i][$nfl_team]['Misc. Points'][1];
             }
         }
     }
