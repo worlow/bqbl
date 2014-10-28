@@ -29,6 +29,14 @@ $bqbl_teamname = bqblTeams($league, $year);
 $matchup = array();
 $record = array();
 $score = array();
+
+$query = "SELECT bqbl_team, nfl_team
+    FROM roster WHERE year='$year';";
+$result = pg_query($GLOBALS['bqbldbconn'],$query);
+while(list($bqbl_team,$nfl_team) = pg_fetch_array($result)) {
+    $roster[$bqbl_team][] = $nfl_team;
+}
+
 foreach ($bqbl_teamname as $key => $val) {
     $record[$key]['wins'] = 0;
     $record[$key]['losses'] = 0;
@@ -38,10 +46,16 @@ foreach ($bqbl_teamname as $key => $val) {
 }
 
 for ($i = 1; $i <= $week; $i++) {
-    $lineup = getLineups($year, $i, $league);
-    foreach ($lineup as $team => $starters) {
-            $score[$team][$i] =
-                totalPoints($gamePoints[$year][$i][$starters[0]]) + totalPoints($gamePoints[$year][$i][$starters[1]]);
+    $lineup = getLineups($year, $i, $leagu-e);
+    foreach ($roster as $bqbl_team => $nfl_teams) {
+        $score[$bqbl_team][$i] = 0;
+        foreach ($nfl_teams as $nfl_team) {
+            if ($nfl_team == $lineup[$bqbl_team][0] || $nfl_team == $lineup[$bqbl_team][1]) {
+                $score[$bqbl_team][$i] += totalPoints($gamePoints[$year][$i][$nfl_team])
+            } else {
+                $score[$bqbl_team][$i] += $gamePoints[$year][$i][$nfl_team]['Misc. Points'];
+            }
+        }
     }
     
     $matchup = getMatchups($year, $i, $league);
