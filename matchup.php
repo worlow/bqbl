@@ -42,25 +42,26 @@ foreach ($unsortedmatchup as $bqblteam1 => $bqblteam2) {
     }
 }
 
-foreach ($matchup as $bqblteam1 => $bqblteam2) {
-    $games[] = array($year, $week, $lineup[$bqblteam1][0]);
-    $games[] = array($year, $week, $lineup[$bqblteam1][1]);
-    $games[] = array($year, $week, $lineup[$bqblteam2][0]);
-    $games[] = array($year, $week, $lineup[$bqblteam2][1]);
-}
+$games = array();
+foreach(nflTeams() as $nflTeam) $games[] = array($year, $week, $nflTeam);
 $gamePoints = getPointsBatch($games);
 
 echo "<table>";
 foreach ($matchup as $bqblteam1 => $bqblteam2) {
     $home_team1 = $gamePoints[$year][$week][$lineup[$bqblteam1][0]];
     $home_team2 = $gamePoints[$year][$week][$lineup[$bqblteam1][1]];
+    $home_team3 = $gamePoints[$year][$week][$lineup[$bqblteam1][2]];
+    $home_team4 = $gamePoints[$year][$week][$lineup[$bqblteam1][3]];
     $away_team1 = $gamePoints[$year][$week][$lineup[$bqblteam2][0]];
     $away_team2 = $gamePoints[$year][$week][$lineup[$bqblteam2][1]];
+    $away_team3 = $gamePoints[$year][$week][$lineup[$bqblteam2][2]];
+    $away_team4 = $gamePoints[$year][$week][$lineup[$bqblteam2][3]];
     $populatedTeam = $home_team1;
     if(count($home_team2)>0) $populatedTeam = $home_team2;
     elseif(count($away_team1)>0) $populatedTeam = $away_team1;
     elseif(count($away_team2)>0) $populatedTeam = $away_team2;
     $columns = 2 + count($populatedTeam);
+    $statcolumns = $columns - 1;
 
     echo "<tr>\n";
     echo "<td><table border=2 class='matchup'>
@@ -71,31 +72,11 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     }
     echo "<th>Total</th></tr>";
     
-    echo "<tr><td class='nflteamname'>
-        <a href='/bqbl/nfl.php?team=".$lineup[$bqblteam1][0]."&year=$year'>".$lineup[$bqblteam1][0]."</a></td>";
-    if (gameType($year, $week, $lineup[$bqblteam1][0]) != 2) {
-        foreach($home_team1 as $name => $val) {
-            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
-        }
-        echo "<td class='totalpoints'>" . totalPoints($home_team1) . "</td>";
-    } else {
-        $statcolumns = $columns - 1;
-        echo "<td colspan=$statcolumns></td>";
-    }
-    echo "</tr>\n";
-    echo "<tr><td class='nflteamname'>
-        <a href='/bqbl/nfl.php?team=".$lineup[$bqblteam1][1]."&year=$year'>".$lineup[$bqblteam1][1]."</a></td>";
-    if (gameType($year, $week, $lineup[$bqblteam1][1]) != 2) {
-        foreach($home_team2 as $name => $val) {
-            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
-        }
-        echo "<td class='totalpoints'>" . totalPoints($home_team2) . "</td>";
-    } else {
-        $statcolumns = $columns - 1;
-        echo "<td colspan=$statcolumns></td>";
-    }
-    echo "</tr>\n";
-    
+    printTeamRow($lineup[$bqblteam1][0], $home_team1);
+    printTeamRow($lineup[$bqblteam1][1], $home_team2);
+    printTeamRow($lineup[$bqblteam1][2], getPointsOnlyMisc($home_team3));
+    printTeamRow($lineup[$bqblteam1][3], getPointsOnlyMisc($home_team4));
+
     echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>VS.</td></tr>";
     echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>$bqbl_teamname[$bqblteam2]</td></tr>";
     echo "<th></th>";
@@ -103,30 +84,12 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
         echo "<th>$name</th>";
     }
     echo "<th>Total</th></tr>";
-    echo "<tr><td class='nflteamname'>
-        <a href='/bqbl/nfl.php?team=".$lineup[$bqblteam2][0]."&year=$year'>".$lineup[$bqblteam2][0]."</a></td>";
-    if (gameType($year, $week, $lineup[$bqblteam2][0]) != 2) {
-        foreach($away_team1 as $name => $val) {
-            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
-        }
-        echo "<td class='totalpoints'>" . totalPoints($away_team1) . "</td>";
-    } else {
-        $statcolumns = $columns - 1;
-        echo "<td colspan=$statcolumns></td>";
-    }
-    echo "</tr>\n";
-    echo "<tr><td class='nflteamname'>
-        <a href='/bqbl/nfl.php?team=".$lineup[$bqblteam2][1]."&year=$year'>".$lineup[$bqblteam2][1]."</a></td>";
-    if (gameType($year, $week, $lineup[$bqblteam2][1]) != 2) {
-        foreach($away_team2 as $name => $val) {
-            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
-        }
-        echo "<td class='totalpoints'>" . totalPoints($away_team2) . "</td>";
-    } else {
-        $statcolumns = $columns - 1;
-        echo "<td colspan=$statcolumns></td>";
-    }
-    echo "</tr>\n";
+
+    printTeamRow($lineup[$bqblteam2][0], $away_team1);
+    printTeamRow($lineup[$bqblteam2][1], $away_team2);
+    printTeamRow($lineup[$bqblteam2][2], getPointsOnlyMisc($away_team3));
+    printTeamRow($lineup[$bqblteam2][3], getPointsOnlyMisc($away_team4));
+
     echo "</table>";
     echo "<tr><td class='line' colspan=$columns></td></tr>";
 }
@@ -143,6 +106,21 @@ function cmp_isTeamUser($a, $b) {
     }
     return 0;
 }
+function printTeamRow($team, $points) {
+    global $statcolumns, $year, $week;
+    echo "<tr><td class='nflteamname'>
+        <a href='/bqbl/nfl.php?team=$team&year=$year'>$team</a></td>";
+    foreach($points as $name => $val) {
+        if ($val == '') {
+            echo "<td></td>";
+        } else {
+            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+        }
+    }
+    echo "<td class='totalpoints'>" . totalPoints($points) . "</td>";
+    echo "</tr>\n";
+}
+
 ?>
 <style>
 .score {

@@ -141,16 +141,21 @@ function bqblTeams($league, $year, $sortByDraftOrder=false) {
     return $bqbl_teamname;
 }
 
+
 function getRosters($year, $league) {
     global $bqbldbconn;
     $roster = array();
+    foreach (nflTeams() as $team) {
+        $roster[$team] = array();
+    }
     $query = "SELECT bqbl_team, nfl_team
-                FROM roster
-                  WHERE year='$year' AND league='$league';";
-    $result = pg_query($GLOBALS['bqbldbconn'],$query);
-    while(list($bqbl_team,$nfl_team) = pg_fetch_array($result)) {
+              FROM roster
+              WHERE year = $year AND league='$league';";
+    $result = pg_query($bqbldbconn, $query);
+    while(list($bqbl_team, $nfl_team) = pg_fetch_array($result)) {
         $roster[$bqbl_team][] = $nfl_team;
     }
+    return $roster;
 }
 
 function getLineups($year, $week, $league) {
@@ -161,8 +166,15 @@ function getLineups($year, $week, $league) {
                   WHERE year = $year AND week = $week AND league='$league';";
     $result = pg_query($bqbldbconn, $query);
     while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
-        $lineup[$bqbl_team][0] = $starter1;
-        $lineup[$bqbl_team][1] = $starter2;
+        $lineup[$bqbl_team][] = $starter1;
+        $lineup[$bqbl_team][] = $starter2;
+    }
+    foreach (getRosters($year, $league) as $bqbl_team => $roster) {
+        foreach ($roster as $nfl_team) {
+            if (!$lineup[$bqbl_team] or !in_array($nfl_team, $lineup[$bqbl_team])) {
+                $lineup[$bqbl_team][] = $nfl_team;
+            }
+        }
     }
     return $lineup;
 }

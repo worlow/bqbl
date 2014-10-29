@@ -2,15 +2,32 @@
 require_once "lib.php";
 
 function getPoints($team, $week, $year=2014) {
+    $points = array();
     if (gameType($year, $week, $team) == 2 || gameType($year, $week, $team) == -1) {
-        return array();
+        $points["TAINTs"] =
+        $points["Interceptions"] =
+        $points["FARTs"] =
+        $points["Fumbles Kept"] =
+        $points["Fumbles Lost"] =
+        $points["Turnovers"] =
+        $points["Longest Pass"] =
+        $points["TDs"] =
+        $points["Passing Yards"] =
+        $points["Rushing Yards"] =
+        $points["Completion Pct"] =
+        $points["Safeties"] =
+        $points["Overtime TAINTs"] =
+        $points["Benchings"] =
+        $points["Game Winning Drive"] =
+        '';
+        $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
+        return $points;
     }
     $query = "SELECT gsis_id
               FROM game
               WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
                   AND week='$week' AND season_type='Regular';";
     $gsis = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
-    $points = array();
     $points["TAINTs"] = array(taints($gsis, $team), 0);
     $points["Interceptions"] = array(ints($gsis, $team) - $points["TAINTs"][0], 0);
     $points["FARTs"] = array(farts($gsis, $team), 0);
@@ -68,6 +85,19 @@ function getPoints($team, $week, $year=2014) {
 	$points['Game Winning Drive'][1] = -12*$points['Game Winning Drive'][0];
 	$points['Misc. Points'][1] = $points['Misc. Points'][0];
     return $points;
+}
+
+function getPointsOnlyMisc($points) {
+    $newPoints = array();
+    foreach ($points as $key => $val) {
+        if ($key == 'Misc. Points') {
+            $newPoints[$key] = $val;
+        }
+        else {
+            $newPoints[$key] = '';
+        }
+    }
+    return $newPoints;
 }
 
 function totalPoints($points) {
