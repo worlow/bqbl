@@ -57,9 +57,9 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     $away_team3 = $gamePoints[$year][$week][$lineup[$bqblteam2][2]];
     $away_team4 = $gamePoints[$year][$week][$lineup[$bqblteam2][3]];
     $populatedTeam = $home_team1;
-    if(count($home_team2)>0) $populatedTeam = $home_team2;
-    elseif(count($away_team1)>0) $populatedTeam = $away_team1;
-    elseif(count($away_team2)>0) $populatedTeam = $away_team2;
+    if(count($home_team2)>0 && $home_team2["Interceptions"] != '') $populatedTeam = $home_team2;
+    elseif(count($away_team1)>0 && $away_team1["Interceptions"] != '') $populatedTeam = $away_team1;
+    elseif(count($away_team2)>0 && $away_team2["Interceptions"] != '') $populatedTeam = $away_team2;
     $columns = 2 + count($populatedTeam);
     $statcolumns = $columns - 1;
 
