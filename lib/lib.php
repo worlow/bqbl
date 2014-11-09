@@ -161,6 +161,9 @@ function getRosters($year, $league) {
 function getLineups($year, $week, $league) {
     global $bqbldbconn;
     $lineup = array();
+    foreach (bqblTeams($league, $year) as $id => $name) {
+        $lineup[$id] = array();
+    }
     $query = "SELECT bqbl_team, starter1, starter2
                 FROM lineup
                   WHERE year = $year AND week = $week AND league='$league';";
@@ -168,13 +171,6 @@ function getLineups($year, $week, $league) {
     while(list($bqbl_team,$starter1,$starter2) = pg_fetch_array($result)) {
         $lineup[$bqbl_team][] = $starter1;
         $lineup[$bqbl_team][] = $starter2;
-    }
-    foreach (getRosters($year, $league) as $bqbl_team => $roster) {
-        foreach ($roster as $nfl_team) {
-            if (!$lineup[$bqbl_team] or !in_array($nfl_team, $lineup[$bqbl_team])) {
-                $lineup[$bqbl_team][] = $nfl_team;
-            }
-        }
     }
     return $lineup;
 }

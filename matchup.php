@@ -28,7 +28,15 @@ if (isset($_GET['autorefresh'])) {
     echo "<br/><a href='$_SERVER[PHP_SELF]?league=$league&autorefresh'>Auto Refresh</a>";
 }
 $bqbl_teamname = bqblTeams($league, $year);
-$lineup = getLineups($year, $week, $league);
+$starters = getLineups($year, $week, $league);
+$lineup = $starters;
+foreach (getRosters($year, $league) as $bqbl_team => $roster) {
+    foreach ($roster as $nfl_team) {
+        if (!$lineup[$bqbl_team] or !in_array($nfl_team, $lineup[$bqbl_team])) {
+            $lineup[$bqbl_team][] = $nfl_team;
+        }
+    }
+}
 $unsortedmatchup = getMatchups($year, $week, $league);
 $matchup=array();
 foreach ($unsortedmatchup as $bqblteam1 => $bqblteam2) {
@@ -71,9 +79,9 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
         echo "<th>$name</th>";
     }
     echo "<th>Total</th></tr>";
-    
-    printTeamRow($lineup[$bqblteam1][0], $home_team1);
-    printTeamRow($lineup[$bqblteam1][1], $home_team2);
+
+    printTeamRow($lineup[$bqblteam1][0], $home_team1, in_array($lineup[$bqblteam1][0], $starters[$bqblteam1]));
+    printTeamRow($lineup[$bqblteam1][1], $home_team2, in_array($lineup[$bqblteam1][1], $starters[$bqblteam1]));
     printTeamRow($lineup[$bqblteam1][2], getPointsOnlyMisc($home_team3));
     printTeamRow($lineup[$bqblteam1][3], getPointsOnlyMisc($home_team4));
 
@@ -85,8 +93,8 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     }
     echo "<th>Total</th></tr>";
 
-    printTeamRow($lineup[$bqblteam2][0], $away_team1);
-    printTeamRow($lineup[$bqblteam2][1], $away_team2);
+    printTeamRow($lineup[$bqblteam2][0], $away_team1, in_array($lineup[$bqblteam2][0], $starters[$bqblteam2]));
+    printTeamRow($lineup[$bqblteam2][1], $away_team2, in_array($lineup[$bqblteam2][1], $starters[$bqblteam2]));
     printTeamRow($lineup[$bqblteam2][2], getPointsOnlyMisc($away_team3));
     printTeamRow($lineup[$bqblteam2][3], getPointsOnlyMisc($away_team4));
 
@@ -106,9 +114,10 @@ function cmp_isTeamUser($a, $b) {
     }
     return 0;
 }
-function printTeamRow($team, $points) {
+function printTeamRow($team, $points, $starting=false) {
     global $statcolumns, $year, $week;
-    echo "<tr><td class='nflteamname'>
+    $style = $starting ? "background: #00CC66;" : "";
+    echo "<tr><td class='nflteamname' style='$style'>
         <a href='/bqbl/nfl.php?team=$team&year=$year'>$team</a></td>";
     foreach($points as $name => $val) {
         if ($val == '') {
