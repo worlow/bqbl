@@ -4,21 +4,21 @@ require_once "lib.php";
 function getPoints($team, $week, $year=2014) {
     $points = array();
     if (gameType($year, $week, $team) == 2 || gameType($year, $week, $team) == -1) {
-        $points["TAINTs"] =
-        $points["Interceptions"] =
-        $points["FARTs"] =
-        $points["Fumbles Kept"] =
-        $points["Fumbles Lost"] =
-        $points["Turnovers"] =
-        $points["Longest Pass"] =
-        $points["TDs"] =
-        $points["Passing Yards"] =
-        $points["Rushing Yards"] =
-        $points["Completion Pct"] =
-        $points["Safeties"] =
-        $points["Overtime TAINTs"] =
-        $points["Benchings"] =
         $points["Game Winning Drive"] =
+        $points["Benchings"] =
+        $points["Overtime TAINTs"] =
+        $points["Safeties"] =
+        $points["Completion Pct"] =
+        $points["Rushing Yards"] =
+        $points["Passing Yards"] =
+        $points["TDs"] =
+        $points["Longest Pass"] =
+        $points["Turnovers"] =
+        $points["Fumbles Lost"] =
+        $points["Fumbles Kept"] =
+        $points["FARTs"] =
+        $points["Interceptions"] =
+        $points["TAINTs"] =
         '';
         $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
         return $points;

@@ -37,6 +37,12 @@ function weekCutoffTime($week) {
     return $season_start + 7*24*60*60*($week - 1);
 }
 
+function isGameFinished($gsis_id) {
+    global $nfldbconn;
+    $query = "SELECT finished FROM game WHERE gsis_id='$gsis_id';";
+    return pg_fetch_result(pg_query($nfldbconn, $query), 0);
+}
+
 function getLeague() {
     $year=currentYear();
     if(isset($_SESSION['league'])) {
