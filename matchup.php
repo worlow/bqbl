@@ -123,7 +123,11 @@ function printTeamRow($team, $points, $starting=false) {
         if ($val == '') {
             echo "<td></td>";
         } else {
-            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>($val[0])</td>";
+            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>";
+            if ($name != "Misc. Points") {
+                echo "($val[0])";
+            }
+            echo "</td>";
         }
     }
     echo "<td class='totalpoints'>" . totalPoints($points) . "</td>";
