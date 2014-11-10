@@ -20,7 +20,8 @@ function getPoints($team, $week, $year=2014) {
         $points["Interceptions"] =
         $points["TAINTs"] =
         '';
-        $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
+        $miscpoints = miscPoints($year, $week, $team);
+        $points["Misc. Points"] = array($miscpoints, $miscpoints);
         return $points;
     }
     $query = "SELECT gsis_id
