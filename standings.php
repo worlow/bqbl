@@ -6,6 +6,7 @@ $completed_week = currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
 $week = isset($_GET['week']) && (pg_escape_string($_GET['week']) <= $completed_week || $year < currentYear())
         ? pg_escape_string($_GET['week']) : currentCompletedWeek();
+$week = min($week, $REG_SEASON_END_WEEK);
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 
 $games = array();

@@ -23,7 +23,7 @@ $score = array();
 
 $query = "SELECT week, team1, team2
             FROM schedule
-              WHERE year='$year' AND league='$league';";
+              WHERE year='$year' AND league='$league' AND week <= '$REG_SEASON_END_WEEK';";
 $result = pg_query($bqbldbconn, $query);
 while(list($week,$team1,$team2) = pg_fetch_array($result)) {
     $matchup[$week][$team1] = $team2;
