@@ -30,7 +30,7 @@ if (isset($_GET['autorefresh'])) {
 $bqbl_teamname = bqblTeams($league, $year);
 $starters = getLineups($year, $week, $league);
 $lineup = $starters;
-foreach (getRosters($year, $league) as $bqbl_team => $roster) {
+foreach (getRosters($year, $league, $week > $REG_SEASON_END_WEEK) as $bqbl_team => $roster) {
     foreach ($roster as $nfl_team) {
         if (!$lineup[$bqbl_team] or !in_array($nfl_team, $lineup[$bqbl_team])) {
             $lineup[$bqbl_team][] = $nfl_team;

@@ -149,14 +149,15 @@ function bqblTeams($league, $year, $sortByDraftOrder=false) {
 }
 
 
-function getRosters($year, $league) {
+function getRosters($year, $league, $playoffs=false) {
     global $bqbldbconn;
     $roster = array();
     foreach (nflTeams() as $team) {
         $roster[$team] = array();
     }
+    $roster_table = $playoffs ? "playoff_roster" : "roster";
     $query = "SELECT bqbl_team, nfl_team
-              FROM roster
+              FROM $roster_table
               WHERE year = $year AND league='$league';";
     $result = pg_query($bqbldbconn, $query);
     while(list($bqbl_team, $nfl_team) = pg_fetch_array($result)) {

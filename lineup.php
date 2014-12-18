@@ -64,7 +64,7 @@ echo "<tr><th>Team</th><th>Starts</th><th>Wk$week Opponent<th>Wk$week Starter 1<
 $query = "SELECT nfl_team FROM roster
           WHERE league='$league' AND year='$year' AND bqbl_team='$bqblTeam';";
 $result = pg_query($bqbldbconn, $query);
-while (list($nflTeam) = pg_fetch_array($result)) {
+foreach (getRosters($year, $league, $week > $REG_SEASON_END_WEEK)[$bqblTeam] as $nflTeam) {
     $opponent = getOpponent($year, $week, $nflTeam);
     $disabled = !$allowediting ? "disabled" : "";
     $selected1 = $nflTeam == $starter1 ? "checked" : "";
