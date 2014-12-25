@@ -34,8 +34,13 @@ function currentCompletedWeek() {
 function weekCutoffTime($week) {
     global $WEEK_1_THURS_DATE;
     $now = time();
-    $season_start = strtotime($WEEK_1_THURS_DATE . " 17:30:00");  # Tuesday
-    return $season_start + 7*24*60*60*($week - 1);
+    if ($week == 17) {
+        $season_first_sunday = strtotime($WEEK_1_THURS_DATE . " 10:00:00") + 24*60*60 * 3;  # Sunday 10:00AM PST
+        return $season_first_sunday + 7*24*60*60*($week - 1);
+    } else {
+        $season_start = strtotime($WEEK_1_THURS_DATE . " 17:30:00");  # Thursday 5:30PM PST
+        return $season_start + 7*24*60*60*($week - 1);
+    }
 }
 
 function isGameFinished($gsis_id) {
