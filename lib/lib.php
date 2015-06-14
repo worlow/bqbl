@@ -288,7 +288,7 @@ $refreshicon = $autorefresh ? "av:pause-circle-outline" : "autorenew";
 # TODO(sam): When paper-dropdown-menu comes out, replace <select> with it,
 # then replace the true ternary with "inherit"
 $week_visibility = $showAutorefresh ? "hidden" : "hidden";
-$weekdropdown = "<div class='week-dropdown' style='visibility:$week_visibility;'>
+$weekdropdown = "<div id='week-dropdown' class='week-dropdown' style='visibility:$week_visibility;'>
 <select>";
 for ($i = 1; $i <= $week; $i++) {
     $selected = ($i == $week) ? "selected" : "";
@@ -359,7 +359,8 @@ $image_url = "/bqbl/media/avatar_default.jpg";
 }
 
 $onload = "document.getElementById('drawer-header').style.height=68;
-document.getElementById('user-avatar').style.width = document.getElementById('user-avatar').clientHeight;";
+document.getElementById('user-avatar').style.width = document.getElementById('user-avatar').clientHeight;
+document.getElementById('week-dropdown-filler').style.paddingLeft = document.getElementById('week-dropdown').clientWidth;";
 
 echo <<<END
 <html><head>
@@ -404,7 +405,7 @@ echo <<<END
                 <paper-icon-button style="padding:4.5mm;" icon="menu" role="button" class="huge x-scope paper-icon-button-0" paper-drawer-toggle  >
                 </paper-icon-button>
             </div>
-            <div class="week-dropdown" style="visibility:hidden;"></div>
+            <div id="week-dropdown-filler" class="week-dropdown" style="visibility:hidden;"></div>
             <div class="header-title">
                 <h1 style="margin:0px;">$title</h1>
                 $lastUpdatedString
@@ -447,7 +448,6 @@ function ui_footer() {
 
 .week-dropdown {
     display:table-cell;
-    width:10%;
     white-space: nowrap;
 }
 
