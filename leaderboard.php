@@ -1,16 +1,12 @@
 <?php
 require_once "lib/lib.php";
 require_once "lib/scoring.php";
-$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
-$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+
+ui_header($title="$year Week $week Rankings", $showLastUpdated=($week == currentWeek()), $showWeekDropdown=true);
 
 $games = array();
 foreach(nflTeams() as $nflTeam) $games[] = array($year, $week, $nflTeam);
 $gamePoints = getPointsBatch($games);
-
-echo "<html><head>
-<title>BQBL Week $week $year</title></head><body>\n
-<h1>Week $week $year Leaderboard</h1>";
 
 $query = "SELECT gsis_id, home_team, away_team
 		  FROM game
@@ -31,21 +27,86 @@ while(list($gsis,$hometeam,$awayteam) = pg_fetch_array($result)) {
 arsort($totals);
 arsort($totals_defense);
 
-echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block;">';
-echo "<tr><th>Rank</th><th>Team Name</th><th>Total Points</th></tr>";
+echo "<paper-material elevation=2>";
+echo "<div class='cardheader'>Offense</div>";
+echo '<div class="table">';
+echo '<div class="header row"><div class="cell">Rank</div><div class="cell">Team Name</div><div class="cell">Total Points</div></div>';
 $rank = 0;
 foreach ($totals as $key => $val) {
     $rank++;
-    echo "<tr><td>$rank</td><td><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></td><td>$val</td></tr>";
+    echo "<div class=\"row\"><div class=\"cell\">$rank</div><div class=\"cell\"><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></div><div class=\"cell\">$val</div></div>";
 }
-echo "</table>";
+echo "</div>";
+echo "</paper-material>";
 
-echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-echo "<tr><th>Rank</th><th>Team Name</th><th>Total Defensive Points</th></tr>";
+echo "<paper-material elevation=2>";
+echo "<div class='cardheader'>Defense</div>";
+echo '<div class="table">';
+echo "<div class=\"header row\"><div class=\"cell\">Rank</div><div class=\"cell\">Team Name</div><div class=\"cell\">Total Points</div></div>";
 $rank = 0;
 foreach ($totals_defense as $key => $val) {
     $rank++;
-    echo "<tr><td>$rank</td><td><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></td><td>$val</td></tr>";
+    echo "<div class=\"row\"><div class=\"cell\">$rank</div><div class=\"cell\"><a href='/bqbl/nfl.php?team=$key&year=$year'>$key</a></div><div class=\"cell\">$val</div></div>";
 }
-echo "</table>";
+echo "</div>";
+echo "</paper-material>";
+?>
+
+<style is="custom-style">
+paper-material {
+    display: inline-block;
+    background-color: #FFFFFF;
+    padding: 32px;
+    margin: 32px 24px 0 24px;
+}
+
+.loss {
+    background-color: var(--paper-red-500);
+}
+
+.win {
+    background-color: var(--paper-green-500);
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+}
+
+.table {
+  display: table;
+  border-collapse: separate;
+  font-size: 1vw;
+  text-align: center;
+}
+
+.table .cell {
+  border-top: 1px solid #e5e5e5;
+  padding: 8px;
+}
+
+.table .thickline .cell {
+  border-bottom: 5px solid #000000;
+}
+
+.table .header .cell {
+    border-top: 0;
+    font-weight: bold;
+    font-size: 110%;
+    padding-top: 0;
+}
+
+.cardheader {
+    display:inline-block;
+    font-weight: bold;
+    font-size: 150%;
+    padding-bottom: 16px;
+}
+</style>
+
+<?php
+ui_footer();
 ?>

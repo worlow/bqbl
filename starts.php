@@ -1,19 +1,9 @@
 <?php
 require_once "lib/lib.php";
 
-$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
-$week = currentWeek();
+ui_header($title="$year NFL Team Starts");
 
-echo "<html><head>
-<title>$year NFL Team Starts </title>
-<style type='text/css'>
-tr.thickline td {
-border-bottom-width: 6px;
-}
-</style>
-</head><body>\n";
-
-$bqbl_teamname = bqblTeams();
+$bqbl_teamname = bqblTeams($league, $year);
 $roster = array();
 $starts = array();
 $query = "SELECT bqbl_team, nfl_team
@@ -25,14 +15,14 @@ while(list($bqbl_team,$nfl_team) = pg_fetch_array($result)) {
 }
 
 for ($i = 1; $i <= $week; $i++) {
-    $lineup = getLineups($year, $i);
+    $lineup = getLineups($year, $i, $league);
     foreach ($lineup as $team => $starters) {
         $starts[$starters[0]]++;
         $starts[$starters[1]]++;
     }
 }
 
-foreach (bqblTeams() as $id => $name) {
+foreach (bqblTeams($league, $year) as $id => $name) {
     if (($id == 9 && $year > 2013) || ($id == 4 && $year <= 2013)) {
         continue;
     }
@@ -44,4 +34,6 @@ foreach (bqblTeams() as $id => $name) {
     }
     echo "</table>"; 
 }
+
+ui_footer();
 ?>

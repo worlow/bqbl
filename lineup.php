@@ -1,8 +1,8 @@
 <?php
 require_once "lib/lib.php";
-$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
-$league = isset($_GET['league']) ? $_GET['league'] : getLeague();
-$week = isset($_GET['week']) ? $_GET['week'] : currentWeek();
+
+ui_header($title="Set BQBL Lineup");
+
 if(isset($_GET['team'])) {
     $bqblTeam = bqblTeamStrToInt(pg_escape_string($_GET['team']));
 } elseif(isset($_GET['teamnum'])) {
@@ -37,15 +37,6 @@ if(isset($_POST['submit'])) {
     }
 }
 
-echo "<html><head>
-<title>$year NFL Team Starts </title>
-<style type='text/css'>
-tr.thickline td {
-border-bottom-width: 6px;
-}
-</style>
-</head>
-<body>\n";
 
 $allowediting = (($_SESSION['bqbl_team'] == $bqblTeam) || (isTed($bqblTeam) && isTed($_SESSION['bqbl_team']))) && ($week >= currentWeek());
 $starts = getStarts($year, $bqblTeam, $league);
@@ -81,6 +72,7 @@ if($allowediting) echo "<input type='submit' name='submit' value='Update Lineup'
 elseif(!isset($_SESSION['user'])) echo "<a href='/bqbl/auth/login.php'>Log in to edit lineup</a>";
 echo "</form>";
 
+ui_footer();
 
 function getStarts($year, $bqblTeam, $league) {
     global $bqbldbconn;

@@ -2,8 +2,8 @@
 // Report simple running errors
 error_reporting(E_ERROR);
 require_once "lib/lib.php";
-$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
-$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
+
+ui_header($title="$year Week $week Extra Points", $showWeekDropdown=true);
 
 if (isset($_POST['submit'])) {
     foreach (nflTeams() as $team) {
@@ -18,16 +18,74 @@ if (isset($_POST['submit'])) {
     echo "Updated.<br>\n";
 }
 
-echo "<h1>Extra Points for Week $week, $year</h1>";
 $formaction=$_SERVER['PHP_SELF'] . "?week=$week&year=$year";
-echo "<form method=post action='$formaction'>
-<table><tr><th>Team</th><th>Benchings</th><th>Other</th><th>Explanation For Other Points</th></tr>\n";
+echo "<paper-material><form method=post action='$formaction'>
+<div class='table'><div class=\"header row\"><div class=\"cell\">Team</div><div class=\"cell\">Benchings</div><div class=\"cell\">Other</div><div class=\"cell\">Explanation For Other Points</div></div>\n";
 foreach (nflTeams() as $team) {
     $query = "SELECT benching, points, explanation FROM extra_points 
               WHERE year='$year' AND week='$week' AND nfl_team='$team';";
     list($benching, $points, $explanation) = pg_fetch_array(pg_query($bqbldbconn, $query));
-    echo "<tr><td>$team</td><td><input type='text' name='benching_$team' size='3' maxlength='1' value='$benching'></td><td><input type='text' name='points_$team' size='3' value='$points'></td><td><input type='text' name='explanation_$team' size='80' value='$explanation'></td></tr>\n";
+    echo "<div class=\"row\"><div class=\"cell\">$team</div><div class=\"cell\"><input type='text' name='benching_$team' size='3' maxlength='1' value='$benching'></div><div class=\"cell\"><input type='text' name='points_$team' size='3' value='$points'></div><div class=\"cell\"><input type='text' name='explanation_$team' size='80' value='$explanation'></div></div>\n";
 }
-echo "</table>
-<input type='submit' name='submit' value='Update'></form>";
+echo "</div>
+<input type='submit' name='submit' value='Update'></form></paper-material>";
+?>
+
+<style is="custom-style">
+paper-material {
+    display: inline-block;
+    background-color: #FFFFFF;
+    padding: 32px;
+    margin: 32px 24px 0 24px;
+}
+
+.loss {
+    background-color: var(--paper-red-500);
+}
+
+.win {
+    background-color: var(--paper-green-500);
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+}
+
+.table {
+  display: table;
+  border-collapse: separate;
+  font-size: 1vw;
+  text-align: center;
+}
+
+.table .cell {
+  border-top: 0;
+  padding: 8px;
+}
+
+.table .thickline .cell {
+  border-bottom: 5px solid #000000;
+}
+
+.table .header .cell {
+    border-top: 0;
+    font-weight: bold;
+    font-size: 110%;
+    padding-top: 0;
+}
+
+.cardheader {
+    display:inline-block;
+    font-weight: bold;
+    font-size: 150%;
+    padding-bottom: 16px;
+}
+</style>
+
+<?php
+ui_footer();
 ?>

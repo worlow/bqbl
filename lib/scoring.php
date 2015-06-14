@@ -119,7 +119,7 @@ function printGameScore($points, $team, $week, $year=2014) {
 
 function printBlankScore($team) {
 echo <<< END
-<table border=2 cellpadding=4 style="border-collapse: collapse;">
+<table class="score" border=2 cellpadding=4 style="border-collapse: collapse;">
 <tr><th>Stat Type</th> <th>Stat Value</th> <th>BQBL Points</th></tr>
 <tr><th colspan=2>TOTAL</th> <td>0</td>
 </table>
@@ -128,7 +128,7 @@ END;
 
 function printScore($points) {
 echo <<< END
-<table border=2 cellpadding=4 style="border-collapse: collapse;">
+<table class="score" border=2 cellpadding=4 style="border-collapse: collapse;">
 <tr><th>Stat Type</th> <th>Stat Value</th> <th>BQBL Points</th></tr>
 END;
 foreach ($points as $name => $val) {

@@ -4,8 +4,8 @@ require_once "lib/scoring.php";
 
 $completed_week = currentCompletedWeek();
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
-$week = isset($_GET['week']) && (pg_escape_string($_GET['week']) <= $completed_week || $year < currentYear())
-        ? pg_escape_string($_GET['week']) : currentCompletedWeek();
+$week = min(15, isset($_GET['week']) && (pg_escape_string($_GET['week']) <= $completed_week || $year < currentYear())
+        ? pg_escape_string($_GET['week']) : currentCompletedWeek());
 $week = min($week, $REG_SEASON_END_WEEK);
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 
@@ -17,14 +17,7 @@ foreach (nflTeams() as $team) {
 }
 $gamePoints = getPointsBatch($games);
 
-echo "<html><head>
-<title>$year BQBL Standings </title>
-<style type='text/css'>
-tr.thickline td {
-border-bottom-width: 24px;
-}
-</style>
-</head><body>\n";
+ui_header("$year Standings");
 
 $bqbl_teamname = bqblTeams($league, $year);
 $matchup = array();
@@ -107,9 +100,17 @@ for ($i = 1; $i <= $week; $i++) {
 }
 
 arsort($record);
-echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block;">';
-echo "<tr><th></th><th>Team</th><th>Wins</th><th>Losses</th><th>Points For</th>
-    <th>Points Against</th><th>Point Differential</th><th>Streak</th></tr>";
+echo '<paper-material elevation="2">';
+echo '<div id="standings-table">';
+echo "<div class='header row' style='display:table-row;'>
+<div class='cell' style='display:table-cell;'></div>
+<div class='cell' style='display:table-cell;'>Team</div>
+<div class='cell' style='display:table-cell;'>Wins</div>
+<div class='cell' style='display:table-cell;'>Losses</div>
+<div class='cell' style='display:table-cell;'>Points For</div>
+<div class='cell' style='display:table-cell;'>Points Against</div>
+<div class='cell' style='display:table-cell;'>Point Differential</div>
+<div class='cell' style='display:table-cell;'>Streak</div></div>";
 $rank = 0;
 foreach ($record as $key => $val) {
     if (($key == 4 && $year <= 2013) || ($key == 9 && $year > 2013)) {
@@ -118,54 +119,89 @@ foreach ($record as $key => $val) {
         
     $rank++;
     $point_differential = $val['points_for'] - $val['points_against'];
-    $thickline = ($rank==4) ? "class='thickline'" : "";
+    $thickline = ($rank==4) ? "thickline" : "";
     
     switch ($key) {
         case 1:
-            $color = "class='samdwich'";
+            $color = "samdwich";
             break;
         case 2:
-            $color ="class='sworls'";
+            $color = "sworls";
             break;
         case 3:
-            $color = "class='jhka3'";
+            $color = "jhka3";
             break;
         case 4:
         case 9:
-            $color = "class='murphmanjr'";
+            $color = "murphmanjr";
             break;
         case 5:
-            $color = "class='lukabear'";
+            $color = "lukabear";
             break;
         case 6:
-            $color =  "class='anirbaijan'";
+            $color = "anirbaijan";
             break;
         case 7:
-            $color = "class='kvk'";
+            $color = "kvk";
             break;
         case 8:
-            $color = "class='palc'";
+            $color = "palc";
             break;
         default:
             $color = "";
     }
     
-    echo "<tr $thickline><td>$rank.</td><td $color>$bqbl_teamname[$key]</td><td>".$val['wins']."</td>
-        <td>".$val['losses']."</td><td>".$val['points_for']."</td><td>".$val['points_against']."</td><td>";
+    echo "<div class='row $thickline' style='display:table-row;'><div class='cell' style='display:table-cell;'>$rank.</div><div class='cell $color' style='display:table-cell;' $color>$bqbl_teamname[$key]</div><div class='cell' style='display:table-cell;'>".$val['wins']."</div>
+        <div class='cell' style='display:table-cell;'>".$val['losses']."</div><div class='cell' style='display:table-cell;'>".$val['points_for']."</div><div class='cell' style='display:table-cell;'>".$val['points_against']."</div><div class='cell' style='display:table-cell;'>";
     if ($point_differential >= 0) {
         echo "+";
     }
-    echo "$point_differential</td><td>";
+    echo "$point_differential</div><div class='cell' style='display:table-cell;'>";
     if ($val['streak'] < 0) {
         echo "L".$val['streak'];
     } else {
         echo "W-".$val['streak'];
     }
-    echo "</td></tr>";  
+    echo "</div></div>";  
 }
-echo "</table>";
+echo "</div>";
+ui_footer();
 ?>
 <style>
+* {
+font-family:'Roboto', sans-serif;
+}
+
+paper-material {
+    display: inline-block;
+    background-color: #FFFFFF;
+    padding: 32px;
+    margin: 32px;
+}
+
+#standings-table {
+  display: table;
+  border-collapse: separate;
+  font-size: 1vw;
+  text-align: center;
+}
+
+#standings-table .cell {
+  border-top: 1px solid #e5e5e5;
+  padding: 16px;
+}
+
+#standings-table .thickline .cell {
+  border-bottom: 5px solid #000000;
+}
+
+#standings-table .header .cell {
+    font-weight: bold;
+    font-size: 110%;
+    padding-top: 0;
+    border-top: 0;
+}
+
 .samdwich {
     background-color: #00FF00;
 }
@@ -188,14 +224,6 @@ echo "</table>";
 .lukabear {
     color: #FFFFFF;
     background-color: #9B30FF;
-}
-    
-.anirbaijan {
-  background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
-  background-image: gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
-  color:transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
 }
 
 .kvk {

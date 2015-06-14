@@ -2,7 +2,7 @@
 require_once "lib/lib.php";
 require_once "lib/scoring.php";
 $year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
-$week_complete = $year < currentYear() ? 15 : currentCompletedWeek();
+$week_complete = min(15, $year < currentYear() ? 15 : currentCompletedWeek());
 $league = isset($_GET['league']) ? $_GET['league'] : getLeague();
 
 $games = array();
@@ -14,8 +14,7 @@ foreach (nflTeams() as $team) {
 
 $gamePoints = getPointsBatch($games);
 
-echo "<html><head>
-<title>$year BQBL Schedule </title></head><body>\n";
+ui_header("$year BQBL Schedule");
 
 $bqbl_teamname = bqblTeams($league, $year);
 $matchup = array();
@@ -30,16 +29,17 @@ while(list($week,$team1,$team2) = pg_fetch_array($result)) {
     $matchup[$week][$team2] = $team1;
 }
 
-echo '<table border=2 cellpadding=4 style="border-collapse:collapse;display:inline-block; margin-left:20px;">';
-echo "<tr><th></th>";
+echo '<paper-material elevation="2">';
+echo '<div id="schedule-table">';
+echo "<div class='header row'><div class='cell'></div>";
 foreach($bqbl_teamname as $teamName) {
     if ($teamName == "Anirbaijan") {
-        echo '<th><span class="rainbow">'.$teamName.'</span></th>';
+        echo "<div class='cell'><span class='rainbow'>$teamName</span></div>";
     } else {
-        echo "<th>$teamName</th>";
+        echo "<div class='cell'>$teamName</div>";
     }
 }
-echo "</tr>";
+echo "</div>";
 
 for ($i = 1; $i <= 15; $i++) {
     if ($i == 15 && $year > 2013) {
@@ -55,27 +55,66 @@ for ($i = 1; $i <= 15; $i++) {
         }   
     }
     
-    echo "<tr><td><a href='/bqbl/matchup.php?week=$i'>Week $i</a></td>";
+    echo "<div class='row'><div class='cell'><a href='/bqbl/matchup.php?week=$i'>Week $i</a></div>";
     foreach ($bqbl_teamname as $teamId => $teamName) {
         if ($score[$teamId][$i] > $score[$matchup[$i][$teamId]][$i]) {
-            echo '<td bgcolor="#00FF00">'.$bqbl_teamname[$matchup[$i][$teamId]]."</td>";
+            echo "<div class='cell win'>".$bqbl_teamname[$matchup[$i][$teamId]]."</div>";
         } elseif ($score[$teamId][$i] < $score[$matchup[$i][$teamId]][$i]) {
-            echo '<td bgcolor="FF0000">'.$bqbl_teamname[$matchup[$i][$teamId]]."</td>";
+            echo "<div class='cell loss'>".$bqbl_teamname[$matchup[$i][$teamId]]."</div>";
         } else {
-            echo "<td>".$bqbl_teamname[$matchup[$i][$teamId]]."</td>";
+            echo "<div class='cell'>".$bqbl_teamname[$matchup[$i][$teamId]]."</div>";
         }
     }
-    echo "</tr>";
+    echo "</div>";
 }
-echo "</table>";
+echo "</div>";
+ui_footer();
 ?>
-<style>
-.rainbow {
-  background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
-  background-image: gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
-  color:transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
+<style is="custom-style">
+
+paper-material {
+    display: inline-block;
+    background-color: #FFFFFF;
+    padding: 32px;
+    margin: 32px 32px 0 32px;
+}
+
+.loss {
+    background-color: var(--paper-red-500);
+}
+
+.win {
+    background-color: var(--paper-green-500);
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+}
+
+#schedule-table {
+  border-collapse: separate;
+  font-size: .75vw;
+  text-align: center;
+}
+
+#schedule-table .cell {
+  border-top: 1px solid #e5e5e5;
+  padding: 16px;
+}
+
+#schedule-table .thickline .cell {
+  border-bottom: 5px solid #000000;
+}
+
+#schedule-table .header .cell {
+    font-weight: bold;
+    font-size: 110%;
+    padding-top: 0;
+    border-top: 0;
 }
 </style>
 

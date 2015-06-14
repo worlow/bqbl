@@ -1,11 +1,14 @@
-<!DOCTYPE html>
-<html>
+<?php
+require_once "lib/lib.php";
+ui_header($title="League Management");
+?>
+<style is="custom-style">
+#content {
+	margin: 32px;
+	text-align: left;
+}
+</style>
 
-<head>
-  <title>League Management</title>
-</head>
-
-<body>
   <h2>Executives</h2>
 
     <h3>Commissioner - Jimmy Hans Kristian Anderson III</h3>
@@ -99,6 +102,6 @@
       <li>Anything Frosh - Murphman Jr.</li>
     </ul>
 
-</body>
-
-</html>
+<?php
+ui_footer();
+?>

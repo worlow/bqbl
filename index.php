@@ -1,7 +1,8 @@
 <?php
 require_once "lib/lib.php";
-?>
-<html><head><title>BQBL</title>
+ui_header($title="BQBL");
+
+echo <<<END
 <style type="text/css">
 .blink {
   animation: blink 1s steps(3, start) infinite;
@@ -15,17 +16,15 @@ require_once "lib/lib.php";
   to { visibility: hidden; }
 }
 </style>
-</head>
-<audio autoplay loop><source src="media/GetLow.mp3" type="audio/mpeg" /></audio>
 <marquee scrollamount=18><h1 class="blink">Welcome to the BQBL page!!!</h1></marquee>
+END;
 
-<?php
 if(isset($_SESSION['user'])) {
     echo "<a href='lineup.php'>View and set lineup</a><br>";
 } else {
     echo "<a href='auth/login.php'>Log in</a><br>";
 }
-?>
+echo <<<END
 <a href='matchup.php'>BQBL Matchup Scoreboard</a><br>
 <a href='week.php'>BQBL NFL Scoreboard</a><br>
 <a href='standings.php'>Standings</a><br>
@@ -35,5 +34,8 @@ if(isset($_SESSION['user'])) {
 <a href='extrapoints.php'>Input Extra BQBL Points</a><br>
 <a href='nfl.php'>NFL Teams</a><br> 
 <a href='bios.html'>League Management</a><br>
-<a href='champions.html'>Past Champions</a><br>
 <a href='cares/'>BQBL Cares</a><br>
+END;
+
+ui_footer();
+?>

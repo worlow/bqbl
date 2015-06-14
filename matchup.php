@@ -2,31 +2,8 @@
 require_once "lib/lib.php";
 require_once "lib/scoring.php";
 
-$week = isset($_GET['week']) ? pg_escape_string($_GET['week']) : currentWeek();
-$year = isset($_GET['year']) ? pg_escape_string($_GET['year']) : currentYear();
-$league = isset($_GET['league']) ? $_GET['league'] : getLeague();
+ui_header($title="$year Week $week BQBL Scoreboard", $showLastUpdated=true, $showAutoRefresh=true, $showWeekDropdown=true);
 
-$updateTime = date("n/j g:i:s A, T", databaseModificationTime());
-echo "<html><head><title>BQBL Week $week $year</title>
-<div id='content' align='center'>
-<h1>$year Week $week BQBL Scoreboard</h1>
-Last Updated at $updateTime ";
-$timeout = $DB_UPDATE_INTERVAL - (time()-databaseModificationTime());
-if (isset($_GET['autorefresh'])) {
-    if ($timeout < 0 && $timeout > -$DB_UPDATE_INTERVAL) $timeout=0;
-    if ($timeout >= 0) {
-        $timeout *= 1000;  # millis
-        $timeout += rand(15000,20000);  # allow for update + prevent DDOS
-        echo "<script type='text/javascript'>
-        setTimeout(function() {location.reload();}, $timeout);
-        </script>";
-    } else {
-        echo "<br /><span style='color: #FF0000'>The auto-refresh function is not available at this time.</span>";
-    }
-} elseif ($timeout>=0 && $week==currentWeek() && $year==currentYear()) {
-
-    echo "<br/><a href='$_SERVER[PHP_SELF]?league=$league&autorefresh'>Auto Refresh</a>";
-}
 $bqbl_teamname = bqblTeams($league, $year);
 $starters = getLineups($year, $week, $league);
 $lineup = $starters;
@@ -54,7 +31,6 @@ $games = array();
 foreach(nflTeams() as $nflTeam) $games[] = array($year, $week, $nflTeam);
 $gamePoints = getPointsBatch($games);
 
-echo "<table>";
 foreach ($matchup as $bqblteam1 => $bqblteam2) {
     $home_team1 = $gamePoints[$year][$week][$lineup[$bqblteam1][0]];
     $home_team2 = $gamePoints[$year][$week][$lineup[$bqblteam1][1]];
@@ -71,38 +47,40 @@ foreach ($matchup as $bqblteam1 => $bqblteam2) {
     $columns = 2 + count($populatedTeam);
     $statcolumns = $columns - 1;
 
-    echo "<tr>\n";
-    echo "<td><table border=2 class='matchup'>
-    <tr><td colspan=$columns class='teamname'>$bqbl_teamname[$bqblteam1]</td></tr>
-    <tr><th></th>";
+    echo "<paper-material elevation='5' class='matchuppaper x-scope paper-material-0'><div style=\"display:inline-table;font-family:'Roboto', sans-serif;font-size: 1vw;max-width:100%;\" class='matchup'>";
+
+    echo "<paper-material elevation='1' class='teampaper x-scope paper-material-0'><span class='teamname'>$bqbl_teamname[$bqblteam1]</span>";
+    echo "<div style='display:table-row;'>";
+    echo "<div class='cell'></div>";
     foreach($populatedTeam as $name => $val) {
-        echo "<th>$name</th>";
+        echo "<div class='cell'>$name</div>";
     }
-    echo "<th>Total</th></tr>";
+    echo "<div class='cell'>Total</div></div>";
 
     printTeamRow($lineup[$bqblteam1][0], $home_team1, in_array($lineup[$bqblteam1][0], $starters[$bqblteam1]));
     printTeamRow($lineup[$bqblteam1][1], $home_team2, in_array($lineup[$bqblteam1][1], $starters[$bqblteam1]));
     printTeamRow($lineup[$bqblteam1][2], getPointsOnlyMisc($home_team3));
     printTeamRow($lineup[$bqblteam1][3], getPointsOnlyMisc($home_team4));
 
-    echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>VS.</td></tr>";
-    echo "<tr style='border:0;'><td colspan=$columns class='teamname' style='border:0;'>$bqbl_teamname[$bqblteam2]</td></tr>";
-    echo "<th></th>";
+    echo "</paper-material><br>";
+    echo "<paper-material elevation='1' class='teampaper x-scope paper-material-0'><span class='teamname'>$bqbl_teamname[$bqblteam2]</span>";
+
+    echo "<div style='display:table-row'>";
+    echo "<div class='cell'></div>";
     foreach($populatedTeam as $name => $val) {
-        echo "<th>$name</th>";
+        echo "<div class='cell'>$name</div>";
     }
-    echo "<th>Total</th></tr>";
+    echo "<div class='cell'>Total</div></div>";
 
     printTeamRow($lineup[$bqblteam2][0], $away_team1, in_array($lineup[$bqblteam2][0], $starters[$bqblteam2]));
     printTeamRow($lineup[$bqblteam2][1], $away_team2, in_array($lineup[$bqblteam2][1], $starters[$bqblteam2]));
     printTeamRow($lineup[$bqblteam2][2], getPointsOnlyMisc($away_team3));
     printTeamRow($lineup[$bqblteam2][3], getPointsOnlyMisc($away_team4));
 
-    echo "</table>";
-    echo "<tr><td class='line' colspan=$columns></td></tr>";
+    echo "</div></paper-material></paper-material>";
 }
-echo "</table>";
-echo "</div>";  # content div
+
+ui_footer();
 
 function cmp_isTeamUser($a, $b) {
     if (isset($_SESSION['bqbl_team'])) {
@@ -117,30 +95,58 @@ function cmp_isTeamUser($a, $b) {
 function printTeamRow($team, $points, $starting=false) {
     global $statcolumns, $year, $week;
     $style = $starting ? "background: #00CC66;" : "";
-    echo "<tr><td class='nflteamname' style='$style'>
-        <a href='/bqbl/nfl.php?team=$team&year=$year'>$team</a></td>";
+    echo "<div style='display:table-row;'><div class='cell 'nflteamname' style='$style'>
+        <a href='/bqbl/nfl.php?team=$team&year=$year'>$team</a></div>";
     foreach($points as $name => $val) {
         if ($val == '') {
-            echo "<td></td>";
+            echo "<div class='cell'></div>";
         } else {
-            echo "<td><span class='statpoints'>$val[1]</span><span class='statvalue'>";
+            echo "<div class='cell'><span class='statpoints'>$val[1]</span><span class='statvalue'>";
             if ($name != "Misc. Points") {
                 echo "($val[0])";
             }
-            echo "</td>";
+            echo "</div>";
         }
     }
-    echo "<td class='totalpoints'>" . totalPoints($points) . "</td>";
-    echo "</tr>\n";
+    echo "<div class='cell' class='totalpoints'>" . totalPoints($points) . "</div>";
+    echo "</div>\n";
 }
 
+function tableCells($cells) {
+    for ($i = 0; $i < $cells; $i++) {
+        echo "<div style='width:0px;'></div>";
+    }
+}
 ?>
 <style>
-.score {
-font-size: x-large;
-font-weight:bold;
-text-align: center;
-padding:0 20px 10px 0;
+paper-material {
+display: inline-block;
+background: white;
+box-sizing: border-box;
+margin: 16px;
+padding: 16px;
+border-radius: 2px;
+}
+
+.teampaper {
+background-color: #FFFFFF;
+margin:16px 0px 16px 0px;
+display: inline-block;
+max-width: 100%;
+x-overflow: hidden;
+}
+
+.matchuppaper {
+background-color: #F8F8F8;
+padding:0px 16px 0px 16px;
+margin:32px 32px 0px 32px;
+display: inline-block;
+}
+
+.cell {
+display:table-cell;
+padding:2px 4px 2px 4px;
+word-wrap: break-word;
 }
 
 .line {
@@ -170,8 +176,6 @@ font-weight: bold;
 }
 
 .matchup {
-border-collapse: collapse;
-background-color: #F8F8F8;
 }
 
 .matchup th {

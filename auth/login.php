@@ -10,42 +10,62 @@ if(isset($_POST['redirect_url']) && $_POST['redirect_url'] != "") {
 }
 
 if(!isset($_POST['user'])) {
-    $loginMessage = isset($_GET['failed']) 
-        ? "Login failed."
-        : "Login.";
+    $errorMessage = isset($_GET['failed']) 
+        ? "<div style='width:100%;text-align:center;'><span style='color:red;'>Login failed!</span></div>"
+        : "";
     $PHP_SELF = $_SERVER['PHP_SELF'];
+    ui_header("BQBL Login");
     echo <<< END
-<html><head>
-<title>BQBL Login</title></head>
-    <table align=center style="position: relative; top: 40%;">
-        <tr>
-            <td>
-                <form name="login_form" action="$PHP_SELF" method="post">
-                    <input type='hidden' name="redirect_url" value="$redirectUrl" />
-                    <div align=center>$loginMessage</div>
-                    <table id="login_box">
-                        <tr>
-                            <td>User:</td>
-                            <td><input type=text name="user" /></td>
-                        </tr>
-                        <tr>
-                            <td>Password:</td>
-                            <td><input name="password" type="password" /></td>
-                            <td><a href="forgotpassword.php">Forgot password?</a></td>
-                        </tr>
-                        <tr>
-                            <td align="right" colspan="2"><input type="submit" value="Login" /></td>
-                        </tr>
-                    </table>
-                </form>
-                
-                <script language="javascript" type="text/javascript">
-                    document.login_form.user.focus();
-                </script>
-            </td>
-        </tr>
-    </table>
+        <style is="custom-style">
+        :root {
+        }
+        </style>
+<div class="login_box">
+    $errorMessage
+    <form name="login_form" id="login_form" action="$PHP_SELF" method="post">
+        <input type='hidden' name="redirect_url" value="$redirectUrl" />
+        <paper-input no-label-float label="User" type="text" name="user">
+        </paper-input>
+        <paper-input no-label-float label="Password" type="password" name="password">
+        </paper-input>
+        <div>
+            <paper-button 
+              style="background: #42A5F5;color:white;margin:5px 0; width:100%;" 
+              onclick="document.getElementById('login_form').submit();"
+              raised>
+                Login
+            </paper-button>
+            <div style="display:inline;float:right;">
+                <a href="forgotpassword.php" style="color: var(--paper-blue-400);;word-wrap:break-word;">Forgot password?</a>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+#content {
+padding-top: 32px;
+}
+
+.login_box {
+    width: 25%;
+    text-align: left;
+    align: left;
+}
+
+paper-input-container {
+    text-align: left;
+    background-color: #FFFFFF;
+    padding-left: 4px;
+    padding-bottom: 0;
+    margin-bottom: 8px;
+    border: 1px #d9d9d9 solid;
+    border-top: 1px solid #c0c0c0;
+}
+
+</style>
 END;
+
+ui_footer();
 } else {
     $hashedPassword=hashedPassword($_POST['password']);
     $user=$_POST['user'];
