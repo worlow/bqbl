@@ -265,8 +265,6 @@ function urlWithParameters($url, $parameters) {
     foreach ($parameters as $key => $val) {
         $paramstrings[] = "$key=$val";
     }
-    print_r(array("1"));
-    print_r($paramstrings);
     return $url . "?" . implode("&", $paramstrings);
 }
 
@@ -311,12 +309,20 @@ $nav_items = array(
     "Schedule" => "/bqbl/schedule.php",
     "Weekly Rankings" => "/bqbl/leaderboard.php",
     "Season Rankings" => "/bqbl/seasonleaderboard.php",
+    "Set Lineup" => "/bqbl/lineup.php",
     "Input Extra Points" => "/bqbl/extrapoints.php",
     "Rantland" => "/rantland",
     "League Management" => "/bqbl/leaguemanagement.php",
     "Past Champions" => "/bqbl/champions.php",
-    "BQBL Cares" => "/bqbl/cares", 
+    "BQBL Cares" => "/bqbl/cares",
+    "Logout" => "/bqbl/auth/logout.php"
 );
+
+if (!isset($_SESSION['user'])) {
+    unset($nav_items['Input Extra Points']);
+    unset($nav_items['Logout']);
+    unset($nav_items['Set Lineup']);
+}
 
 $nav_block = "";
 $selected_nav_index = -1;
@@ -348,7 +354,7 @@ if ($authbqblteam != null) {
     $userheader = "<div id='user-avatar' style='margin:8px 0;background-image:url($image_url);margin-right:8px;'></div><div>$teamname</div>";
 } else {
 $image_url = "/bqbl/media/avatar_default.jpg";
-    $userheader = "<div id='user-avatar' style='background-image:url($image_url);margin-right:8px;'></div><div><a href='/bqbl/auth/login.php' style='color:white;font-size:125%;font-weight:400;'>Login</a></div>";
+    $userheader = "<div id='user-avatar' style='background-image:url($image_url);margin-right:8px;'></div><div style='margin-left:3%;'><a href='/bqbl/auth/login.php' style='color:white;font-size:125%;font-weight:400;'>Login</a></div>";
 
 }
 

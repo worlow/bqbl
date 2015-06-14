@@ -39,6 +39,7 @@ if(!isset($_POST['user'])) {
                 <a href="forgotpassword.php" style="color: var(--paper-blue-400);;word-wrap:break-word;">Forgot password?</a>
             </div>
         </div>
+        <input type="submit" style="visibility:hidden;position: absolute; left: -9999px"/>
     </form>
 </div>
 <style>
