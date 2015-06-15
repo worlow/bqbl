@@ -15,6 +15,10 @@ paper-material {
 }
 </style>
 <paper-material>
+    <h2>2014 BQBL Champion</h2>
+    <h4><font color='red'>James Hans Kristian Anderson III</font></h4>
+</paper-material>
+<paper-material>
     <h2>2013 BQBL Champion</h2>
     <h4><font color='orange'>Keevon von Kevin</font></h4>
     <img src="media/kevin_front.jpg" alt="Kevin Front" style="width:172px;height:228px">

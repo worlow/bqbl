@@ -2,6 +2,13 @@
 require_once "lib.php";
 
 function getPoints($team, $week, $year=2014) {
+    if ($year < 2015) {
+        return getPointsV2($team, $week, $year);
+    }
+    return getPointsV2($team, $week, $year);
+}
+
+function getPointsV1($team, $week, $year=2014) {
     $points = array();
     if (gameType($year, $week, $team) == 2 || gameType($year, $week, $team) == -1) {
         $points["Game Winning Drive"] =
@@ -86,6 +93,106 @@ function getPoints($team, $week, $year=2014) {
 	$points['Game Winning Drive'][1] = -12*$points['Game Winning Drive'][0];
 	$points['Misc. Points'][1] = $points['Misc. Points'][0];
     return $points;
+}
+
+function getPointsV2($team, $week, $year=2015) {
+    $points = array();
+    if (gameType($year, $week, $team) == 2 || gameType($year, $week, $team) == -1) {
+        $points["Game Winning Drive"] =
+        $points["Benchings"] =
+        $points["Overtime TOs"] =
+        $points["Safeties"] =
+        $points["Completion Pct"] =
+        $points["Total Yards"] =
+        $points["TDs"] =
+        $points["Longest Play"] =
+        $points["Long Plays"] =
+        $points["Sacks"] =
+        $points["Turnovers"] =
+        $points["Fumbles Lost"] =
+        $points["Fumbles Kept"] =
+        $points["FARTs"] =
+        $points["Interceptions"] =
+        $points["TAINTs"] =
+        '';
+        $miscpoints = miscPoints($year, $week, $team);
+        $points["Misc. Points"] = array($miscpoints, $miscpoints);
+        return $points;
+    }
+    $query = "SELECT gsis_id
+              FROM game
+              WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
+                  AND week='$week' AND season_type='Regular';";
+    $gsis = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
+    $points["TAINTs"] = array(taints($gsis, $team), 0);
+    $points["Interceptions"] = array(ints($gsis, $team) - $points["TAINTs"][0], 0);
+    $points["FARTs"] = array(farts($gsis, $team), 0);
+    $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
+    $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $points["FARTs"][0], 0);
+    $points["Turnovers"] =
+        array($points["Fumbles Lost"][0] + $points["Interceptions"][0] + $points["TAINTs"][0] + $points["FARTs"][0], 0);
+    $points["Longest Play"] = array(longestPass($gsis, $team), 0);
+    $points["TDs"] = array(passingTDs($gsis, $team) + rushingTDs($gsis, $team), 0);
+    $points["Total Yards"] = array(passingYards($gsis, $team), 0)
+        + array(rushingYards($gsis, $team), 0);
+    try {
+        $completionPct = number_format(@completionPct($gsis, $team),1);
+    } catch (Exception $e) {
+        $completionPct = -1;
+    }
+    $points["Completion Pct"] = array($completionPct, 0);
+    $points["Safeties"] = array(safeties($gsis, $team), 0);
+    $points["Overtime TOs"] = array(overtimeTaints($gsis, $team), 0);
+    $points["Benchings"] = array(benchings($year, $week, $team), 0);
+    $points["Game Winning Drive"] = array(gameWinningDrive($gsis, $team), 0);
+    $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
+
+    // TOs
+    $points['TAINTs'][1] = 20*$points['TAINTs'][0];
+    $points['FARTs'][1] = 20*$points['FARTs'][0];
+    $points['Safeties'][1] = 20*$points['Safeties'][0];
+    
+    $points['Interceptions'][1] = 5*$points['Interceptions'][0];
+    $points['Fumbles Kept'][1] = 2*$points['Fumbles Kept'][0];
+    $points['Fumbles Lost'][1] = 5*$points['Fumbles Lost'][0];
+    
+    $points['Turnovers'][1] = 0;
+        if($points['Turnovers'][0] >= 2)
+            $points['Turnovers'][1] = 2 ** $points['Turnovers'][0];
+    
+    $points['Overtime TAINTs'][1] = 50*$points['Overtime TAINTs'][0];
+    
+    // Longest Play
+    $points['Longest Pass'][1] = $points['Longest Pass'][0] < 25 ? 10 : 0;
+
+    // TDs
+    $points['TDs'][1] = 0;
+        if($points['TDs'][0] == 0) $points['TDs'][1] = 10;
+        elseif($points['TDs'][0] >= 3) $points['TDs'][1] = -5 * pow(2, $points['TDs'][0] - 3);
+
+    // Sacks
+    
+    // Completion Percentage
+    $points['Completion Pct'][1] = (-1) ** $points['Completion Pct'][0] / 60
+        * ($points['Completion Pct'][0] / 5 - 12) ** 2;
+
+    // Total Yards
+    $yards = $points['Total Yards'][0];
+    if ($yards >= 250)
+        $points['Total Yards'][1] = -1 * fibbi($yards / 50 - 5);
+    else
+        points['Total Yards'][1] = 2 * fibbi(12 - $yards / 25);
+    
+    // Others
+	$points['Benchings'][1] = 35*$points['Benchings'][0];
+	$points['Game Winning Drive'][1] = -12*$points['Game Winning Drive'][0];
+	$points['Misc. Points'][1] = $points['Misc. Points'][0];
+    return $points;
+}
+
+function fibbi($num) {
+    $phi = (1 + sqrt(5))/2;
+    return ($phi ** $num - (1 - $phi ** $num)) / sqrt(5);
 }
 
 function getPointsOnlyMisc($points) {
