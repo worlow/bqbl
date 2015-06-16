@@ -367,7 +367,7 @@ function safeties($gsis, $team) {
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
-                                    
+                                  
 function overtimeSafeties($gsis, $team) {
     $query = " SELECT COUNT(*)
                  FROM play_player LEFT JOIN player on play_player.player_id = player.player_id LEFT JOIN play USING (gsis_id, play_id)
@@ -504,15 +504,6 @@ function sacks($gsis, $team) {
     $query = "SELECT COUNT(*) 
               FROM play_player
               WHERE gsis_id='$gsis' AND team='$team' AND passing_sk > 0;";
-    $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
-    return $result;
-}
-
-function overtimeTaints($gsis, $team) {
-    $query = "SELECT COUNT(*) 
-              FROM play_player LEFT JOIN play USING (gsis_id, play_id)
-              WHERE gsis_id='$gsis' AND team!='$team' 
-              AND defense_int_tds > 0 AND (\"time\").phase IN ('OT', 'OT2');";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
