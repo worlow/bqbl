@@ -130,26 +130,25 @@ function getPointsV2($team, $week, $year=2015) {
     
     $otTaints = overtimeTaints($gsis, $team);
     $otFarts = overtimeFarts($gsis, $team);
+    
+    $ints = ints($gsis, $team) - $taints;
+    $fumblesLost = fumblesLost($gsis, $team) - $farts;
 
-    $points["TD TOs"] = array($taints + $farts, 0);
-    $points["Safeties"] = array(safeties($gsis, $team), 0);
-    
-    $points["OT TD TOs"] = array($otTaints + $otFarts, 0);
-    $points["OT Safeties"] = array(overtimeSafeties($gsis, $team), 0);
-    
-    $points["Interceptions"] = array(ints($gsis, $team) - $taints, 0);
+    $otInts = overtimeInts($gsis, $team) - $otTaints;
+    $otFumblesLost = overtimeFumblesLost($gsis, $team) - $otFarts;
+
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
-    $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $farts, 0);
-
-    $points["OT Interceptions"] = array(overtimeInts($gsis, $team) - $otTaints, 0);
-    $points["OT Fumbles Lost"] = array(overtimeFumblesLost($gsis, $team) - $otFarts, 0);
-    $points["OT TOs"] = array($points["OT Interceptions"][0] + $points["OT Fumbles Lost"][0], 0);
+    $points["TOs"] = array($ints + $fumblesLost, 0);
+    $points["TD TOs"] = array($taints + $farts, 0);
+    
+    $points["OT TOs"] = array($otInts + $otFumblesLost, 0);
+    $points["OT TD TOs"] = array($otTaints + $otFarts, 0);
+    $points["Safeties"] = array(safeties($gsis, $team), 0);
+    $points["OT Safeties"] = array(overtimeSafeties($gsis, $team), 0);
 
     $points["Turnovers"] =
-        array($points["Fumbles Lost"][0] + $points["Interceptions"][0]
-              + $taints + $farts
-              + $points["OT Fumbles Lost"][0] + $points["OT Interceptions"][0]
-              + $otTaints + $otFarts, 0);
+        array($fumblesLost + $ints + $taints + $farts 
+              + $otFumblesLost + $otInts + $otTaints + $otFarts, 0);
 
     $points["Longest Play"] = array(longestPlay($gsis, $team), 0);
     $points["Long Plays"] = array(longPlays($gsis, $team, 30), 0);
@@ -167,7 +166,6 @@ function getPointsV2($team, $week, $year=2015) {
     }
     $points["Completion Pct"] = array($completionPct, 0);
     
-    
     $points["Benchings"] = array(benchings($year, $week, $team), 0);
     $points["Game Winning Drive"] = array(gameWinningDrive($gsis, $team), 0);
     $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
@@ -176,9 +174,8 @@ function getPointsV2($team, $week, $year=2015) {
     $points['TD TOs'][1] = 20*$points['TD TOs'][0];
     $points['Safeties'][1] = 20*$points['Safeties'][0];
     
-    $points['Interceptions'][1] = 5*$points['Interceptions'][0];
     $points['Fumbles Kept'][1] = 2*$points['Fumbles Kept'][0];
-    $points['Fumbles Lost'][1] = 5*$points['Fumbles Lost'][0];
+    $points['TOs'][1] = 5*$points['TOs'][0];
     
     $points['Turnovers'][1] = 0;
         if($points['Turnovers'][0] >= 2)
