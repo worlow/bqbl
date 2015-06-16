@@ -176,10 +176,10 @@ function getPointsV2($team, $week, $year=2015) {
         if($points['Turnovers'][0] >= 2)
             $points['Turnovers'][1] = 2 ** $points['Turnovers'][0];
     
-    $points['Overtime TAINTs'][1] = 40*$points['Overtime TAINTs'][0];
-    $points['Overtime FARTs'][1] = 40*$points['Overtime FARTs'][0];
-    $points['Overtime Safeties'][1] = 40*$points['Overtime Safeties'][0];
-    $points['Overtime TOs'][1] = 10*$points['Overtime TOs'][0];
+    $points['OT TAINTs'][1] = 40*$points['Overtime TAINTs'][0];
+    $points['OT FARTs'][1] = 40*$points['Overtime FARTs'][0];
+    $points['OT Safeties'][1] = 40*$points['Overtime Safeties'][0];
+    $points['OT TOs'][1] = 10*$points['Overtime TOs'][0];
     
     // Longest Play
     $points['Longest Play'][1] = 0;
