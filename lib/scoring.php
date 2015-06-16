@@ -523,7 +523,7 @@ function intentionalGroundings($gsis, $team) {
 }
 
 function sacksAndGroundings($gsis, $team) {
-    return sacks($gsis, $team) + intentionalGrounds($gsis, $team);
+    return sacks($gsis, $team) + intentionalGroundings($gsis, $team);
 }
 
 function benchings($year, $week, $team) {
