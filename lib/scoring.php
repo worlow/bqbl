@@ -555,7 +555,7 @@ function gameWinningDrive($gsis, $team) {
     # team in question scored
     if ($scoringteam == $team) {
         # OT or last 2 minutes
-        if ($phase == "OT" || $phase == "OT2" || ($phase == "Q4" && $elapsed >= (15*60-2*60))) {
+        if ($phase == "OT" || $phase == "OT2" || ($phase == "Q4" && $elapsed >= (15*60-5*60))) {
             # team was not winning before this play
             if ($team_score-offensivePlayScoreToDriveScore($score_offense) <= $other_score) {
                 $query = "SELECT COUNT(*) FROM play_player
