@@ -154,8 +154,7 @@ function getPointsV2($team, $week, $year=2015) {
     $points["Long Plays"] = array(longPlays($gsis, $team, 30), 0);
 
     $points["TDs"] = array(passingTDs($gsis, $team) + rushingTDs($gsis, $team), 0);
-    $points["Total Yards"] = array(passingYards($gsis, $team), 0)
-        + array(rushingYards($gsis, $team), 0);
+    $points["Total Yards"] = array(passingYards($gsis, $team) + rushingYards($gsis, $team) + receivingYards($gsis, $team), 0);
 
     $points["Sacks and Groundings"] = array(sacksAndGroundings($gsis, $team), 0);
 
@@ -476,6 +475,14 @@ function passingYardsNoSacks($gsis, $team) {
 
 function rushingYards($gsis, $team) {
     $query = "SELECT SUM(rushing_yds)
+              FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
+              WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB';";
+    $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
+    return $result;
+}
+
+function receivingYards($gsis, $team) {
+    $query = "SELECT SUM(receiving_yds)
               FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
               WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB';";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
