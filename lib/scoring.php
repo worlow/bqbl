@@ -152,7 +152,7 @@ function getPointsV2($team, $week, $year=2015) {
     $points["Total Yards"] = array(passingYards($gsis, $team), 0)
         + array(rushingYards($gsis, $team), 0);
 
-    $points["Sacks"] = array(sacks($gsis, $team), 0);
+    $points["Sacks and Groundings"] = array(sacksAndGroundings($gsis, $team), 0);
 
     try {
         $completionPct = number_format(@completionPct($gsis, $team),1);
@@ -195,7 +195,7 @@ function getPointsV2($team, $week, $year=2015) {
         elseif($points['TDs'][0] >= 3) $points['TDs'][1] = -5 * (2 ** ($points['TDs'][0] - 3));
 
     // Sacks
-    $points['Sacks'][1] = $points['Sacks'][0] - 2;
+    $points['Sacks and Groundings'][1] = $points['Sacks and Groundings'][0] - 2;
     
     // Completion Percentage
     $points['Completion Pct'][1] = (-1) ** intval($points['Completion Pct'][0] / 60)
@@ -511,6 +511,19 @@ function sacks($gsis, $team) {
               WHERE gsis_id='$gsis' AND team='$team' AND passing_sk > 0;";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
+}
+
+function intentionalGroundings($gsis, $team) {
+    $query = "SELECT COUNT(*)
+              FROM play_player LEFT JOIN play USING (gsis_id, play_id)
+              WHERE gsis_id='$gsis' AND team='$team' AND penalty > 0
+              AND description CONTAINS 'grounding';"
+    $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
+    return $result;
+}
+
+function sacksAndGroundings($gsis, $team) {
+    return sacks($gsis, $team) + intentionalGrounds($gsis, $team);
 }
 
 function benchings($year, $week, $team) {
