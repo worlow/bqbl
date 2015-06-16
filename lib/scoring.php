@@ -168,12 +168,12 @@ function getPointsV2($team, $week, $year=2015) {
     // TDs
     $points['TDs'][1] = 0;
         if($points['TDs'][0] == 0) $points['TDs'][1] = 10;
-        elseif($points['TDs'][0] >= 3) $points['TDs'][1] = -5 * pow(2, $points['TDs'][0] - 3);
+        elseif($points['TDs'][0] >= 3) $points['TDs'][1] = -5 * (2 ** ($points['TDs'][0] - 3));
 
     // Sacks
     
     // Completion Percentage
-    $points['Completion Pct'][1] = (-1) ** $points['Completion Pct'][0] / 60
+    $points['Completion Pct'][1] = (-1) ** ($points['Completion Pct'][0] / 60)
         * ($points['Completion Pct'][0] / 5 - 12) ** 2;
 
     // Total Yards
