@@ -124,26 +124,32 @@ function getPointsV2($team, $week, $year=2015) {
               WHERE (home_team='$team' or away_team='$team') AND season_year='$year' 
                   AND week='$week' AND season_type='Regular';";
     $gsis = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
-    $points["TAINTs"] = array(taints($gsis, $team), 0);
-    $points["FARTs"] = array(farts($gsis, $team), 0);
+    
+    $taints = taints($gsis, $team);
+    $farts = farts($gsis, $team);
+    
+    $otTaints = overtimeTaints($gsis, $team);
+    $otFarts = overtimeFarts($gsis, $team);
+
+    $points["TD TOs"] = array($taints + $farts, 0);
     $points["Safeties"] = array(safeties($gsis, $team), 0);
     
-    $points["OT TAINTs"] = array(overtimeTaints($gsis, $team), 0);
-    $points["OT FARTs"] = array(overtimeFarts($gsis, $team), 0);
+    $points["OT TD TOs"] = array($otTaints + $otFarts, 0);
     $points["OT Safeties"] = array(overtimeSafeties($gsis, $team), 0);
     
-    $points["Interceptions"] = array(ints($gsis, $team) - $points["TAINTs"][0], 0);
+    $points["Interceptions"] = array(ints($gsis, $team) - $taints, 0);
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
-    $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $points["FARTs"][0], 0);
+    $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $farts, 0);
 
-    $points["OT Interceptions"] = array(overtimeInts($gsis, $team) - $points["OT TAINTs"][0], 0);
-    $points["OT Fumbles Lost"] = array(overtimeFumblesLost($gsis, $team) - $points["OT FARTs"][0], 0);
+    $points["OT Interceptions"] = array(overtimeInts($gsis, $team) - $otTaints, 0);
+    $points["OT Fumbles Lost"] = array(overtimeFumblesLost($gsis, $team) - $otFarts, 0);
     $points["OT TOs"] = array($points["OT Interceptions"][0] + $points["OT Fumbles Lost"][0], 0);
 
     $points["Turnovers"] =
-        array($points["Fumbles Lost"][0] + $points["Interceptions"][0] + $points["TAINTs"][0] + $points["FARTs"][0]
+        array($points["Fumbles Lost"][0] + $points["Interceptions"][0]
+              + $taints + $farts
               + $points["OT Fumbles Lost"][0] + $points["OT Interceptions"][0]
-              + $points["OT TAINTs"][0] + $points["OT FARTs"][0], 0);
+              + $otTaints + $otFarts, 0);
 
     $points["Longest Play"] = array(longestPlay($gsis, $team), 0);
     $points["Long Plays"] = array(longPlays($gsis, $team, 30), 0);
@@ -167,8 +173,7 @@ function getPointsV2($team, $week, $year=2015) {
     $points["Misc. Points"] = array(miscPoints($year, $week, $team), 0);
 
     // TOs
-    $points['TAINTs'][1] = 20*$points['TAINTs'][0];
-    $points['FARTs'][1] = 20*$points['FARTs'][0];
+    $points['TD TOs'][1] = 20*$points['TD TOs'][0];
     $points['Safeties'][1] = 20*$points['Safeties'][0];
     
     $points['Interceptions'][1] = 5*$points['Interceptions'][0];
@@ -179,10 +184,9 @@ function getPointsV2($team, $week, $year=2015) {
         if($points['Turnovers'][0] >= 2)
             $points['Turnovers'][1] = 2 ** $points['Turnovers'][0];
     
-    $points['OT TAINTs'][1] = 40*$points['Overtime TAINTs'][0];
-    $points['OT FARTs'][1] = 40*$points['Overtime FARTs'][0];
-    $points['OT Safeties'][1] = 40*$points['Overtime Safeties'][0];
-    $points['OT TOs'][1] = 10*$points['Overtime TOs'][0];
+    $points['OT TD TOs'][1] = 40*$points['OT TD TOs'][0];
+    $points['OT Safeties'][1] = 40*$points['OT Safeties'][0];
+    $points['OT TOs'][1] = 10*$points['OT TOs'][0];
     
     // Longest Play
     $points['Longest Play'][1] = 0;
