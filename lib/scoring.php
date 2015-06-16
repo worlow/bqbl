@@ -268,9 +268,9 @@ echo "<tr><th colspan=2>TOTAL</th> <td>$total</td>
 
 function ints($gsis, $team) {
     $query = "SELECT COUNT(*) 
-              FROM play_player LEFT JOIN play USING (gsis_id, play_id)
+              FROM play_player
               WHERE gsis_id='$gsis' AND team!='$team' 
-              AND defense_int > 0 AND (\"time\").phase NOT IN ('OT', 'OT2');";
+              AND defense_int > 0;";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
@@ -286,9 +286,9 @@ function overtimeInts($gsis, $team) {
 
 function taints($gsis, $team) {
     $query = "SELECT COUNT(*) 
-              FROM play_player LEFT JOIN play USING (gsis_id, play_id)
+              FROM play_player
               WHERE gsis_id='$gsis' AND team!='$team' 
-              AND defense_int_tds > 0 AND (\"time\").phase NOT IN ('OT', 'OT2');";
+              AND defense_int_tds > 0;";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
@@ -313,9 +313,9 @@ function fumblesNotLost($gsis, $team) {
 
 function fumblesLost($gsis, $team) {
     $query = "SELECT COUNT(*) 
-              FROM play_player LEFT JOIN player on play_player.player_id = player.player_id LEFT JOIN play USING (gsis_id, play_id)
+              FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
               WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' 
-                  AND fumbles_lost > 0 AND (\"time\").phase NOT IN ('OT', 'OT2');";
+                  AND fumbles_lost > 0;";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
@@ -336,7 +336,7 @@ function farts($gsis, $team) {
                   (SELECT play_id
                       FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
                       WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' 
-                      AND fumbles_lost > 0) AND (\"time\").phase IN ('OT', 'OT2');";
+                      AND fumbles_lost > 0);";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
@@ -359,11 +359,11 @@ function turnovers($gsis, $team) {
                                     
 function safeties($gsis, $team) {
     $query = " SELECT COUNT(*)
-                 FROM play_player LEFT JOIN player on play_player.player_id = player.player_id LEFT JOIN play USING (gsis_id, play_id)
+                 FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
                  WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' AND play_id IN 
                   (SELECT play_id
                      FROM play_player 
-                     WHERE gsis_id='$gsis' AND defense_safe > 0) AND (\"time\").phase IN ('OT', 'OT2');";
+                     WHERE gsis_id='$gsis' AND defense_safe > 0);";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
@@ -379,18 +379,18 @@ function overtimeSafeties($gsis, $team) {
     return $result;
 }
 
-function longPasses($gsis, $team, $passLength) {
-    $query = "SELECT COUNT(*) 
-              FROM play_player 
-              WHERE gsis_id='$gsis' AND team='$team' AND passing_yds > $passLength;";
-    $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
-    return $result;
-}
-
 function longestPass($gsis, $team) {
     $query = "SELECT MAX(passing_yds)
               FROM play_player 
               WHERE gsis_id='$gsis' AND team='$team';";
+    $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
+    return $result;
+}
+
+function longPasses($gsis, $team, $passLength) {
+    $query = "SELECT COUNT(*) 
+              FROM play_player 
+              WHERE gsis_id='$gsis' AND team='$team' AND passing_yds > $passLength;";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
