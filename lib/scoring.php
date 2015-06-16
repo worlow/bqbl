@@ -151,6 +151,9 @@ function getPointsV2($team, $week, $year=2015) {
     $points["TDs"] = array(passingTDs($gsis, $team) + rushingTDs($gsis, $team), 0);
     $points["Total Yards"] = array(passingYards($gsis, $team), 0)
         + array(rushingYards($gsis, $team), 0);
+
+    $points["Sacks"] = array(sacks($gsis, $team), 0);
+
     try {
         $completionPct = number_format(@completionPct($gsis, $team),1);
     } catch (Exception $e) {
@@ -192,6 +195,7 @@ function getPointsV2($team, $week, $year=2015) {
         elseif($points['TDs'][0] >= 3) $points['TDs'][1] = -5 * (2 ** ($points['TDs'][0] - 3));
 
     // Sacks
+    $points['Sacks'][1] = $points['Sacks'][0] - 2;
     
     // Completion Percentage
     $points['Completion Pct'][1] = (-1) ** intval($points['Completion Pct'][0] / 60)
