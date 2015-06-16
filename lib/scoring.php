@@ -163,7 +163,7 @@ function getPointsV2($team, $week, $year=2015) {
     $points['Overtime TAINTs'][1] = 50*$points['Overtime TAINTs'][0];
     
     // Longest Play
-    $points['Longest Pass'][1] = $points['Longest Pass'][0] < 25 ? 10 : 0;
+    $points['Longest Play'][1] = $points['Longest Play'][0] < 25 ? 10 : 0;
 
     // TDs
     $points['TDs'][1] = 0;
@@ -173,15 +173,15 @@ function getPointsV2($team, $week, $year=2015) {
     // Sacks
     
     // Completion Percentage
-    $points['Completion Pct'][1] = (-1) ** ($points['Completion Pct'][0] / 60)
+    $points['Completion Pct'][1] = (-1) ** intval($points['Completion Pct'][0] / 60)
         * ($points['Completion Pct'][0] / 5 - 12) ** 2;
 
     // Total Yards
     $yards = $points['Total Yards'][0];
     if ($yards >= 250)
-        $points['Total Yards'][1] = -1 * fibbi($yards / 50 - 5);
+        $points['Total Yards'][1] = -1 * fibbi(intval($yards / 50) - 5);
     else
-        $points['Total Yards'][1] = 2 * fibbi(12 - $yards / 25);
+        $points['Total Yards'][1] = 2 * fibbi(12 - intval($yards / 25));
     
     // Others
 	$points['Benchings'][1] = 35*$points['Benchings'][0];
@@ -192,7 +192,7 @@ function getPointsV2($team, $week, $year=2015) {
 
 function fibbi($num) {
     $phi = (1 + sqrt(5))/2;
-    return ($phi ** $num - (1 - $phi ** $num)) / sqrt(5);
+    return round(($phi ** $num - (1 - $phi ** $num)) / sqrt(5));
 }
 
 function getPointsOnlyMisc($points) {
