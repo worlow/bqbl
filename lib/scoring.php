@@ -517,7 +517,7 @@ function intentionalGroundings($gsis, $team) {
     $query = "SELECT COUNT(*)
               FROM play_player LEFT JOIN play USING (gsis_id, play_id)
               WHERE gsis_id='$gsis' AND team='$team' AND penalty > 0
-              AND description CONTAINS 'grounding';";
+              AND description LIKE '%Grounding%enforced%';";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
