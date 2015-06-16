@@ -181,7 +181,7 @@ function getPointsV2($team, $week, $year=2015) {
     if ($yards >= 250)
         $points['Total Yards'][1] = -1 * fibbi($yards / 50 - 5);
     else
-        points['Total Yards'][1] = 2 * fibbi(12 - $yards / 25);
+        $points['Total Yards'][1] = 2 * fibbi(12 - $yards / 25);
     
     // Others
 	$points['Benchings'][1] = 35*$points['Benchings'][0];
