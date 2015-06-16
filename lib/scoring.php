@@ -198,8 +198,11 @@ function getPointsV2($team, $week, $year=2015) {
     $points['Sacks and Groundings'][1] = $points['Sacks and Groundings'][0] - 2;
     
     // Completion Percentage
-    $points['Completion Pct'][1] = (-1) ** intval($points['Completion Pct'][0] / 60)
-        * (intval($points['Completion Pct'][0] / 5) - 12) ** 2;
+    $completionPercentage = $points['Completion Pct'][0];
+    if ($completionPercentage < 65)
+        $points['Completion Pct'][1] = (intval($points['Completion Pct'][0] / 5) - 12) ** 2;
+    elseif
+        $points['Completion Pct'][1] = (intval($points['Completion Pct'][0] / 10) - 5) ** 2;
 
     // Total Yards
     $yards = $points['Total Yards'][0];
