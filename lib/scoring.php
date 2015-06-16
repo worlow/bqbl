@@ -136,8 +136,8 @@ function getPointsV2($team, $week, $year=2015) {
     $points["Fumbles Kept"] = array(fumblesNotLost($gsis, $team),0);
     $points["Fumbles Lost"] = array(fumblesLost($gsis, $team) - $points["FARTs"][0], 0);
 
-    $points["OT Interceptions"] = array(overtimeInts($gsis, $team) - $points["OT TAINTs"][0];
-    $points["OT Fumbles Lost"] = array(overtimeFumblesLost($gsis, $team) - $points["OT FARTs"][0];
+    $points["OT Interceptions"] = array(overtimeInts($gsis, $team) - $points["OT TAINTs"][0], 0);
+    $points["OT Fumbles Lost"] = array(overtimeFumblesLost($gsis, $team) - $points["OT FARTs"][0], 0);
 
     $points["Turnovers"] =
         array($points["Fumbles Lost"][0] + $points["Interceptions"][0] + $points["TAINTs"][0] + $points["FARTs"][0]
