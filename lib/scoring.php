@@ -270,7 +270,7 @@ function ints($gsis, $team) {
     $query = "SELECT COUNT(*) 
               FROM play_player LEFT JOIN play USING (gsis_id, play_id)
               WHERE gsis_id='$gsis' AND team!='$team' 
-              AND defense_int > 0 AND (\"time\").phase NOT IN ('OT', 'OT2');"
+              AND defense_int > 0 AND (\"time\").phase NOT IN ('OT', 'OT2');";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
@@ -279,7 +279,7 @@ function overtimeInts($gsis, $team) {
     $query = "SELECT COUNT(*) 
               FROM play_player LEFT JOIN play USING (gsis_id, play_id)
               WHERE gsis_id='$gsis' AND team!='$team' 
-              AND defense_int > 0 AND (\"time\").phase IN ('OT', 'OT2');"
+              AND defense_int > 0 AND (\"time\").phase IN ('OT', 'OT2');";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
