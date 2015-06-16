@@ -406,7 +406,7 @@ function longestRush($gsis, $team) {
 function longRushes($gsis, $team, $rushLength) {
     $query = "SELECT COUNT(*) 
               FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
-              WHERE gsis_id='$gsis' AND team='$team' AND player.position='QB' AND rushing_yds > $rushLength;";
+              WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' AND rushing_yds > $rushLength;";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
@@ -422,7 +422,7 @@ function longestReception($gsis, $team) {
 function longReceptions($gsis, $team, $receptionLength) {
     $query = "SELECT COUNT(*) 
               FROM play_player LEFT JOIN player on play_player.player_id = player.player_id
-              WHERE gsis_id='$gsis' AND team='$team' AND player.position='QB' AND receiving_yds > $receptionLength;";
+              WHERE gsis_id='$gsis' AND play_player.team='$team' AND player.position='QB' AND receiving_yds > $receptionLength;";
     $result = pg_fetch_result(pg_query($GLOBALS['nfldbconn'],$query),0);
     return $result;
 }
