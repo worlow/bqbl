@@ -163,7 +163,8 @@ function getPointsV2($team, $week, $year=2015) {
     $points['Overtime TAINTs'][1] = 50*$points['Overtime TAINTs'][0];
     
     // Longest Play
-    $points['Longest Play'][1] = $points['Longest Play'][0] < 25 ? 10 : 0;
+    $points['Longest Play'][1] = 0;
+        if($points['Longest Play'][0] <= 30) $points['Longest Play'][1] = 30 - $points['Longest Play'][0];
 
     // TDs
     $points['TDs'][1] = 0;
