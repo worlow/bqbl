@@ -174,7 +174,7 @@ function getPointsV2($team, $week, $year=2015) {
     
     // Completion Percentage
     $points['Completion Pct'][1] = (-1) ** intval($points['Completion Pct'][0] / 60)
-        * ($points['Completion Pct'][0] / 5 - 12) ** 2;
+        * (intval($points['Completion Pct'][0] / 5) - 12) ** 2;
 
     // Total Yards
     $yards = $points['Total Yards'][0];
@@ -192,7 +192,7 @@ function getPointsV2($team, $week, $year=2015) {
 
 function fibbi($num) {
     $phi = (1 + sqrt(5))/2;
-    return round(($phi ** $num - (1 - $phi ** $num)) / sqrt(5));
+    return round((($phi ** $num - (1 - $phi) ** $num)) / sqrt(5));
 }
 
 function getPointsOnlyMisc($points) {
