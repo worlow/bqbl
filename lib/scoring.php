@@ -201,7 +201,7 @@ function getPointsV2($team, $week, $year=2015) {
     $completionPercentage = $points['Completion Pct'][0];
     if ($completionPercentage < 65)
         $points['Completion Pct'][1] = (intval($points['Completion Pct'][0] / 5) - 12) ** 2;
-    elseif
+    else
         $points['Completion Pct'][1] = (intval($points['Completion Pct'][0] / 10) - 5) ** 2;
 
     // Total Yards
