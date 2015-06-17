@@ -3,7 +3,7 @@ require_once "lib.php";
 
 function getPoints($team, $week, $year=2014) {
     if ($year < 2015) {
-        return getPointsV1($team, $week, $year);
+        return getPointsV2($team, $week, $year);
     }
     return getPointsV2($team, $week, $year);
 }
