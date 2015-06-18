@@ -612,7 +612,8 @@ function defenseScore($points) {
 function getPointsBatch($games) {
     global $bqbldbconn, $nfldbconn;
     $points = array();
-    foreach($games as $key=>list($year, $week, $team)) { 
+    foreach($games as $key=>$value) {
+	list($year, $week, $team) = $value;
         if(!isset($points[$year])) $points[$year] = array();
         if(!isset($points[$year][$week])) $points[$year][$week] = array();
     }
