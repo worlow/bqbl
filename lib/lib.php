@@ -1,5 +1,6 @@
 <?php
 // Report simple running errors
+ini_set('display_errors', 1);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 session_start();
 require_once("lib_db.php");
