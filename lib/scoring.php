@@ -178,7 +178,7 @@ function getPointsV2($team, $week, $year=2015) {
     
     $points['Turnovers'][1] = 0;
         if($points['Turnovers'][0] >= 2)
-            $points['Turnovers'][1] = 2 ** $points['Turnovers'][0];
+            $points['Turnovers'][1] = pow(2,  $points['Turnovers'][0]);
     
     $points['OT TD TOs'][1] = 40*$points['OT TD TOs'][0];
     $points['OT Safeties'][1] = 40*$points['OT Safeties'][0];
@@ -192,7 +192,7 @@ function getPointsV2($team, $week, $year=2015) {
     // TDs
     $points['TDs'][1] = 0;
         if($points['TDs'][0] == 0) $points['TDs'][1] = 10;
-        elseif($points['TDs'][0] >= 3) $points['TDs'][1] = -5 * (2 ** ($points['TDs'][0] - 3));
+        elseif($points['TDs'][0] >= 3) $points['TDs'][1] = -5 * pow(2,  ($points['TDs'][0] - 3));
 
     // Sacks
     $points['Sacks and Groundings'][1] = $points['Sacks and Groundings'][0] - 2;
@@ -200,9 +200,9 @@ function getPointsV2($team, $week, $year=2015) {
     // Completion Percentage
     $completionPercentage = $points['Completion Pct'][0];
     if ($completionPercentage < 65)
-        $points['Completion Pct'][1] = (intval($points['Completion Pct'][0] / 5) - 12) ** 2;
+        $points['Completion Pct'][1] = pow((intval($points['Completion Pct'][0] / 5) - 12),  2);
     else
-        $points['Completion Pct'][1] = -1 * (intval($points['Completion Pct'][0] / 10) - 5) ** 2;
+        $points['Completion Pct'][1] = -1 * pow((intval($points['Completion Pct'][0] / 10) - 5),  2);
 
     // Total Yards
     $yards = $points['Total Yards'][0];
@@ -221,7 +221,7 @@ function getPointsV2($team, $week, $year=2015) {
 
 function fibbi($num) {
     $phi = (1 + sqrt(5))/2;
-    return round((($phi ** $num - (1 - $phi) ** $num)) / sqrt(5));
+    return round(((pow($phi, $num) - pow((1 - $phi), $num))) / sqrt(5));
 }
 
 function getPointsOnlyMisc($points) {
