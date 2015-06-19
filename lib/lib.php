@@ -431,7 +431,7 @@ function ui_footer() {
 </body>
 <style is="custom-style">
 .paper-header {
-    background-color: var(--paper-red-500);
+    background-color: var(--paper-red-600);
 }
 
 * {
