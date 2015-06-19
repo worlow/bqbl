@@ -88,7 +88,7 @@ function bqblUserImage($id) {
 }
 
 function databaseModificationTime() {
-    $file = "update_time";
+    $file = "/var/www/bqbl/lib/update_time";
     return filemtime($file);
 }
 
