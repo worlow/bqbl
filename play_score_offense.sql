@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION play_score_offense2(gsisid gameid, playid usmallint, playerid character varying) RETURNS integer AS $$
+CREATE OR REPLACE FUNCTION play_score_offense(gsisid gameid, playid usmallint, playerid character varying) RETURNS integer AS $$
 DECLARE td integer;
 DECLARE fg integer;
 DECLARE xp integer;
