@@ -618,15 +618,13 @@ function getPointsBatch($games) {
         if(!isset($points[$year][$week])) $points[$year][$week] = array();
     }
 
-    $pool = new Pool(8, \PointsWorker::class);
     $work = array();
     array_unshift($games, $games[0]);  // fixes weird bug where first element would be replaced by last element
     foreach($games as $game) {
         $newWork = new PointsWork($game);
         $work[] = $newWork;
-        $pool->submit($newWork);
+        $newWork->run();
     }
-    $pool->shutdown();
     foreach($work as $gameWork) {
         $total = totalPoints($gameWork->points);
         $points[$gameWork->year][$gameWork->week][$gameWork->team] = $gameWork->points;
@@ -636,7 +634,7 @@ function getPointsBatch($games) {
     return $points;
 }
 
-class PointsWork extends Threaded {
+class PointsWork {
     public $year;
     public $week;
     public $team;
@@ -660,10 +658,6 @@ class PointsWork extends Threaded {
         }
         #pg_close($GLOBALS['bqbldbconn']);
         #pg_close($GLOBALS['nfldbconn']);
-        exit();
+        return;
     }
-}
-
-class PointsWorker extends Worker {
-    public function run() {}
 }
