@@ -10,8 +10,8 @@ date_default_timezone_set('America/Los_Angeles');
 $nfldbconn = connect_nfldb();
 $bqbldbconn = connect_bqbldb();
 
-$CURRENT_YEAR = 2014;
-$WEEK_1_THURS_DATE = "2014-09-04";
+$CURRENT_YEAR = 2015;
+$WEEK_1_THURS_DATE = "2015-09-10";
 $DB_UPDATE_INTERVAL = 60;  # seconds
 $REG_SEASON_END_WEEK = 14;
 
